@@ -1,0 +1,13 @@
+﻿venv/
+venv313/
+venv310/
+.env
+__pycache__/
+*.pyc
+data/session_uploads/
+data/session_index/
+results/raw_outputs/
+.vscode/
+*.log
+vncorenlp_models/
+data/corpus/normal_vinamilkbaocao2024_96tr.pdf

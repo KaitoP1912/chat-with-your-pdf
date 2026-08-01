@@ -1,0 +1,37 @@
+KẾT QUẢ TEST BASELINE LONG-CONTEXT — chạy lúc 2026-08-01 08:06:39
+File input: data/corpus/tests/normal_hienphap.pdf
+Model: gemini-flash-latest
+Câu hỏi: Mặt trận Tổ quốc Việt Nam có vai trò gì? Trả lời kèm số trang trích dẫn theo marker [Trang X] có trong văn bản.
+
+📄 Đang đọc data/corpus/tests/normal_hienphap.pdf và chèn marker trang...
+✅ Đã ghép 33 trang, tổng 66,206 ký tự.
+🔢 Đang đếm token qua Gemini API (count_tokens)...
+✅ Số token input (ước tính trước): 20,398
+
+🚀 Đang gọi Gemini (gemini-flash-latest) với toàn bộ 33 trang (temperature=0.0)...
+
+✅ THÀNH CÔNG — Latency: 8.73 giây
+
+--- CÂU TRẢ LỜI ---
+Theo quy định tại Điều 9 [Trang 3], [Trang 4] của tài liệu, Mặt trận Tổ quốc Việt Nam có vị trí và vai trò như sau:
+
+- Là tổ chức liên minh chính trị, liên hiệp tự nguyện của tổ chức chính trị, các tổ chức chính trị - xã hội, tổ chức xã hội và các cá nhân tiêu biểu trong các giai cấp, tầng lớp xã hội, dân tộc, tôn giáo, người Việt Nam định cư ở nước ngoài [Trang 3].
+- Là một bộ phận của hệ thống chính trị của nước Cộng hòa xã hội chủ nghĩa Việt Nam, do Đảng Cộng sản Việt Nam lãnh đạo [Trang 3].
+- Là cơ sở chính trị của chính quyền nhân dân [Trang 3].
+- Tập hợp, phát huy sức mạnh đại đoàn kết toàn dân tộc [Trang 3].
+- Thể hiện ý chí, nguyện vọng và phát huy quyền làm chủ của Nhân dân [Trang 3], [Trang 4].
+- Đại diện, bảo vệ quyền và lợi ích hợp pháp, chính đáng của Nhân dân [Trang 4].
+- Thực hiện dân chủ, tăng cường đồng thuận xã hội [Trang 4].
+- Giám sát, phản biện xã hội [Trang 4].
+- Phản ánh ý kiến, kiến nghị của Nhân dân đến các cơ quan nhà nước [Trang 4].
+- Tham gia xây dựng Đảng, Nhà nước, hoạt động đối ngoại nhân dân, góp phần xây dựng và bảo vệ Tổ quốc [Trang 4].
+
+--- THÔNG TIN TOKEN (từ response thật) ---
+Prompt tokens: 20,628
+Output tokens: 331
+Tổng tokens: 22,452
+
+--- TÓM TẮT ---
+Số trang: 33
+Số ký tự: 66,206
+Số token input (ước tính trước): 20,398

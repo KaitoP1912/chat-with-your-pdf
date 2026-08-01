@@ -1,0 +1,13 @@
+KẾT QUẢ ĐO CORPUS STATS — chạy lúc 2026-08-01 07:56:55
+File đo: data/corpus/tests/normal_hienphap.pdf
+Đang tải tokenizer vietnamese-bi-encoder...
+
+--- KẾT QUẢ ĐO: data/corpus/tests/normal_hienphap.pdf ---
+Tổng số trang: 33
+Số trang rỗng/không trích được text: 0
+Tổng token toàn văn bản: 20,067
+Trung bình token/trang: 608.1
+Trang ít token nhất: 384
+Trang nhiều token nhất: 816
+Số chunk 256-token ước tính (không tính overlap): 78
+Số trang cần để có ~10 chunk (đủ test bridge chunk): 4

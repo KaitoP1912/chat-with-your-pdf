@@ -1,0 +1,19 @@
+
+======================================================================
+ĐO THỜI GIAN EMBEDDING (CPU) trên file 114 trang — chạy lúc 2026-08-01 07:06:32
+File đo: data/corpus/normal_lichsudang_114tr.pdf
+
+📄 Đang đọc PDF và chia chunk tạm thời...
+✅ Tổng số trang: 114, số chunk tạo được: 462
+
+🧠 Đang tải model vietnamese-bi-encoder...
+🚀 Đang encode 462 chunk trên CPU...
+
+--- KẾT QUẢ ĐO EMBEDDING (114 trang) ---
+Số chunk đã encode: 462
+Thời gian encode toàn bộ (114 trang): 143.18 giây
+Trung bình: 1.256 giây/trang
+Ước tính cho 125 trang (ngoại suy từ 114 trang): 156.99 giây
+
+--- ĐỐI CHIẾU VỚI TIMEOUT 90 GIÂY ---
+⚠️ 157.0s ĐÃ VƯỢT 90s -> cần xem lại giới hạn số trang.

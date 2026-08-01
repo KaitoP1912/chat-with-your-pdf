@@ -1,0 +1,130 @@
+
+======================================================================
+ĐO THỜI GIAN EMBEDDING (CPU) — chạy lúc 2026-08-01 07:57:27
+File đo: data/corpus/tests/normal_hienphap.pdf
+
+📄 Đang đọc PDF...
+✅ Tổng số trang: 33, số chunk tạo được: 101
+
+🔤 Đang thử đo thời gian tách từ (py_vncorenlp, chỉ đo 10 chunk đầu)...
+⚠️ Bỏ qua đo tách từ (py_vncorenlp chưa sẵn sàng): [WinError 183] Cannot create a file when that file already exists: 'D:\\PHUOC\\HK9\\TTTN\\chat-with-your-pdf\\vncorenlp_models/models'
+
+🧠 Đang tải model vietnamese-bi-encoder...
+🚀 Đang encode 101 chunk trên CPU...
+
+--- KẾT QUẢ ĐO EMBEDDING ---
+Số chunk đã encode: 101
+Thời gian encode toàn bộ (33 trang): 21.39 giây
+Trung bình: 0.648 giây/trang
+Ước tính cho 60 trang (chỉ riêng embedding): 38.89 giây
+
+--- ĐỐI CHIẾU VỚI TIMEOUT 90 GIÂY ---
+✅ 38.9s < 90s -> Vẫn nằm trong ngưỡng thời gian an toàn.
+
+======================================================================
+ĐO THỜI GIAN EMBEDDING (CPU) — chạy lúc 2026-08-01 07:59:23
+File đo: data/corpus/tests/normal_hienphap.pdf
+
+📄 Đang đọc PDF...
+✅ Tổng số trang: 33, số chunk tạo được: 101
+
+🔤 Đang thử đo thời gian tách từ (py_vncorenlp, chỉ đo 10 chunk đầu)...
+⚠️ Bỏ qua đo tách từ (py_vncorenlp chưa sẵn sàng): [WinError 183] Cannot create a file when that file already exists: 'D:\\PHUOC\\HK9\\TTTN\\chat-with-your-pdf\\vncorenlp_models/models'
+
+🧠 Đang tải model vietnamese-bi-encoder...
+🚀 Đang encode 101 chunk trên CPU...
+
+--- KẾT QUẢ ĐO EMBEDDING ---
+Số chunk đã encode: 101
+Thời gian encode toàn bộ (33 trang): 26.04 giây
+Trung bình: 0.789 giây/trang
+Ước tính cho 60 trang (chỉ riêng embedding): 47.35 giây
+
+--- ĐỐI CHIẾU VỚI TIMEOUT 90 GIÂY ---
+✅ 47.3s < 90s -> Vẫn nằm trong ngưỡng thời gian an toàn.
+
+--- TRUNG BÌNH TẤT CẢ 1 LẦN CHẠY ĐÃ LƯU TRONG FILE NÀY ---
+Các giá trị giây/trang từng lần: [0.648]
+Trung bình: 0.648 giây/trang
+Ước tính cho 60 trang: 38.88 giây
+
+======================================================================
+ĐO THỜI GIAN EMBEDDING (CPU) — chạy lúc 2026-08-01 08:00:24
+File đo: data/corpus/tests/normal_hienphap.pdf
+
+📄 Đang đọc PDF...
+✅ Tổng số trang: 33, số chunk tạo được: 101
+
+🔤 Đang thử đo thời gian tách từ (py_vncorenlp, chỉ đo 10 chunk đầu)...
+⚠️ Bỏ qua đo tách từ (py_vncorenlp chưa sẵn sàng): [WinError 183] Cannot create a file when that file already exists: 'D:\\PHUOC\\HK9\\TTTN\\chat-with-your-pdf\\vncorenlp_models/models'
+
+🧠 Đang tải model vietnamese-bi-encoder...
+🚀 Đang encode 101 chunk trên CPU...
+
+--- KẾT QUẢ ĐO EMBEDDING ---
+Số chunk đã encode: 101
+Thời gian encode toàn bộ (33 trang): 29.27 giây
+Trung bình: 0.887 giây/trang
+Ước tính cho 60 trang (chỉ riêng embedding): 53.22 giây
+
+--- ĐỐI CHIẾU VỚI TIMEOUT 90 GIÂY ---
+✅ 53.2s < 90s -> Vẫn nằm trong ngưỡng thời gian an toàn.
+
+--- TRUNG BÌNH TẤT CẢ 3 LẦN CHẠY ĐÃ LƯU TRONG FILE NÀY ---
+Các giá trị giây/trang từng lần: [0.648, 0.789, 0.648]
+Trung bình: 0.695 giây/trang
+Ước tính cho 60 trang: 41.70 giây
+
+======================================================================
+ĐO THỜI GIAN EMBEDDING (CPU) — chạy lúc 2026-08-01 08:02:01
+File đo: data/corpus/tests/normal_hienphap.pdf
+
+📄 Đang đọc PDF...
+✅ Tổng số trang: 33, số chunk tạo được: 101
+
+🔤 Đang thử đo thời gian tách từ (py_vncorenlp, chỉ đo 10 chunk đầu)...
+⚠️ Bỏ qua đo tách từ (py_vncorenlp chưa sẵn sàng): [WinError 183] Cannot create a file when that file already exists: 'D:\\PHUOC\\HK9\\TTTN\\chat-with-your-pdf\\vncorenlp_models/models'
+
+🧠 Đang tải model vietnamese-bi-encoder...
+🚀 Đang encode 101 chunk trên CPU...
+
+--- KẾT QUẢ ĐO EMBEDDING ---
+Số chunk đã encode: 101
+Thời gian encode toàn bộ (33 trang): 21.93 giây
+Trung bình: 0.665 giây/trang
+Ước tính cho 60 trang (chỉ riêng embedding): 39.87 giây
+
+--- ĐỐI CHIẾU VỚI TIMEOUT 90 GIÂY ---
+✅ 39.9s < 90s -> Vẫn nằm trong ngưỡng thời gian an toàn.
+
+--- TRUNG BÌNH TẤT CẢ 5 LẦN CHẠY ĐÃ LƯU TRONG FILE NÀY ---
+Các giá trị giây/trang từng lần: [0.648, 0.789, 0.648, 0.887, 0.695]
+Trung bình: 0.733 giây/trang
+Ước tính cho 60 trang: 44.00 giây
+
+======================================================================
+ĐO THỜI GIAN EMBEDDING (CPU) — chạy lúc 2026-08-01 08:04:26
+File đo: data/corpus/tests/normal_hienphap.pdf
+
+📄 Đang đọc PDF...
+✅ Tổng số trang: 33, số chunk tạo được: 101
+
+🔤 Đang thử đo thời gian tách từ (py_vncorenlp, chỉ đo 10 chunk đầu)...
+⚠️ Bỏ qua đo tách từ (py_vncorenlp chưa sẵn sàng): [WinError 183] Cannot create a file when that file already exists: 'D:\\PHUOC\\HK9\\TTTN\\chat-with-your-pdf\\vncorenlp_models/models'
+
+🧠 Đang tải model vietnamese-bi-encoder...
+🚀 Đang encode 101 chunk trên CPU...
+
+--- KẾT QUẢ ĐO EMBEDDING ---
+Số chunk đã encode: 101
+Thời gian encode toàn bộ (33 trang): 22.90 giây
+Trung bình: 0.694 giây/trang
+Ước tính cho 60 trang (chỉ riêng embedding): 41.65 giây
+
+--- ĐỐI CHIẾU VỚI TIMEOUT 90 GIÂY ---
+✅ 41.6s < 90s -> Vẫn nằm trong ngưỡng thời gian an toàn.
+
+--- TRUNG BÌNH TẤT CẢ 7 LẦN CHẠY ĐÃ LƯU TRONG FILE NÀY ---
+Các giá trị giây/trang từng lần: [0.648, 0.789, 0.648, 0.887, 0.695, 0.665, 0.733]
+Trung bình: 0.724 giây/trang
+Ước tính cho 60 trang: 43.41 giây

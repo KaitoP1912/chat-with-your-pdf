@@ -1,0 +1,36 @@
+KẾT QUẢ TEST BASELINE LONG-CONTEXT (114 trang) — chạy lúc 2026-08-01 07:00:33
+File input: data/corpus/normal_lichsudang_114tr.pdf
+Model: gemini-flash-latest
+Câu hỏi: Tóm tắt 3 ý chính của văn bản. Trả lời kèm số trang trích dẫn theo marker [Trang X] có trong văn bản.
+
+📄 Đang đọc data/corpus/normal_lichsudang_114tr.pdf và chèn marker trang...
+✅ Đã ghép 114 trang, tổng 338,601 ký tự.
+🔢 Đang đếm token qua Gemini API (count_tokens)...
+✅ Số token input (ước tính trước): 109,588
+
+🚀 Đang gọi Gemini (gemini-flash-latest) với toàn bộ 114 trang...
+
+✅ THÀNH CÔNG — Latency: 11.64 giây
+
+--- CÂU TRẢ LỜI ---
+Dựa trên nội dung Tập bài giảng Lịch sử Đảng Cộng sản Việt Nam, dưới đây là tóm tắt 3 ý chính (tương ứng với 3 chương nội dung cốt lõi của văn bản):
+
+1. **Đảng Cộng sản Việt Nam ra đời và lãnh đạo đấu tranh giành chính quyền (1930 - 1945):** 
+   Văn bản làm rõ bối cảnh lịch sử, vai trò của Nguyễn Ái Quốc trong việc chuẩn bị tư tưởng, chính trị, tổ chức và hợp nhất các tổ chức cộng sản để thành lập Đảng Cộng sản Việt Nam (1930) cùng Cương lĩnh chính trị đầu tiên [Trang 7, 9-13]. Qua các phong trào cách mạng (1930-1931, 1936-1939, 1939-1945), Đảng đã tổ chức và lãnh đạo nhân dân tiến hành Tổng khởi nghĩa Tháng Tám năm 1945 giành chính quyền, khai sinh ra nước Việt Nam Dân chủ Cộng hòa [Trang 14-24].
+
+2. **Đảng lãnh đạo hai cuộc kháng chiến, hoàn thành giải phóng dân tộc, thống nhất đất nước (1945 - 1975):** 
+   Đảng đã lãnh đạo nhân dân vượt qua tình thế "ngàn cân treo sợi tóc", củng cố chính quyền non trẻ và tiến hành cuộc kháng chiến chống thực dân Pháp xâm lược (1946-1954) kết thúc bằng chiến thắng Điện Biên Phủ [Trang 27-41]. Giai đoạn 1954-1975, Đảng lãnh đạo thực hiện đồng thời hai chiến lược cách mạng: xây dựng chủ nghĩa xã hội ở miền Bắc và kháng chiến chống đế quốc Mỹ xâm lược ở miền Nam, tiến tới giải phóng hoàn toàn miền Nam, thống nhất đất nước vào năm 1975 [Trang 40-58].
+
+3. **Đảng lãnh đạo cả nước quá độ lên chủ nghĩa xã hội và tiến hành công cuộc đổi mới (1975 - 2018):** 
+   Sau khi hoàn thành thống nhất nước nhà về mặt nhà nước và bảo vệ biên giới Tổ quốc [Trang 59-64], từ Đại hội VI (năm 1986), Đảng đã khởi xướng và lãnh đạo công cuộc đổi mới toàn diện [Trang 66-67]. Qua các kỳ Đại hội, Đảng tiếp tục hoàn thiện đường lối, đẩy mạnh công nghiệp hóa, hiện đại hóa và hội nhập quốc tế, đưa đất nước thoát khỏi khủng hoảng kinh tế - xã hội, đạt được nhiều thành tựu to lớn, có ý nghĩa lịch sử [Trang 68-103].
+
+--- THÔNG TIN TOKEN (từ response thật) ---
+Prompt tokens: 109,698
+Output tokens: 601
+Tổng tokens: 111,497
+
+--- TÓM TẮT ---
+Số trang: 114
+Số ký tự: 338,601
+Số token input (ước tính trước): 109,588
+Token/trang (114 trang): 961.3
