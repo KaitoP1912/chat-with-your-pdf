@@ -62,5 +62,5 @@ Kết quả được lưu vào `results/tuan1_pilot/`. Script `measure_embedding
 
 ## Trạng thái hiện tại
 
-- **Tuần 1**: đã chốt câu hỏi nghiên cứu, corpus mẫu (9 file), rubric đánh giá, và các giới hạn vận hành (125 trang / 90 giây, giới hạn token baseline B) dựa trên đo thực nghiệm. Chi tiết: `report/`.
+- **Tuần 1**: đã chốt câu hỏi nghiên cứu, corpus mẫu (9 file), rubric đánh giá, và các giới hạn vận hành (60 trang / 90 giây / 20MB, giới hạn token baseline B) dựa trên đo thực nghiệm. Chi tiết: `report/`.
 - Các module trong `source/` mới khởi tạo, chưa cài đặt logic — dự kiến từ tuần 2 theo kế hoạch trong đề cương.
