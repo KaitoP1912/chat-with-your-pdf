@@ -24,8 +24,8 @@ Chunking theo ranh giới trang có cải thiện độ chính xác trích dẫn
 | 3 | normal_lichsudang_C1&2_60tr.pdf | 60 | Chuẩn — giáo trình văn xuôi | Giáo trình Lịch sử Đảng CSVN |
 | 4 | mixedscan_qcvn06_38tr.pdf | 38 | Lỗi — scan từng phần (trang 1 scan, còn lại text) | QCVN 06:2022, Bộ Xây dựng — copyright-free (văn bản quy phạm pháp luật) |
 | 5 | scan_nd238_14tr.pdf | 14 | Lỗi — scan toàn bộ | Nghị định 238/2026/NĐ-CP — copyright-free |
-| 6 | oldenc_vni_118-2025-qh15_23tr.pdf | 23 | Lỗi — bảng mã VNI | Luật 118/2025/QH15 — copyright-free |
-| 7 | oldenc_tcvn3_36-2024-qh15_53tr.pdf | 53 | Lỗi — bảng mã TCVN3 | Luật 36/2024/QH15 — copyright-free |
+| 6 | oldenc_vni_118-2025-qh15_23tr.pdf | 23 | Controlled test — VNI WINDOWS | Luật 118/2025/QH15 — Unicode gốc chuyển sang VNI bằng UniKey (Ctrl + Shift + F6) |
+| 7 | oldenc_tcvn3_36-2024-qh15_53tr.pdf | 53 | Controlled test — TCVN ABC/TCVN3 | Luật 36/2024/QH15 — Unicode gốc chuyển sang TCVN ABC bằng UniKey (Ctrl + Shift + F6) |
 | 8 | nodiacritic_118-2025-qh15_20tr.pdf | 20 | Lỗi — mất dấu | Luật 118/2025/QH15 — copyright-free |
 | 9 | word_118-2025-qh15_28tr.docx | 28 (số trang Word gốc, có thể lệch khi convert PDF) | Chuẩn — .docx gốc | Luật 118/2025/QH15, file Word gốc chính thức — copyright-free |
 

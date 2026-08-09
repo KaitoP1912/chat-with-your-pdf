@@ -1,0 +1,89 @@
+{
+  "_ghi_chu": [
+    "Bộ 10 câu hỏi dev — Tuần 2 (Phục vụ đánh giá Trạm 5 & Trạm 6).",
+    "Phân bổ: 4 câu Hiến pháp | 3 câu Vinamilk Báo cáo 2014 | 3 câu Lịch sử Đảng.",
+    "Bao gồm 2 câu hỏi dạng Bridge (đáp án nằm trải trên 2 trang liền kề: dev_04, dev_10)."
+  ],
+  "questions": [
+    {
+      "id": "dev_01",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Nước Cộng hòa xã hội chủ nghĩa Việt Nam là một quốc gia như thế nào theo Điều 1 của Hiến pháp?",
+      "answer_reference": "Nước Cộng hòa xã hội chủ nghĩa Việt Nam là một nước độc lập, có chủ quyền, thống nhất và toàn vẹn lãnh thổ, bao gồm đất liền, hải đảo, vùng biển và vùng trời.",
+      "answer_pages": [3],
+      "is_bridge_case": false
+    },
+    {
+      "id": "dev_02",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Mọi người có những quyền gì đối với tính mạng và thân thể theo quy định tại Điều 19 và Điều 20?",
+      "answer_reference": "Mọi người có quyền sống. Tính mạng con người được pháp luật bảo hộ. Không ai bị tước đoạt tính mạng trái luật. Mọi người có quyền bất khả xâm phạm về thân thể, được pháp luật bảo hộ về sức khỏe, danh dự và nhân phẩm.",
+      "answer_pages": [6],
+      "is_bridge_case": false
+    },
+    {
+      "id": "dev_03",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Nhiệm kỳ của mỗi khóa Quốc hội được quy định bao nhiêu năm?",
+      "answer_reference": "Nhiệm kỳ của mỗi khóa Quốc hội là năm năm. Sáu mươi ngày trước khi Quốc hội hết nhiệm kỳ, Quốc hội khóa mới phải được bầu xong.",
+      "answer_pages": [17],
+      "is_bridge_case": false
+    },
+    {
+      "id": "dev_04",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Hiến pháp quy định như thế nào về trách nhiệm của các cơ quan nhà nước, cán bộ, công chức đối với Nhân dân và quy định về Mặt trận Tổ quốc Việt Nam?",
+      "answer_reference": "Các cơ quan nhà nước, cán bộ, công chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân. Mặt trận Tổ quốc Việt Nam là tổ chức liên minh chính trị, liên hiệp tự nguyện của tổ chức chính trị, các tổ chức chính trị - xã hội...",
+      "answer_pages": [3, 4],
+      "is_bridge_case": true
+    },
+    {
+      "id": "dev_05",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Doanh thu thuần của Vinamilk năm 2014 đạt bao nhiêu tỷ đồng?",
+      "answer_reference": "Doanh thu năm 2014 đạt 35.704 tỷ đồng.",
+      "answer_pages": [12],
+      "is_bridge_case": false
+    },
+    {
+      "id": "dev_06",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Chính sách khám sức khỏe định kỳ cho nhân viên Vinamilk được quy định cụ thể như thế nào đối với lao động nam và nữ?",
+      "answer_reference": "Chương trình khám sức khỏe định kỳ cho nhân viên: Lao động nam: 01 lần/năm. Lao động nữ: 02 lần/năm.",
+      "answer_pages": [75],
+      "is_bridge_case": false
+    },
+    {
+      "id": "dev_07",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Tính đến cuối năm 2014, Quỹ sữa Vươn cao Việt Nam đã đem đến cho trẻ em khó khăn tại Việt Nam bao nhiêu ly sữa?",
+      "answer_reference": "Đến cuối 2014, tổng số lượng sữa mà Quỹ sữa đã đem đến cho hơn 310 nghìn trẻ em khó khăn tại Việt Nam là gần 23,5 triệu ly sữa, tương đương khoảng 84 tỷ đồng.",
+      "answer_pages": [87],
+      "is_bridge_case": false
+    },
+    {
+      "id": "dev_08",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Đối tượng nghiên cứu của môn học Lịch sử Đảng Cộng sản Việt Nam bao gồm những nội dung chính nào?",
+      "answer_reference": "Đối tượng nghiên cứu bao gồm các sự kiện lịch sử Đảng, Cương lĩnh đường lối của Đảng, quá trình lãnh đạo chỉ đạo tổ chức thực tiễn và công tác xây dựng Đảng qua các thời kỳ.",
+      "answer_pages": [4],
+      "is_bridge_case": false
+    },
+    {
+      "id": "dev_09",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Hội nghị thành lập Đảng Cộng sản Việt Nam diễn ra vào thời gian nào và ở đâu?",
+      "answer_reference": "Hội nghị hợp nhất các tổ chức Cộng sản họp từ ngày 6-1 đến ngày 7-2-1930 tại Hương Cảng, Trung Quốc do Nguyễn Ái Quốc chủ trì.",
+      "answer_pages": [12],
+      "is_bridge_case": false
+    },
+    {
+      "id": "dev_10",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Nguyễn Ái Quốc đã lựa chọn con đường cách mạng nào cho dân tộc Việt Nam và chuẩn bị những gì về mặt tư tưởng, chính trị cho sự ra đời của Đảng?",
+      "answer_reference": "Nguyễn Ái Quốc lựa chọn con đường cách mạng vô sản. Người đã chuẩn bị về tư tưởng, chính trị thông qua việc thành lập Hội Liên hiệp thuộc địa, viết sách Đường Kách Mệnh và thành lập Hội Việt Nam Cách mạng Thanh niên.",
+      "answer_pages": [9, 10],
+      "is_bridge_case": true
+    }
+  ]
+}
