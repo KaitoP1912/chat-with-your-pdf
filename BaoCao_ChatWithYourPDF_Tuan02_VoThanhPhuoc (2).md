@@ -121,7 +121,19 @@ Sau đó, pipeline đã được hậu kiểm lại bằng cách đối chiếu 
 
 ---
 
-## 4. Tình trạng `text_normalizer.py`
+## 4. Vấn đề tồn đọng và xin ý kiến giảng viên
+
+- `text_normalizer.py` hiện đang xử lý TCVN3 và VNI bằng các candidate mapping và chấm điểm wordlist, nhưng chưa có cơ chế kiểm chứng toàn diện và vẫn còn khả năng sai khi gặp biến thể font/encoding khác.
+- Cần xin ý kiến Thầy về chiến lược xử lý TCVN3/VNI:
+  - tiếp tục mở rộng mapping theo hướng corpus-driven, hay xây dựng bộ dịch/chuyển đổi chuyên biệt hơn?
+  - có nên gắn nhãn riêng `tcvn3` / `vni` và chỉ chuyển đổi khi confidence đủ cao, thay vì cố tự động đổi cho mọi trường hợp?
+  - có nên bổ sung bước kiểm tra với wordlist/lexicon tiếng Việt và luật chính tả để giảm false positive?
+- Ưu tiên hiện tại là giữ pipeline chạy được với corpus Tuần 2 và mô tả rõ đây là giải pháp heuristic đủ dùng cho giai đoạn này.
+- Nếu Thầy có hướng đi cụ thể cho phần TCVN3/VNI, em sẽ tiếp tục hoàn thiện ở Tuần 3 hoặc Tuần 4.
+
+---
+
+## 5. Tình trạng `text_normalizer.py`
 
 Hiện trạng thực tế của `text_normalizer.py` là:
 - Module hoạt động được trên corpus Tuần 2.
