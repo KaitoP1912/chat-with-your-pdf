@@ -1,9 +1,10 @@
 file,status,total_pages,doc_scan_status,scan_pages,empty_pages,low_text_pages,image_parse_error_pages,detected_encoding,encoding_confidence,encoding_warning,likely_missing_diacritics,elapsed_sec,error
-mixedscan_qcvn06_38tr.pdf,OK,38,mixed_scan,"1,38","3,7,9",-,-,unicode_chuẩn,0.53,OK,False,5.31,
-nodiacritic_118-2025-qh15_20tr.pdf,OK,20,text,-,-,-,-,unicode_chuẩn,0.11,OK,True,3.24,
-normal_hienphap_33tr.pdf,OK,33,text,-,-,-,-,unicode_chuẩn,0.68,OK,False,7.61,
-normal_lichsudang_C1&2_60tr.pdf,OK,60,text,-,2,-,-,unicode_chuẩn,0.41,OK,False,24.04,
-normal_vinamilkbaocao2014_53tr.pdf,OK,53,text,-,-,1,-,unicode_chuẩn,0.51,OK,False,24.13,
-oldenc_tcvn3_36-2024-qh15_53tr.pdf,OK,53,text,-,-,53,-,tcvn3,0.49,OK,False,8.29,
-oldenc_vni_118-2025-qh15_23tr.pdf,OK,23,text,-,-,-,-,vni,0.53,OK,False,4.54,
-scan_nd238_14tr.pdf,REJECTED,14,full_scan,"1,2,3,4,5,6,7,8,9,10,11,12,13,14",-,-,-,N/A (bị từ chối),N/A,File scan 100%,N/A,0.13,Toàn bộ tài liệu là scan (full_scan) — từ chối xử lý theo quy tắc.
+Test2.pdf,OK,45,text,-,-,-,-,tcvn3,0.80,OK,False,5.11,
+mixedscan_qcvn06_38tr.pdf,OK,38,mixed_scan,"1,38","3,7,9",-,-,unicode_chuẩn,0.82,OK,False,5.06,
+nodiacritic_118-2025-qh15_20tr.pdf,OK,20,text,-,-,-,-,unicode_chuẩn,0.60,"Ứng viên đầu và thứ hai sát nhau (best=0.60, 2nd=0.60).",True,2.91,
+normal_hienphap_33tr.pdf,OK,33,text,-,-,-,-,unicode_chuẩn,0.86,"Ứng viên đầu và thứ hai sát nhau (best=0.86, 2nd=0.82).",False,6.89,
+normal_lichsudang_C1&2_60tr.pdf,OK,60,text,-,2,-,-,unicode_chuẩn,0.78,"Ứng viên đầu và thứ hai sát nhau (best=0.78, 2nd=0.76).",False,22.18,
+normal_vinamilkbaocao2014_53tr.pdf,OK,53,text,-,-,1,-,unicode_chuẩn,0.84,"Ứng viên đầu và thứ hai sát nhau (best=0.84, 2nd=0.81).",False,23.25,
+oldenc_tcvn3_36-2024-qh15_53tr.pdf,OK,53,text,-,-,53,-,tcvn3,0.79,OK,False,9.50,
+oldenc_vni_118-2025-qh15_23tr.pdf,OK,23,text,-,-,-,-,vni,0.85,OK,False,7.55,
+scan_nd238_14tr.pdf,REJECTED,14,full_scan,"1,2,3,4,5,6,7,8,9,10,11,12,13,14",-,-,-,N/A (bị từ chối),N/A,File scan 100%,N/A,0.30,Toàn bộ tài liệu là scan (full_scan) — từ chối xử lý theo quy tắc.

@@ -1,0 +1,19 @@
+[1/4] Đọc + chuẩn hóa PDF: data/corpus/normal_hienphap_33tr.pdf
+      -> 33 trang, 13.37s
+[2/4] Chunking (page-aware + bridge chunk)
+      -> 126 chunk (gồm 32 bridge chunk), 27.14s
+[3/4] Embedding + lập chỉ mục FAISS
+      -> Index có 126 vector, 45.90s
+[4/4] Tìm kiếm cho câu hỏi: 'Vai trò của Mặt trận Tổ quốc Việt Nam là gì?'
+      -> 0.08s
+
+=== KẾT QUẢ TOP-3 ===
+
+#1 | trang 3 | score=0.7259 | chunk_id=normal_hienphap_33tr.pdf_p3_c2
+    ở nước ngoài. Mặt trận Tổ quốc Việt Nam là bộ phận của hệ thống chính trị của nước Cộng hòa xã hội chủ nghĩa Việt Nam, do Đảng Cộng sản Việt Nam lãnh đạo; là cơ sở chính trị của chính quyền nhân dân; ...
+
+#2 | trang 3-4 (bridge) | score=0.7109 | chunk_id=normal_hienphap_33tr.pdf_bridge_3-4
+    giáo, người Việt Nam định cư ở nước ngoài. Mặt trận Tổ quốc Việt Nam là bộ phận của hệ thống chính trị của nước Cộng hòa xã hội chủ nghĩa Việt Nam, do Đảng Cộng sản Việt Nam lãnh đạo; là cơ sở chính t...
+
+#3 | trang 4 | score=0.5534 | chunk_id=normal_hienphap_33tr.pdf_p4_c0
+    Nhân dân; đại diện, bảo vệ quyền và lợi ích hợp pháp, chính đáng của Nhân dân; thực hiện dân chủ, tăng cường đồng thuận xã hội; giám sát, phản biện xã hội; phản ánh ý kiến, kiến nghị của Nhân dân đến ...

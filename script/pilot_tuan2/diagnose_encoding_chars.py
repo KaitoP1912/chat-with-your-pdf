@@ -25,7 +25,7 @@ import sys
 from collections import defaultdict
 
 try:
-    from .pdf_loader import load_pdf_pages
+    from ...source.ingestion.pdf_loader import load_pdf_pages
 except ImportError:
     from pdf_loader import load_pdf_pages  # type: ignore
 

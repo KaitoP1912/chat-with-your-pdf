@@ -78,6 +78,8 @@ def process_file(file_path: str) -> dict:
             row["encoding_confidence"] = f"{norm_result.encoding_confidence:.2f}"
             row["encoding_warning"] = norm_result.encoding_warning or "OK"
             row["likely_missing_diacritics"] = norm_result.likely_missing_diacritics
+
+            # No corpus-level overrides: detection must come from pipeline
         else:
             row["detected_encoding"] = "N/A (không có trang text)"
             row["encoding_confidence"] = "N/A"

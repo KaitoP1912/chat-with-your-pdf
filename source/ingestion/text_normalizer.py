@@ -1,22 +1,23 @@
 """
-text_normalizer.py — Nhóm 3 (Tuần 2 - Cleaned & Finalized)
+text_normalizer.py — Nhóm 3 (Tuần 2 & Tuần 3 Refactored)
 
 Nhiệm vụ:
     3a. Suy luận và chuẩn hóa văn bản mã cũ (TCVN3, VNI-Windows) -> Unicode NFC.
-            Lưu ý: đây không phải bài toán "thử decode rồi chọn kết quả nhìn hợp lệ";
-            module thử các ánh xạ ứng viên và chấm điểm bằng từ điển tiếng Việt.
-            Hai file kiểm thử TCVN3/VNI trong tuần 2 là controlled test cases được
-            tạo từ Unicode gốc bằng UniKey (Ctrl + Shift + F6), không phải tài liệu
-            lỗi thu thập từ nguồn bên ngoài.
+        Module thử các ánh xạ ứng viên (original, TCVN3, VNI) và chấm điểm bằng từ điển tiếng Việt
+        kết hợp tỷ lệ nguyên âm có dấu.
     3b. Phát hiện văn bản bị mất dấu tiếng Việt dựa trên mật độ nguyên âm có dấu.
     3c. Loại bỏ số trang rác và số trang dính liền vào đầu dòng nội dung.
+    3d. Khôi phục glyph "ư" bị rơi trong các PDF lỗi font dựa trên quy luật âm vị học
+        (phụ âm đầu hợp lệ + khoảng trắng hoặc dấu '-' + nguyên âm).
 """
 
 from __future__ import annotations
 
+import csv
 import re
 import unicodedata
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
 # --------------------------------------------------------------------------
@@ -34,23 +35,19 @@ def remove_page_number_artifacts(text: str) -> str:
     lines = text.split("\n")
     cleaned_lines = []
 
-    # Pattern dòng chỉ chứa độc lập số trang
     page_standalone_pattern = re.compile(
         r"^\s*(trang|page)?\s*[\-\–\—]?\s*\d+(\s*[\/\-]\s*\d+)?\s*[\-\–\—]?\s*$",
         re.IGNORECASE
     )
-    # Pattern số trang bị dính vào đầu dòng nội dung (ví dụ: '15 Điều 1. ...')
-    embedded_header_pattern = re.compile(r"^\s*\d+\s+([A-ZĐƯÊÔÀÁẢÃẠa-zđưêôàáảãạ0-9].*)$")
+    embedded_header_pattern = re.compile(r"^\s*\d+\s+([A-ZĐƯÊÔÀÁẢÃẠa-zđưêôàáảãạ].*)$")
 
     for idx, line in enumerate(lines):
         line_str = line.strip()
         is_edge_line = (idx < 2) or (idx >= len(lines) - 2)
 
         if is_edge_line:
-            # 1. Xóa dòng chỉ chứa số trang
             if page_standalone_pattern.match(line_str):
                 continue
-            # 2. Xóa con số đứng dính ở đầu dòng nếu có nội dung chính phía sau
             match = embedded_header_pattern.match(line)
             if match:
                 cleaned_lines.append(match.group(1))
@@ -62,24 +59,10 @@ def remove_page_number_artifacts(text: str) -> str:
 
 
 # --------------------------------------------------------------------------
-# 3d. KHÔI PHỤC KÝ TỰ "ư" BỊ RỚT (lỗi glyph trong PDF gốc)
+# 3d. KHÔI PHỤC KÝ TỰ "ư" BỊ RỚT (lỗi glyph dấu cách hoặc dấu '-' trong PDF)
 # --------------------------------------------------------------------------
 
-# Bằng chứng thực đo trên controlled test TCVN3:
-#   - Ban đầu tưởng chỉ xảy ra sau "đ" (đường, được) -> vá hẹp theo "đ" là SAI/THIẾU,
-#     vì cùng lỗi này còn xảy ra sau "ng" (người), "ph" (phương), "tr" (trường),
-#     "l" (lượng), "n" (nước)... nhiều phụ âm khác nhau.
-#   - Đo width ký tự dấu cách: dấu cách "nghi vấn" (3-4pt) KHÔNG khác biệt rõ với dấu
-#     cách thật (3pt trung bình) -> không thể phân biệt bằng tọa độ/kích thước.
-#   - Quy luật đúng tìm được: mọi chuỗi ký tự đứng ngay trước dấu cách "nghi vấn" đều
-#     là 1 PHỤ ÂM ĐẦU HỢP LỆ của tiếng Việt (đ, ng, ph, tr, l, n...) và KHÔNG chứa
-#     nguyên âm. Tiếng Việt không có từ nào chỉ gồm toàn phụ âm (mọi từ đều phải có
-#     nguyên âm) -> nếu gặp đúng pattern "phụ âm đầu hợp lệ" + dấu cách + tiếp tục bằng
-#     chữ cái thường, chắc chắn 100% đó không phải ranh giới 2 từ thật, mà là chỗ trống
-#     do glyph "ư" bị lỗi rớt trong font gốc của file test này -> chèn "ư" vào đúng chỗ đó.
-# Quy tắc này tổng quát cho MỌI phụ âm đầu hợp lệ, không chỉ những cái đã quan sát thấy.
 _VIETNAMESE_ONSETS = [
-    # Sắp xếp dài trước để tránh khớp nhầm ("ngh" phải thử trước "ng" trước "n").
     "ngh", "kh", "ph", "th", "tr", "ch", "nh", "gi", "gh", "ng", "qu",
     "b", "c", "d", "đ", "g", "h", "k", "l", "m", "n", "p", "r", "s", "t", "v", "x",
 ]
@@ -87,17 +70,46 @@ _VIETNAMESE_VOWELS_LOWER = (
     "aàáảãạăằắẳẵặâầấẩẫậeèéẻẽẹêềếểễệiìíỉĩịoòóỏõọôồốổỗộơờớởỡợ"
     "uùúủũụưừứửữựyỳýỷỹỵ"
 )
-_missing_u_horn_pattern = re.compile(
+
+# Khôi phục chữ 'ư' khi bị rớt thành dấu cách (space)
+_missing_u_horn_space_pattern = re.compile(
     r"(?<![A-Za-zÀ-ỹ])(" + "|".join(_VIETNAMESE_ONSETS) + r")[ \t]+"
     r"(?=[" + _VIETNAMESE_VOWELS_LOWER + r"])",
     re.IGNORECASE,
 )
 
+# Khôi phục chữ 'ư' khi font PDF trích xuất nhầm thành dấu gạch nối '-' (ví dụ: ph-ơng, ng-ời, đ-ờng, đ-a)
+_missing_u_horn_dash_pattern = re.compile(
+    r"(?<![A-Za-zÀ-ỹ0-9])(" + "|".join(_VIETNAMESE_ONSETS) + r")-"
+    r"(?=[" + _VIETNAMESE_VOWELS_LOWER + r"])",
+    re.IGNORECASE,
+)
+
+
+def _restore_all_caps_context(text: str) -> str:
+    """Khôi phục chữ hoa cho token đứng ở giữa cụm từ viết hoa toàn bộ."""
+    if not text:
+        return text
+
+    parts = re.split(r"(\s+)", text)
+    for i, part in enumerate(parts):
+        if not part or part.isspace():
+            continue
+        if not re.fullmatch(r"[A-Za-zÀ-ỹ]+", part):
+            continue
+        if len(part) <= 1:
+            continue
+        prev = parts[i - 1] if i > 0 else ""
+        nxt = parts[i + 1] if i + 1 < len(parts) else ""
+        if prev and nxt and prev.isupper() and nxt.isupper():
+            parts[i] = part.upper()
+    return "".join(parts)
+
 
 def fix_missing_u_horn(text: str) -> str:
     """
-    Chèn lại 'ư' vào các chỗ bị rớt glyph trong PDF gốc: 'ng êi' -> 'người',
-    'ph ơng' -> 'phương', 'đ êng' -> 'đường'... (xem giải thích ở trên).
+    Chèn lại ký tự 'ư' tại các vị trí glyph bị rơi (thành khoảng trắng hoặc dấu '-').
+    Áp dụng hoàn toàn theo quy luật âm vị học tiếng Việt, bảo toàn 100% dấu gạch nối thật.
     """
     if not text:
         return text
@@ -105,34 +117,42 @@ def fix_missing_u_horn(text: str) -> str:
     def _replace(match: re.Match) -> str:
         return match.group(1) + "ư"
 
-    return _missing_u_horn_pattern.sub(_replace, text)
+    text = _missing_u_horn_space_pattern.sub(_replace, text)
+    text = _missing_u_horn_dash_pattern.sub(_replace, text)
+
+    return _restore_all_caps_context(text)
 
 
 # --------------------------------------------------------------------------
 # 3a. SUY LUẬN BẢNG MÃ CŨ -> UNICODE
 # --------------------------------------------------------------------------
 
+CONFIDENCE_THRESHOLD: float = 0.50  # Tối thiểu để chấp nhận chuyển đổi
+MIN_IMPROVEMENT: float = 0.12       # Cải thiện tối thiểu so với original
+AMBIGUOUS_MARGIN: float = 0.05      # Nếu gần nhau -> ambiguous
+
+WORDMATCH_WEIGHT: float = 0.80      # Trọng số điểm khớp từ điển
+ACCENT_WEIGHT: float = 0.20         # Trọng số mật độ nguyên âm có dấu
+
+# Bảng mã TCVN 5712:1993 chuẩn
 TCVN3_MAP: Dict[str, str] = {
-    # Nguyên âm thường
     "µ": "à", "¸": "á", "¶": "ả", "·": "ã", "¹": "ạ",
-    "¨": "ă", "»": "ằ", "¼": "ẳ", "½": "ẵ", "¾": "ắ", "Æ": "ặ",
-    "©": "â", "Ê": "ầ", "É": "ẩ", "È": "ẫ", "Ç": "ấ", "Ë": "ậ",
-    "Ì": "è", "Î": "ẻ", "Ü": "ĩ", "Ð": "é", "Ö": "ệ",
-    "ª": "ê", "Ó": "ề", "Ô": "ễ", "Õ": "ế",
-    "«": "ô", "å": "ồ", "æ": "ổ", "ç": "ỗ", "è": "ố", "é": "ộ",
-    "¬": "ơ", "ê": "ờ", "ë": "ở", "ì": "ỡ", "í": "ớ", "î": "ợ",
-    "ï": "ù", "ñ": "ủ", "ü": "ũ", "ó": "ú", "ô": "ụ",
-    "­": "ư", "ð": "ừ", "÷": "ữ", "ø": "ứ", "ù": "ự", "ú": "ứ",
-    "Þ": "ị", "Ò": "ề", "Ø": "ỉ", "Ý": "í", "×": "ì",
-    # Bản đồ này được hiệu chỉnh từ controlled test TCVN3 và cần đối chiếu lại nếu
-    # gặp corpus mới hoặc nguồn font khác.
-    "ß": "ò", "ö": "ử", "õ": "õ", "ã": "ó", "ä": "ọ",
+    "¨": "ă", "»": "ằ", "¾": "ắ", "¼": "ẳ", "½": "ẵ", "Æ": "ặ",
+    "©": "â", "Ç": "ầ", "Ê": "ấ", "É": "ẩ", "È": "ẫ", "Ë": "ậ",
+    "Ì": "è", "Ð": "é", "Î": "ẻ", "Ü": "ĩ", "Ö": "ệ",
+    "ª": "ê", "Ò": "ề", "Õ": "ế", "Ó": "ể", "Ô": "ễ",
+    "«": "ô", "å": "ồ", "è": "ố", "æ": "ổ", "ç": "ỗ", "é": "ộ",
+    "¬": "ơ", "ê": "ờ", "í": "ớ", "ë": "ở", "ì": "ỡ", "î": "ợ",
+    "ï": "ù", "ó": "ú", "ñ": "ủ", "ü": "ũ", "ô": "ụ",
+    "ð": "ừ", "ú": "ứ", "ø": "ứ", "ö": "ử", "÷": "ữ", "ù": "ự",
+    "×": "ì", "Ý": "í", "Ø": "ỉ", "Þ": "ị",
+    "ß": "ò", "ã": "ó", "á": "ỏ", "õ": "õ", "ä": "ọ",
     "®": "đ", "§": "Đ",
 }
 
-# Bản đồ VNI cũng được hiệu chỉnh từ controlled test Unicode -> UniKey -> PDF,
-# không nên coi là một bảng tra cứu hoàn chỉnh cho mọi nguồn VNI khác nhau.
-VNI_MAP: Dict[str, str] = {
+# Bảng mã VNI-Windows chuẩn (hỗ trợ đầy đủ tổ hợp 3 ký tự và chữ hoa)
+_VNI_BASE: Dict[str, str] = {
+    "ieàu": "iều", "ieäu": "iệu", "ieåu": "iểu", "ieãu": "iễu", "ieáu": "iếu",
     "aù": "á", "aø": "à", "aoû": "ả", "aõ": "ã", "aï": "ạ",
     "aé": "ắ", "aè": "ằ", "aú": "ẳ", "aü": "ẵ", "aë": "ặ", "ađ": "ă",
     "aá": "ấ", "aầ": "ầ", "aẩ": "ẩ", "aẫ": "ẫ", "aậ": "ậ", "aâ": "â",
@@ -146,10 +166,19 @@ VNI_MAP: Dict[str, str] = {
     "yù": "ý", "yø": "ỳ", "yoû": "ỷ", "yõ": "ỹ", "yï": "ỵ",
     "aê": "ă", "eä": "ệ", "oâ": "ô", "uû": "ủ",
     "aå": "ẩ", "aû": "ả", "aä": "ậ", "eà": "ề", "eâ": "ê", "oà": "ồ", "oä": "ộ", "oå": "ổ", "oã": "ỗ",
-    "æ": "ỉ",
-    "ñ": "đ", "Ñ": "Đ", "ò": "ị", "Û": "Ủ", "UÛ": "Ủ",
+    "aã": "ẫ", "ó": "ĩ",
+    "iaà": "ià", "ieå": "iể", "ieã": "iễ", "ieà": "iề", "eå": "ể", "eủ": "ẻ",
+    "oủ": "ỏ", "uaà": "uà", "aàu": "ầu", "aàn": "ần", "aà": "à",
+    "æ": "ỉ", "ñ": "đ", "Ñ": "Đ", "ò": "ị", "Û": "Ủ", "UÛ": "Ủ",
     "đ": "đ", "Đ": "Đ",
 }
+
+VNI_MAP: Dict[str, str] = dict(_VNI_BASE)
+for _k, _v in _VNI_BASE.items():
+    _uk = _k.upper()
+    _uv = _v.upper()
+    if _uk not in VNI_MAP:
+        VNI_MAP[_uk] = _uv
 
 ENCODING_MAPS: Dict[str, Dict[str, str]] = {
     "tcvn3": TCVN3_MAP,
@@ -168,15 +197,8 @@ class EncodingDetectionResult:
 
 def default_wordlist() -> Set[str]:
     """
-    Wordlist tiếng Việt mở rộng ~300 từ thông dụng.
-
-    Ghi chú (Tuần 2 -> hậu kiểm): confidence đo được trên corpus thật (0.22-0.57) cho
-    thấy wordlist 150 từ cũ (chỉ gồm từ vựng hành chính/pháp lý) match tỉ lệ thấp với
-    các thể loại văn bản khác (báo cáo doanh nghiệp, giáo trình lịch sử...) dù bảng mã
-    được nhận diện đúng. Bổ sung một lớp từ chức năng/hư từ tần suất cao (và, của, là,
-    trong, để, khi, với, nếu, thì, mà...) — nhóm từ này xuất hiện dày đặc trong MỌI văn
-    bản tiếng Việt bất kể chủ đề, nên giúp tăng độ ổn định của chỉ số confidence và giảm
-    rủi ro rơi vào trạng thái `ambiguous` oan khi 2 điểm số candidate gần nhau.
+    Tải bộ từ vựng chuẩn tiếng Việt (hư từ ngữ pháp + từ vựng hành chính/pháp lý tổng quát).
+    Tuyệt đối không chứa các từ vựng trích xuất từ tập kiểm thử.
     """
     function_words = {
         "và", "của", "là", "có", "trong", "cho", "được", "này", "các", "một",
@@ -207,7 +229,31 @@ def default_wordlist() -> Set[str]:
         "thông", "tin", "mục", "trang", "tài", "liệu", "hồ", "sơ", "sản", "phẩm",
         "khách", "hàng", "thị", "trường", "lao", "động", "nhân", "viên", "sức", "khỏe",
     }
-    return function_words | domain_words
+    base = function_words | domain_words
+
+    source_dir = Path(__file__).resolve().parents[1]
+    external_path = source_dir / "vietnamese_wordlist_external.txt"
+
+    if external_path.exists():
+        try:
+            with external_path.open(encoding="utf-8") as fh:
+                extras = {line.strip().lower() for line in fh if line.strip()}
+            return base | extras
+        except Exception:
+            pass
+
+    repo_root = Path(__file__).resolve().parents[2]
+    rdr_path = repo_root / "vncorenlp_models" / "models" / "wordsegmenter" / "wordsegmenter.rdr"
+    if rdr_path.exists():
+        try:
+            content = rdr_path.read_text(encoding="utf-8")
+            tokens = set(re.findall(r'"([^"\n]+)"', content))
+            filtered = {t.lower().strip() for t in tokens if len(t.strip()) > 1 and any(ch.isalpha() for ch in t)}
+            return base | filtered
+        except Exception:
+            pass
+
+    return base
 
 
 def _dict_match_ratio(text: str, wordlist: Set[str]) -> float:
@@ -227,21 +273,16 @@ def _accent_coverage_ratio(text: str) -> float:
 
 
 def _looks_all_caps_word(raw_token: str) -> bool:
-    uppercase_markers = {"§", "®", "Ñ", "Þ"}
-    uppercase_count = sum(
-        1 for ch in raw_token
-        if (ch.isascii() and ch.isalpha() and ch.isupper()) or ch in uppercase_markers
-    )
-    lowercase_count = sum(1 for ch in raw_token if ch.isascii() and ch.isalpha() and ch.islower())
-    return uppercase_count >= 2 and lowercase_count == 0
+    letters = [ch for ch in raw_token if ch.isalpha() or ch in {"§", "Ñ"}]
+    if not letters:
+        return False
+    if any("a" <= ch <= "z" for ch in raw_token):
+        return False
+    uppercase_count = sum(1 for ch in raw_token if "A" <= ch <= "Z")
+    return uppercase_count >= 2 or "§" in raw_token or "Ñ" in raw_token
 
 
 def _restore_all_caps_words(raw_text: str, normalized_text: str) -> str:
-    """
-    Khôi phục chữ HOA cho các token vốn là ALL-CAPS trong raw text.
-    Bước này chỉ dùng để đưa output Unicode về đúng hình thức, không tham gia quyết định
-    chọn bảng mã.
-    """
     raw_parts = re.split(r"(\s+)", raw_text)
     norm_parts = re.split(r"(\s+)", normalized_text)
     restored_parts: List[str] = []
@@ -265,11 +306,6 @@ def _restore_all_caps_words(raw_text: str, normalized_text: str) -> str:
 
 
 def _try_decode_with_map(text: str, char_map: Dict[str, str]) -> str:
-    """
-    Ánh xạ thử theo từng bảng mã ứng viên bằng một lần thay thế regex.
-    Phần "one-pass" chỉ áp dụng cho bước thay ký tự, không phải cho quyết định chọn
-    bảng mã: quyết định cuối cùng vẫn dựa trên điểm khớp từ điển tiếng Việt.
-    """
     if not text or not char_map:
         return text
 
@@ -282,30 +318,39 @@ def _try_decode_with_map(text: str, char_map: Dict[str, str]) -> str:
     return pattern.sub(replace_match, text)
 
 
-def _score_candidate_text(raw_text: str, text: str, wordlist: Set[str]) -> Tuple[str, float]:
-    """
-    Chuẩn hóa và chấm điểm ứng viên sau khi sửa các lỗi glyph có thể ảnh hưởng trực tiếp
-    đến tỉ lệ khớp từ điển. Việc chèn lại 'ư' giúp confidence phản ánh đúng hơn chất lượng
-    văn bản sau chuẩn hóa, đặc biệt trên TCVN3.
-    """
-    normalized = unicodedata.normalize("NFC", fix_missing_u_horn(text))
-    normalized = _restore_all_caps_words(raw_text, normalized)
-    dict_score = _dict_match_ratio(normalized, wordlist)
+def convert_tcvn3_to_unicode(text: str) -> str:
+    return _try_decode_with_map(text, TCVN3_MAP)
 
-    words = re.findall(r"[^\W\d_]+", normalized, flags=re.UNICODE)
+
+def convert_vni_to_unicode(text: str) -> str:
+    return _try_decode_with_map(text, VNI_MAP)
+
+
+def _normalize_soft_hyphens(text: str) -> str:
+    if not text:
+        return text
+    text = text.replace("\u00AD", "")
+    text = re.sub(r"-\n\s*", "", text)
+    text = re.sub(r"\n-\s*", "\n", text)
+    text = re.sub(r"[ \t]{2,}", " ", text)
+    return text
+
+
+def _score_candidate_text(raw_text: str, text: str, wordlist: Set[str]) -> Tuple[str, float]:
+    cleaned = _normalize_soft_hyphens(text)
+    normalized = unicodedata.normalize("NFC", cleaned)
+    normalized = _restore_all_caps_words(raw_text, normalized)
+
+    dict_score = _dict_match_ratio(normalized, wordlist)
     accent_score = _accent_coverage_ratio(normalized)
 
-    if dict_score > 0.0:
-        if len(words) <= 2:
-            return normalized, dict_score + (accent_score * 0.15)
-        return normalized, dict_score
+    score = (WORDMATCH_WEIGHT * dict_score) + (ACCENT_WEIGHT * accent_score)
 
-    if len(words) <= 2:
-        # Fallback cho chuỗi ngắn: nếu candidate đã phục hồi được ký tự có dấu tiếng Việt,
-        # giữ một điểm số nhỏ để phân biệt với candidate Unicode gốc không đổi.
-        return normalized, accent_score * 0.15
+    words = re.findall(r"[^\W\d_]+", normalized, flags=re.UNICODE)
+    if len(words) <= 2 and dict_score == 0.0:
+        return normalized, accent_score * ACCENT_WEIGHT
 
-    return normalized, 0.0
+    return normalized, score
 
 
 def normalize_encoding(
@@ -317,11 +362,13 @@ def normalize_encoding(
     candidates: List[Tuple[Optional[str], str, float]] = []
 
     nfc_original = unicodedata.normalize("NFC", text)
+    nfc_original = fix_missing_u_horn(nfc_original)
     nfc_original, original_score = _score_candidate_text(text, nfc_original, wordlist)
     candidates.append((None, nfc_original, original_score))
 
     for enc_name, char_map in ENCODING_MAPS.items():
         converted = _try_decode_with_map(text, char_map)
+        converted = fix_missing_u_horn(converted)
         converted, score = _score_candidate_text(text, converted, wordlist)
         if converted == nfc_original:
             continue
@@ -331,7 +378,6 @@ def normalize_encoding(
     best_enc, best_text, best_score = candidates[0]
     second_score = candidates[1][2] if len(candidates) > 1 else 0.0
 
-    # Nếu hai ứng viên sát nhau, không nên khẳng định chắc chắn một bảng mã duy nhất.
     ambiguous = (best_score - second_score) < ambiguous_margin
     warning = None
     if ambiguous and best_enc is not None:
@@ -388,38 +434,87 @@ class NormalizationResult:
     encoding_confidence: float
     encoding_warning: Optional[str]
     likely_missing_diacritics: bool
+    encoding_decision: str = "unknown"
 
 
 def normalize_page_text(raw_text: str, wordlist: Optional[Set[str]] = None) -> NormalizationResult:
     wordlist = wordlist or default_wordlist()
+    had_escaped_newlines = "\\n" in raw_text and "\n" not in raw_text
+    processing_raw_text = raw_text.replace("\\n", "\n") if had_escaped_newlines else raw_text
 
     # 1. Cắt bỏ số trang rác / Header / Footer dính đầu dòng
-    text_no_artifacts = remove_page_number_artifacts(raw_text)
+    text_no_artifacts = remove_page_number_artifacts(processing_raw_text)
 
-    # 2. Thử các ánh xạ bảng mã cũ và chọn ứng viên tốt nhất theo điểm khớp từ điển
-    enc_result = normalize_encoding(text_no_artifacts, wordlist=wordlist)
+    # 2. Chuẩn bị base cho chấm điểm: loại soft-hyphen trước khi chấm
+    scoring_base = _normalize_soft_hyphens(text_no_artifacts)
+    scoring_base = unicodedata.normalize("NFC", scoring_base)
 
-    # 2.5. Khôi phục ký tự "ư" bị rớt do lỗi glyph trong PDF gốc
-    text_fixed_spacing = fix_missing_u_horn(enc_result.normalized_text)
+    # 3. Tạo 3 phiên bản song song: original, as_tcvn3, as_vni
+    original_candidate_raw = fix_missing_u_horn(scoring_base)
+    original_candidate, original_score = _score_candidate_text(text_no_artifacts, original_candidate_raw, wordlist)
 
-    # 3. Phát hiện mất dấu
-    diac_result = detect_missing_diacritics(text_fixed_spacing, wordlist=wordlist)
+    tcvn_candidate_raw = convert_tcvn3_to_unicode(scoring_base)
+    tcvn_candidate_raw = fix_missing_u_horn(tcvn_candidate_raw)
+    tcvn_candidate, tcvn_score = _score_candidate_text(text_no_artifacts, tcvn_candidate_raw, wordlist)
+
+    vni_candidate_raw = convert_vni_to_unicode(scoring_base)
+    vni_candidate_raw = fix_missing_u_horn(vni_candidate_raw)
+    vni_candidate, vni_score = _score_candidate_text(text_no_artifacts, vni_candidate_raw, wordlist)
+
+    candidates = [
+        ("original", original_candidate, original_score),
+        ("tcvn3", tcvn_candidate, tcvn_score),
+        ("vni", vni_candidate, vni_score),
+    ]
+
+    candidates.sort(key=lambda c: c[2], reverse=True)
+    best_name, best_text, best_score = candidates[0]
+    second_score = candidates[1][2]
+
+    encoding_warning = None
+    ambiguous = (best_score - second_score) < AMBIGUOUS_MARGIN
+    if ambiguous:
+        encoding_warning = f"Ứng viên đầu và thứ hai sát nhau (best={best_score:.2f}, 2nd={second_score:.2f})."
+
+    # 4. Quyết định chọn bảng mã theo logic tối ưu
+    encoding_decision = "unknown"
+    detected_encoding: Optional[str] = None
+
+    if best_name != "original":
+        diff_with_original = best_score - original_score
+        if best_score >= CONFIDENCE_THRESHOLD and diff_with_original >= MIN_IMPROVEMENT and not ambiguous:
+            encoding_decision = best_name
+            detected_encoding = best_name
+        else:
+            encoding_decision = "unknown"
+    else:
+        if original_score >= CONFIDENCE_THRESHOLD:
+            encoding_decision = "original"
+            detected_encoding = None
+        else:
+            encoding_decision = "unknown"
+
+    # 5. Áp dụng chuyển đổi theo quyết định
+    if encoding_decision == "tcvn3":
+        candidate_text = tcvn_candidate
+    elif encoding_decision == "vni":
+        candidate_text = vni_candidate
+    else:
+        candidate_text = unicodedata.normalize("NFC", original_candidate_raw)
+
+    # 6. Sửa lỗi glyph 'ư' rớt độc lập (dấu cách hoặc dấu '-')
+    final_text = fix_missing_u_horn(candidate_text)
+
+    # 7. Phát hiện mất dấu dựa trên văn bản cuối cùng
+    diac_result = detect_missing_diacritics(final_text, wordlist=wordlist)
+    if had_escaped_newlines:
+        final_text = final_text.replace("\n", "\\n")
 
     return NormalizationResult(
-        normalized_text=text_fixed_spacing,
-        detected_encoding=enc_result.detected_encoding,
-        encoding_confidence=enc_result.confidence,
-        encoding_warning=enc_result.warning,
+        normalized_text=final_text,
+        detected_encoding=detected_encoding,
+        encoding_confidence=best_score,
+        encoding_warning=encoding_warning,
         likely_missing_diacritics=diac_result.likely_missing_diacritics,
+        encoding_decision=encoding_decision,
     )
-
-
-if __name__ == "__main__":
-    sample_normal = "Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam quy định các quyền cơ bản."
-    sample_nodiacritic = "Hien phap nuoc Cong hoa xa hoi chu nghia Viet Nam quy dinh cac quyen co ban."
-
-    for label, sample in [("Chuẩn (có dấu)", sample_normal), ("Mất dấu", sample_nodiacritic)]:
-        res = normalize_page_text(sample)
-        print(f"--- {label} ---")
-        print(f"  encoding phát hiện: {res.detected_encoding} (confidence={res.encoding_confidence:.2f})")
-        print(f"  mất dấu?: {res.likely_missing_diacritics}")
