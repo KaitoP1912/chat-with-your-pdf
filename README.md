@@ -66,6 +66,51 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
+Kiểm tra Java JDK đã cài đúng và biến môi trường `JAVA_HOME` đã trỏ đúng chưa (VnCoreNLP chạy trên JVM nên nếu thiếu bước này, Trạm 2 sẽ báo lỗi khi khởi tạo `py_vncorenlp.VnCoreNLP`):
+
+```powershell
+java -version
+```
+
+### 1.5. Tải model VnCoreNLP (bắt buộc trước khi chạy Trạm 2 trở đi)
+
+Thư mục `vncorenlp_models/` **không được đính kèm trong repo** (do dung lượng lớn, đã liệt kê trong `.gitignore`) và cần được tải về máy trước khi chạy bất kỳ script nào liên quan đến tách từ tiếng Việt. Chạy đoạn Python sau **một lần duy nhất**, ngay tại thư mục gốc dự án, sau khi đã kích hoạt venv và cài `requirements.txt`:
+
+```powershell
+python -c "import py_vncorenlp, os; py_vncorenlp.download_model(save_dir=os.path.abspath('vncorenlp_models'))"
+```
+
+Lệnh này sẽ tự tạo thư mục `vncorenlp_models/` và tải về đầy đủ file `.jar` cùng các model cần thiết (wordsegmenter, pos, ner, parse).
+
+**Lưu ý riêng cho Windows:** `py_vncorenlp.download_model()` đôi khi bị lỗi thiếu file `vi-vocab` trong quá trình tải. Nếu sau khi chạy lệnh trên mà thư mục `vncorenlp_models\models\wordsegmenter\` không có file `vi-vocab`, hãy mở PowerShell tại thư mục gốc dự án và chạy tiếp:
+
+```powershell
+# 1. Tạo thư mục đích (cờ -Force giúp không bị lỗi nếu thư mục đã tồn tại)
+New-Item -ItemType Directory -Path "vncorenlp_models\models\wordsegmenter" -Force
+
+# 2. Tải file vi-vocab về đúng vị trí
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/vi-vocab" -OutFile "vncorenlp_models\models\wordsegmenter\vi-vocab"
+```
+
+**Kiểm tra đã tải đúng chưa:**
+
+```powershell
+python -c "import py_vncorenlp, os; s = py_vncorenlp.VnCoreNLP(save_dir=os.path.abspath('vncorenlp_models'), annotators=['wseg']); print(s.word_segment('Việt Nam là một quốc gia Đông Nam Á'))"
+```
+
+Nếu lệnh chạy không lỗi và in ra kết quả tách từ, model đã sẵn sàng để tiếp tục các bước bên dưới.
+
+### 1.6. Cấu hình biến môi trường (`.env`)
+
+Các script ở Trạm 4 (QA & Citation Generation) và baseline long-context (`test_longcontext_baseline.py`, `test_longcontext_baseline_114tr.py`) cần gọi Gemini API, do đó cần một file `.env` ở thư mục gốc dự án (file này **không** commit lên git):
+
+```powershell
+# Tạo file .env ở thư mục gốc, nội dung như sau:
+GEMINI_API_KEY=dán_API_key_của_bạn_vào_đây
+```
+
+Lấy API key miễn phí tại [Google AI Studio](https://aistudio.google.com/app/apikey). Nếu chưa tạo `.env` hoặc key còn để mặc định, các script sẽ báo lỗi `❌ Chưa có GEMINI_API_KEY hợp lệ trong .env.` và dừng ngay từ đầu thay vì chạy lỗi giữa chừng.
+
 ### 2. Danh mục Script và Lệnh chạy kiểm thử Trạm 1 (Tuần 2)
 
 #### a) Kiểm thử tự động toàn diện (`pytest` - 138 tests)
@@ -130,17 +175,7 @@ Chạy trên 7 file PDF hợp lệ của corpus (loại file full-scan bị Tr�
 python script/pilot_tuan3/measure_tuan3_corpus.py
 ```
 
-**Lưu ý:** `py_vncorenlp` yêu cầu đường dẫn `save_dir` là đường dẫn **tuyệt đối**. Trên môi trường Windows, việc tự động tải model qua `py_vncorenlp` dễ bị thiếu file `vi-vocab`. Nếu gặp lỗi thiếu từ điển, hãy mở PowerShell tại thư mục gốc dự án và chạy 2 lệnh sau:
-
-```powershell
-# 1. Tạo thư mục đích (cờ -Force giúp không bị lỗi nếu thư mục đã tồn tại)
-New-Item -ItemType Directory -Path "vncorenlp_models\models\wordsegmenter" -Force
-
-# 2. Tải file vi-vocab về đúng vị trí
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/vi-vocab" -OutFile "vncorenlp_models\models\wordsegmenter\vi-vocab"
-```
-
-Việc bổ sung lệnh `New-Item ... -Force` giúp tạo sẵn toàn bộ chuỗi thư mục mẹ, bảo đảm người dùng tiếp theo chạy dự án sẽ không gặp sự cố ngắt quãng.
+**Lưu ý:** `py_vncorenlp` yêu cầu đường dẫn `save_dir` là đường dẫn **tuyệt đối**. Nếu chưa tải model VnCoreNLP hoặc gặp lỗi thiếu file `vi-vocab`, xem lại mục **1.5. Tải model VnCoreNLP** ở trên để tải/khắc phục trước khi chạy các script Trạm 2.
 
 ---
 
