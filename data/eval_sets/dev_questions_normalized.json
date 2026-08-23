@@ -1,0 +1,586 @@
+{
+  "_ghi_chu": [
+    "Bộ 34 câu hỏi dev — Mở rộng phục vụ đánh giá RAG trích dẫn số trang và khả năng xử lý câu hỏi không trả lời được (unanswerable).",
+    "Phân bổ: 23 câu answerable (trong đó có 5 câu bridge) | 11 câu unanswerable (bao gồm 5 câu out_of_scope và 6 câu near_miss trên 3 tài liệu nguồn)."
+  ],
+  "questions": [
+    {
+      "id": "dev_01",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Nước Cộng hòa xã hội chủ nghĩa Việt Nam là một quốc gia như thế nào theo Điều 1 của Hiến pháp?",
+      "answer_reference": "Nước Cộng hòa xã hội chủ nghĩa Việt Nam là một nước độc lập, có chủ quyền, thống nhất và toàn vẹn lãnh thổ, bao gồm đất liền, hải đảo, vùng biển và vùng trời.",
+      "answer_pages": [
+        2
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        2
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_02",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Mọi người có những quyền gì đối với tính mạng và thân thể theo quy định tại Điều 19 và Điều 20?",
+      "answer_reference": "Mọi người có quyền sống. Tính mạng con người được pháp luật bảo hộ. Không ai bị tước đoạt tính mạng trái luật. Mọi người có quyền bất khả xâm phạm về thân thể, được pháp luật bảo hộ về sức khỏe, danh dự và nhân phẩm.",
+      "answer_pages": [
+        6
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        6
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_03",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Nhiệm kỳ của mỗi khóa Quốc hội được quy định bao nhiêu năm?",
+      "answer_reference": "Nhiệm kỳ của mỗi khóa Quốc hội là năm năm. Sáu mươi ngày trước khi Quốc hội hết nhiệm kỳ, Quốc hội khóa mới phải được bầu xong.",
+      "answer_pages": [
+        17
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        17
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_04",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Hiến pháp quy định như thế nào về trách nhiệm của các cơ quan nhà nước, cán bộ, công chức đối với Nhân dân và quy định về Mặt trận Tổ quốc Việt Nam?",
+      "answer_reference": "Các cơ quan nhà nước, cán bộ, công chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân. Mặt trận Tổ quốc Việt Nam là tổ chức liên minh chính trị, liên hiệp tự nguyện của tổ chức chính trị, các tổ chức chính trị - xã hội...",
+      "answer_pages": [
+        3,
+        4
+      ],
+      "is_bridge_case": true,
+      "is_answerable": true,
+      "expected_page": [
+        3,
+        4
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_05",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Doanh thu thuần của Vinamilk năm 2014 đạt bao nhiêu tỷ đồng?",
+      "answer_reference": "Doanh thu năm 2014 đạt 35.704 tỷ đồng.",
+      "answer_pages": [
+        7
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        7
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_06",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Chính sách khám sức khỏe định kỳ cho nhân viên Vinamilk được quy định cụ thể như thế nào đối với lao động nam và nữ?",
+      "answer_reference": "Chương trình khám sức khỏe định kỳ cho nhân viên: Lao động nam: 01 lần/năm. Lao động nữ: 02 lần/năm.",
+      "answer_pages": [
+        38
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        38
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_07",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Tính đến cuối năm 2014, Quỹ sữa Vươn cao Việt Nam đã đem đến cho trẻ em khó khăn tại Việt Nam bao nhiêu ly sữa?",
+      "answer_reference": "Đến cuối 2014, tổng số lượng sữa mà Quỹ sữa đã đem đến cho hơn 310 nghìn trẻ em khó khăn tại Việt Nam là gần 23,5 triệu ly sữa, tương đương khoảng 84 tỷ đồng.",
+      "answer_pages": [
+        44
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        44
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_08",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Đối tượng nghiên cứu của môn học Lịch sử Đảng Cộng sản Việt Nam bao gồm những nội dung chính nào?",
+      "answer_reference": "Đối tượng nghiên cứu bao gồm các sự kiện lịch sử Đảng, Cương lĩnh đường lối của Đảng, quá trình lãnh đạo chỉ đạo tổ chức thực tiễn và công tác xây dựng Đảng qua các thời kỳ.",
+      "answer_pages": [
+        6
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        6
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_09",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Hội nghị thành lập Đảng Cộng sản Việt Nam diễn ra vào thời gian nào và ở đâu?",
+      "answer_reference": "Hội nghị hợp nhất các tổ chức Cộng sản họp từ ngày 6-1 đến ngày 7-2-1930 tại Hương Cảng, Trung Quốc do Nguyễn Ái Quốc chủ trì.",
+      "answer_pages": [
+        14
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        14
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_10",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Nguyễn Ái Quốc đã lựa chọn con đường cách mạng nào cho dân tộc Việt Nam và chuẩn bị những gì về mặt tư tưởng, chính trị cho sự ra đời của Đảng?",
+      "answer_reference": "Nguyễn Ái Quốc lựa chọn con đường cách mạng vô sản. Người đã chuẩn bị về tư tưởng, chính trị thông qua việc thành lập Hội Liên hiệp thuộc địa, viết sách Đường Kách Mệnh và thành lập Hội Việt Nam Cách mạng Thanh niên.",
+      "answer_pages": [
+        11,
+        12
+      ],
+      "is_bridge_case": true,
+      "is_answerable": true,
+      "expected_page": [
+        11,
+        12
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_11",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Theo Điều 13 của Hiến pháp, Quốc kỳ, Quốc huy, Quốc ca và Thủ đô của nước Cộng hòa xã hội chủ nghĩa Việt Nam được quy định như thế nào?",
+      "answer_reference": "Quốc kỳ hình chữ nhật, chiều rộng bằng hai phần ba chiều dài, nền đỏ, ở giữa có ngôi sao vàng năm cánh. Quốc huy hình tròn, nền đỏ, ở giữa có ngôi sao vàng năm cánh, xung quanh có bông lúa, ở dưới có nửa bánh xe răng và dòng chữ Cộng hòa xã hội chủ nghĩa Việt Nam. Quốc ca là nhạc và lời của bài Tiến quân ca. Thủ đô là Hà Nội.",
+      "answer_pages": [
+        5
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        5
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_12",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Theo quy định tại Điều 27 và Điều 29 của Hiến pháp, độ tuổi tối thiểu để công dân có quyền biểu quyết khi Nhà nước trưng cầu ý dân và quyền ứng cử vào Quốc hội là bao nhiêu?",
+      "answer_reference": "Công dân đủ 18 tuổi trở lên có quyền biểu quyết khi Nhà nước tổ chức trưng cầu ý dân; và đủ 21 tuổi trở lên có quyền ứng cử vào Quốc hội, Hội đồng nhân dân.",
+      "answer_pages": [
+        8
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        8
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_13",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Chính phủ có vị trí, tính chất pháp lý như thế nào và cơ cấu thành viên gồm những ai?",
+      "answer_reference": "Chính phủ là cơ quan hành chính nhà nước cao nhất, thực hiện quyền hành pháp, là cơ quan chấp hành của Quốc hội; chịu trách nhiệm và báo cáo công tác trước Quốc hội, Ủy ban thường vụ Quốc hội, Chủ tịch nước. Cơ cấu thành viên gồm Thủ tướng Chính phủ, các Phó Thủ tướng Chính phủ, các Bộ trưởng và Thủ trưởng cơ quan ngang bộ.",
+      "answer_pages": [
+        23,
+        24
+      ],
+      "is_bridge_case": true,
+      "is_answerable": true,
+      "expected_page": [
+        23,
+        24
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_14",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Ai có quyền đề nghị làm Hiến pháp, sửa đổi Hiến pháp và Hiến pháp được thông qua khi đạt tỷ lệ biểu quyết tán thành như thế nào?",
+      "answer_reference": "Chủ tịch nước, Ủy ban thường vụ Quốc hội, Chính phủ hoặc ít nhất một phần ba tổng số đại biểu Quốc hội có quyền đề nghị làm Hiến pháp, sửa đổi Hiến pháp. Hiến pháp được thông qua khi có ít nhất hai phần ba tổng số đại biểu Quốc hội biểu quyết tán thành.",
+      "answer_pages": [
+        31,
+        32
+      ],
+      "is_bridge_case": true,
+      "is_answerable": true,
+      "expected_page": [
+        31,
+        32
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_15",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Quy định về mức trần thuế thu nhập cá nhân đối với người lao động có thu nhập cao trong khu công nghệ cao được nêu tại điều nào của Hiến pháp?",
+      "answer_reference": "KHÔNG CÓ THÔNG TIN TRONG TÀI LIỆU",
+      "answer_pages": [],
+      "is_bridge_case": false,
+      "out_of_scope": true,
+      "is_answerable": false,
+      "expected_page": null,
+      "type": "out_of_scope",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_16",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Theo Báo cáo Phát triển bền vững 2014, cơ cấu sở hữu vốn của Vinamilk đến cuối năm 2014 giữa SCIC, cổ đông nước ngoài và cổ đông trong nước được phân chia với tỷ lệ bao nhiêu?",
+      "answer_reference": "Cơ cấu sở hữu vốn gồm: SCIC nắm giữ 45,06%, Cổ đông nước ngoài chiếm 49%, và Cổ đông trong nước (trừ SCIC) chiếm 5,94%.",
+      "answer_pages": [
+        7
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        7
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_17",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Năm 2014, Vinamilk sở hữu bao nhiêu phần trăm vốn điều lệ tại công ty con Driftwood Dairy Holding Corporation (Mỹ) và Angkor Dairy Products Co., Ltd (Campuchia)?",
+      "answer_reference": "Vinamilk sở hữu 70% vốn điều lệ tại Driftwood Dairy Holding Corporation (Mỹ) và 51% vốn điều lệ tại Angkor Dairy Products Co., Ltd (Campuchia).",
+      "answer_pages": [
+        5
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        5
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_18",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Hội đồng Quản trị Vinamilk năm 2014 gồm những tiểu ban nào và chức năng chính của từng tiểu ban là gì?",
+      "answer_reference": "Gồm 4 tiểu ban: Tiểu ban Chính sách phát triển (xác định, định hướng chiến lược, mục tiêu dài hạn); Tiểu ban Quản lý rủi ro (định hướng, triển khai và giám sát công tác quản lý rủi ro cấp HĐQT); Tiểu ban Nhân sự (quản lý nhân sự thành viên HĐQT, bộ máy điều hành và kế hoạch nhân lực); Tiểu ban Lương thưởng (xây dựng chính sách lương, thưởng, thù lao cho HĐQT và bộ máy điều hành).",
+      "answer_pages": [
+        12
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        12
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_19",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Theo thống kê năm 2014, tổng khối lượng nước sử dụng của Vinamilk là bao nhiêu và lượng nước này được phân bổ cho mục đích sản xuất và chăn nuôi như thế nào?",
+      "answer_reference": "Tổng khối lượng nước sử dụng năm 2014 là 4.247.455 m3, trong đó sử dụng cho sản xuất là 3.860.330 m3 và sử dụng cho chăn nuôi là 387.125 m3.",
+      "answer_pages": [
+        28
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        28
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_20",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Doanh số bán hàng chi tiết theo từng dòng sản phẩm sữa tươi và sữa đặc của Công ty Cổ phần Sữa TH True Milk trong năm tài chính 2014 là bao nhiêu?",
+      "answer_reference": "KHÔNG CÓ THÔNG TIN TRONG TÀI LIỆU",
+      "answer_pages": [],
+      "is_bridge_case": false,
+      "out_of_scope": true,
+      "is_answerable": false,
+      "expected_page": null,
+      "type": "out_of_scope",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_21",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Bản Chỉ thị Kháng chiến kiến quốc ngày 25-11-1945 của Ban Chấp hành Trung ương Đảng đã xác định kẻ thù chính và đề ra khẩu hiệu gì?",
+      "answer_reference": "Xác định kẻ thù chính của ta lúc này là thực dân Pháp xâm lược, phải tập trung ngọn lửa đấu tranh vào chúng; mục tiêu là dân tộc giải phóng và đề ra khẩu hiệu 'Dân tộc trên hết, Tổ quốc trên hết'.",
+      "answer_pages": [
+        30
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        30
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_22",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Hiệp định Sơ bộ ký ngày 6-3-1946 giữa Chủ tịch Hồ Chí Minh và đại diện Chính phủ Pháp gồm những nội dung cơ bản nào?",
+      "answer_reference": "Chính phủ Pháp công nhận Việt Nam là một quốc gia tự do, có chính phủ, nghị viện, tài chính và quân đội riêng nằm trong Liên bang Đông Dương thuộc khối Liên hiệp Pháp; Việt Nam đồng ý để 15.000 quân Pháp ra miền Bắc thay thế 20 vạn quân Tưởng rút về nước và rút dần trong 5 năm; hai bên tiếp tục đàm phán chính thức.",
+      "answer_pages": [
+        32
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        32
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_23",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Nội dung cơ bản của đường lối toàn quốc kháng chiến chống thực dân Pháp được thể hiện qua các điểm chính nào?",
+      "answer_reference": "Đường lối gồm các nội dung: Mục tiêu kháng chiến (đánh đổ thực dân Pháp xâm lược, giành độc lập, tự do, thống nhất hoàn toàn); Kháng chiến toàn dân (toàn dân tham gia, quân đội làm nòng cốt); Kháng chiến toàn diện (trên mọi lĩnh vực quân sự, chính trị, kinh tế, văn hóa...); Kháng chiến lâu dài (vừa đánh vừa xây dựng, chuyển hóa lực lượng); Kháng chiến dựa vào sức mình là chính (phát huy tối đa nội lực dân tộc).",
+      "answer_pages": [
+        34,
+        35
+      ],
+      "is_bridge_case": true,
+      "is_answerable": true,
+      "expected_page": [
+        34,
+        35
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_24",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Đại hội đại biểu toàn quốc lần thứ II của Đảng (tháng 2-1951) họp tại đâu và đã quyết định đổi tên Đảng thành gì?",
+      "answer_reference": "Đại hội họp tại xã Vinh Quang (nay là Kim Bình), huyện Chiêm Hóa, tỉnh Tuyên Quang; quyết định đưa Đảng ra hoạt động công khai với tên gọi Đảng Lao động Việt Nam.",
+      "answer_pages": [
+        37
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        37
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_25",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Chiến dịch Điện Biên Phủ bắt đầu vào ngày nào và kết quả thắng lợi được ghi nhận vào thời điểm nào?",
+      "answer_reference": "Chiến dịch bắt đầu nổ súng vào ngày 13-3-1954 tại phân khu phía Bắc trung tâm Mường Thanh; kết thúc thắng lợi vào lúc 17 giờ 30 phút chiều ngày 7-5-1954 khi quân ta đánh chiếm hầm chỉ huy, bắt sống tướng Đờ Cát-xtơ-ri và toàn bộ Bộ chỉ huy tập đoàn cứ điểm.",
+      "answer_pages": [
+        40
+      ],
+      "is_bridge_case": false,
+      "is_answerable": true,
+      "expected_page": [
+        40
+      ],
+      "out_of_scope": false,
+      "type": "answerable",
+      "related_page": null,
+      "note": ""
+    },
+    {
+      "id": "dev_26",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Hiến pháp quy định cụ thể mức trần lãi suất huy động tiền gửi tiết kiệm bằng Đồng Việt Nam của các ngân hàng thương mại là bao nhiêu phần trăm một năm?",
+      "is_answerable": false,
+      "expected_page": null,
+      "type": "near_miss",
+      "related_page": 12,
+      "note": "Điều 55 khoản 3 Hiến pháp chỉ quy định nguyên tắc 'Đơn vị tiền tệ quốc gia là Đồng Việt Nam. Nhà nước bảo đảm ổn định giá trị đồng tiền quốc gia', hoàn toàn không quy định mức lãi suất cụ thể.",
+      "answer_reference": "KHÔNG CÓ THÔNG TIN TRONG TÀI LIỆU",
+      "answer_pages": [],
+      "is_bridge_case": false,
+      "out_of_scope": false
+    },
+    {
+      "id": "dev_27",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Thời hạn tối đa luật định để Viện kiểm sát nhân dân ra quyết định phê chuẩn lệnh bắt người bị giữ trong trường hợp khẩn cấp là bao nhiêu giờ kể từ khi nhận được đề nghị?",
+      "is_answerable": false,
+      "expected_page": null,
+      "type": "near_miss",
+      "related_page": 6,
+      "note": "Điều 20 khoản 2 Hiến pháp quy định 'Không ai bị bắt nếu không có quyết định của Tòa án nhân dân, quyết định hoặc phê chuẩn của Viện kiểm sát nhân dân... Việc bắt, giam, giữ người do luật định', không nêu mốc thời gian/số giờ cụ thể.",
+      "answer_reference": "KHÔNG CÓ THÔNG TIN TRONG TÀI LIỆU",
+      "answer_pages": [],
+      "is_bridge_case": false,
+      "out_of_scope": false
+    },
+    {
+      "id": "dev_28",
+      "source_file": "normal_hienphap_33tr.pdf",
+      "question": "Quy trình phân bổ hạn ngạch tín dụng xanh và cơ chế định giá carbon theo tiêu chuẩn ETS của Liên minh Châu Âu được quy định như thế nào?",
+      "is_answerable": false,
+      "expected_page": null,
+      "type": "out_of_scope",
+      "note": "Chủ đề hạn ngạch tín dụng xanh và cơ chế định giá carbon của EU hoàn toàn không xuất hiện trong tài liệu.",
+      "answer_reference": "KHÔNG CÓ THÔNG TIN TRONG TÀI LIỆU",
+      "answer_pages": [],
+      "is_bridge_case": false,
+      "out_of_scope": true,
+      "related_page": null
+    },
+    {
+      "id": "dev_29",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Trong năm 2014, mức lương cơ bản và thưởng hiệu quả công việc chi tiết bằng tiền của Tổng Giám đốc Mai Kiều Liên là bao nhiêu tỷ đồng?",
+      "is_answerable": false,
+      "expected_page": null,
+      "type": "near_miss",
+      "related_page": 63,
+      "note": "Báo cáo chỉ nêu tổng quỹ lương, thu nhập, phụ cấp của toàn bộ nhân viên (1.475.436 triệu VNĐ) và cổ tức/thù lao chung, không nêu số liệu lương thưởng chi tiết của cá nhân bà Mai Kiều Liên.",
+      "answer_reference": "KHÔNG CÓ THÔNG TIN TRONG TÀI LIỆU",
+      "answer_pages": [],
+      "is_bridge_case": false,
+      "out_of_scope": false
+    },
+    {
+      "id": "dev_30",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Doanh thu và sản lượng xuất khẩu cụ thể của từng dòng sản phẩm sữa bột sang thị trường Iraq trong năm 2014 là bao nhiêu?",
+      "is_answerable": false,
+      "expected_page": null,
+      "type": "near_miss",
+      "related_page": 10,
+      "note": "Tài liệu chỉ nêu doanh thu xuất khẩu chung chiếm khoảng 10% tổng doanh thu và thị trường chủ yếu là Trung Đông, Đông Nam Á, Châu Phi mà không có số liệu doanh thu riêng cho quốc gia Iraq.",
+      "answer_reference": "KHÔNG CÓ THÔNG TIN TRONG TÀI LIỆU",
+      "answer_pages": [],
+      "is_bridge_case": false,
+      "out_of_scope": false
+    },
+    {
+      "id": "dev_31",
+      "source_file": "normal_vinamilkbaocao2014_53tr.pdf",
+      "question": "Thị phần của hãng xe điện Tesla tại thị trường Bắc Mỹ trong giai đoạn 2012-2014 đạt bao nhiêu phần trăm?",
+      "is_answerable": false,
+      "expected_page": null,
+      "type": "out_of_scope",
+      "note": "Chủ đề thị phần xe điện Tesla tại Bắc Mỹ hoàn toàn không liên quan và không có trong tài liệu.",
+      "answer_reference": "KHÔNG CÓ THÔNG TIN TRONG TÀI LIỆU",
+      "answer_pages": [],
+      "is_bridge_case": false,
+      "out_of_scope": true,
+      "related_page": null
+    },
+    {
+      "id": "dev_32",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Số lượng súng, lựu đạn và đạn dược cụ thể mà quân đội Pháp trang bị tại đồn Phai Khắt trước khi bị Đội Việt Nam Tuyên truyền Giải phóng quân tiến công ngày 25-12-1944 là bao nhiêu?",
+      "is_answerable": false,
+      "expected_page": null,
+      "type": "near_miss",
+      "related_page": 24,
+      "note": "Giáo trình chỉ ghi nhận Đội Việt Nam Tuyên truyền Giải phóng quân thành lập ngày 22/12/1944 với 34 người và đánh thắng hai trận Phai Khắt, Nà Ngần, không thống kê số lượng vũ khí trang bị tại đồn của địch.",
+      "answer_reference": "KHÔNG CÓ THÔNG TIN TRONG TÀI LIỆU",
+      "answer_pages": [],
+      "is_bridge_case": false,
+      "out_of_scope": false
+    },
+    {
+      "id": "dev_33",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Tổng kinh phí chi viện bằng đồng Rúp và Nhân dân tệ mà Liên Xô và Trung Quốc đã viện trợ không hoàn lại cho cuộc Tổng tiến công Tết Mậu Thân 1968 là bao nhiêu?",
+      "is_answerable": false,
+      "expected_page": null,
+      "type": "near_miss",
+      "related_page": 52,
+      "note": "Giáo trình chỉ đề cập đến số lượng cán bộ, chiến sĩ miền Bắc chi viện cho miền Nam và sự ủng hộ quốc tế chung, không nêu số liệu kinh phí bằng ngoại tệ viện trợ riêng cho Tết Mậu Thân 1968.",
+      "answer_reference": "KHÔNG CÓ THÔNG TIN TRONG TÀI LIỆU",
+      "answer_pages": [],
+      "is_bridge_case": false,
+      "out_of_scope": false
+    },
+    {
+      "id": "dev_34",
+      "source_file": "normal_lichsudang_C1&2_60tr.pdf",
+      "question": "Nguyên nhân và diễn biến chính của cuộc Cách mạng Minh Trị Duy Tân năm 1868 tại Nhật Bản được phân tích như thế nào?",
+      "is_answerable": false,
+      "expected_page": null,
+      "type": "out_of_scope",
+      "note": "Nội dung về Cách mạng Minh Trị Duy Tân năm 1868 tại Nhật Bản hoàn toàn không nằm trong phạm vi chương 1 và 2 của giáo trình Lịch sử Đảng.",
+      "answer_reference": "KHÔNG CÓ THÔNG TIN TRONG TÀI LIỆU",
+      "answer_pages": [],
+      "is_bridge_case": false,
+      "out_of_scope": true,
+      "related_page": null
+    }
+  ]
+}

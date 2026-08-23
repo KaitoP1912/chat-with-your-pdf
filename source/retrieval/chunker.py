@@ -5,7 +5,9 @@ Hai chiến lược chia đoạn, dùng chung 1 cấu trúc metadata để so s�
 (theo đúng yêu cầu đề cương: "chênh lệch kết quả chỉ phản ánh đúng biến ranh giới chunk").
 
   - chunk_by_page(): chia theo trang, <=256 token/chunk, overlap ~30 từ,
-    có thêm bridge chunk 128 từ mỗi bên tại mỗi ranh giới trang.
+    có thêm bridge chunk 128 từ mỗi bên tại MỖI ranh giới trang-trang VÀ
+    tại mỗi ranh giới mảnh-mảng nội bộ trong cùng 1 trang (sửa Tuần 4,
+    xem lý do chi tiết ở comment trong chunk_by_page()).
   - chunk_fixed_size(): baseline, chia cố định 170 từ/chunk toàn văn bản,
     không tôn trọng ranh giới trang, overlap 30 từ.
 
@@ -117,10 +119,23 @@ def chunk_by_page(
 
     source_file = pages[0]["source_file"]
 
-    # --- Chunk thường theo từng trang ---
+    # --- Chunk thường theo từng trang + bridge chunk NỘI BỘ TRANG ---
+    #
+    # Sửa lỗi phát hiện ở Tuần 4 (dev_13, dev_14): khi 1 trang dài bị cắt
+    # thành >=2 mảnh bởi _chunk_page_text() (vì vượt MAX_TOKENS_PER_CHUNK),
+    # overlap OVERLAP_WORDS=30 từ giữa 2 mảnh liền kề là quá ít để giữ đủ tín
+    # hiệu cho câu hỏi "bridge" hỏi gộp 2 ý nằm ở 2 mảnh khác nhau (vd Điều 94
+    # + Điều 95 trên cùng 1 trang) -> cosine similarity bị pha loãng, rớt
+    # ngưỡng tau dù thông tin có thật trong tài liệu. Trước đây bridge chunk
+    # chỉ được sinh ở ranh giới TRANG-TRANG (vòng lặp bên dưới), không có ở
+    # ranh giới MẢNH-MẢNH trong cùng 1 trang. Nay thêm bridge chunk tương tự
+    # (BRIDGE_WORDS_EACH_SIDE từ mỗi bên) tại mỗi ranh giới mảnh nội bộ trang,
+    # dùng chung logic "bỏ qua nếu 1 phía rỗng" như bridge trang-trang.
     for page in pages:
         words = _split_words(page["text"])
         pieces = _chunk_page_text(words, token_counter, MAX_TOKENS_PER_CHUNK, OVERLAP_WORDS)
+        piece_word_lists = [_split_words(p) for p in pieces]
+
         for i, piece_text in enumerate(pieces):
             chunks.append(
                 ChunkDict(
@@ -131,6 +146,30 @@ def chunk_by_page(
                     text=piece_text,
                     token_count=token_counter(piece_text),
                     is_bridge=False,
+                )
+            )
+
+        # Bridge chunk nội bộ trang: tại mỗi ranh giới mảnh i / i+1 trong CÙNG 1 trang.
+        for i in range(len(piece_word_lists) - 1):
+            tail = piece_word_lists[i][-BRIDGE_WORDS_EACH_SIDE:]
+            head = piece_word_lists[i + 1][:BRIDGE_WORDS_EACH_SIDE]
+
+            if not tail or not head:
+                continue
+
+            bridge_text = " ".join(tail + head)
+            chunks.append(
+                ChunkDict(
+                    chunk_id=f"{source_file}_p{page['page_number']}_intrabridge{i}",
+                    source_file=source_file,
+                    # Cùng 1 trang thật -> page_number rõ ràng, KHÔNG dùng
+                    # page_range (page_range chỉ dành cho bridge trang-trang,
+                    # nơi 2 trang khác nhau thật sự).
+                    page_number=page["page_number"],
+                    page_range=None,
+                    text=bridge_text,
+                    token_count=token_counter(bridge_text),
+                    is_bridge=True,
                 )
             )
 

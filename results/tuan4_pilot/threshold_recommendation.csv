@@ -1,0 +1,3 @@
+config,threshold,n_answerable,n_unanswerable,false_abstention_rate,false_acceptance_rate,near_miss_acceptance_rate,out_of_scope_acceptance_rate,abstention_precision,abstention_recall,abstention_f1,balanced_error_rate
+page_aware,0.5,23,11,0.087,0.0,0.0,0.0,0.8462,1.0,0.9167,0.0435
+fixed_size,0.45,23,11,0.1304,0.0,0.0,0.0,0.7857,1.0,0.88,0.0652

@@ -179,9 +179,62 @@ python script/pilot_tuan3/measure_tuan3_corpus.py
 
 ---
 
+### 4. Danh mục Script và Lệnh chạy kiểm thử Trạm 3 & 4 (Tuần 4)
+
+Tuần 4 bổ sung Hybrid Search (BM25), hiệu chỉnh ngưỡng cosine (threshold sweep) và tích hợp Gemini QA/Citation. **Cập nhật lại `requirements.txt` trước khi chạy** để tải các thư viện mới (`rank-bm25`, `google-generativeai`, `python-dotenv`):
+
+```powershell
+pip install -r requirements.txt
+```
+
+Đừng quên tạo file `.env` chứa `GEMINI_API_KEY` theo hướng dẫn ở mục **1.6** trước khi chạy các bước gọi Gemini API (mục c, d bên dưới).
+
+#### a) Chuẩn hóa Dev Set (34 câu answerable + unanswerable)
+
+Gộp bộ 10 câu cũ (Tuần 2) với các câu mới bổ sung, chuẩn hóa về chung 1 schema, xuất ra `data/eval_sets/dev_questions_normalized.json`:
+
+```powershell
+python script/pilot_tuan4/normalize_dev_questions.py
+```
+
+#### b) Đo Retrieval thô trên toàn Dev Set (Hit@3)
+
+Chạy retrieval (k=3) cho cả 2 cấu hình chunking (page_aware, fixed_size) trên toàn bộ dev set, xuất `results/tuan4_pilot/dev_retrieval_raw.csv`:
+
+```powershell
+python script/pilot_tuan4/run_dev_retrieval.py
+```
+
+#### c) Quét ngưỡng Cosine (Threshold Sweep)
+
+Quét dải tau từ 0.30 đến 0.80, tính false abstention rate, false acceptance rate và Abstention Precision/Recall/F1 cho từng cấu hình, xuất `results/tuan4_pilot/threshold_sweep.csv` và `threshold_recommendation.csv`:
+
+```powershell
+python script/pilot_tuan4/threshold_sweep.py
+```
+
+#### d) Chạy Gemini QA & Citation Generation theo 2 kịch bản ngưỡng
+
+Sinh câu trả lời kèm trích dẫn số trang cho toàn bộ dev set. Script nhận tham số dòng lệnh để chạy tách biệt từng kịch bản ngưỡng, tránh lẫn kết quả:
+
+```powershell
+# Kịch bản A — ngưỡng riêng theo sweep (page_aware=0.5, fixed_size=0.45)
+python script/pilot_tuan4/run_dev_qa.py --tau-page-aware 0.5 --tau-fixed-size 0.45
+
+# Kịch bản B — ngưỡng chung thấp hơn (tau=0.38 cho cả 2 cấu hình)
+python script/pilot_tuan4/run_dev_qa.py --tau 0.38
+```
+
+Kết quả xuất ra tương ứng `results/tuan4_pilot/dev_qa_results_scenario1_tau038.csv` và `dev_qa_results_scenario2_sweep.csv` (cột `answer_correctness_manual` cần chấm tay sau khi chạy xong).
+
+**Lưu ý:** cả 2 lệnh ở mục d) đều gọi Gemini API thật (68 lượt/lệnh), cần `GEMINI_API_KEY` hợp lệ trong `.env` và có thể phát sinh chi phí/giới hạn quota (RPD) theo tier tài khoản Gemini đang dùng.
+
+---
+
 ## Trạng thái tiến độ
 
 * [x] **Tuần 1:** Chốt câu hỏi nghiên cứu, thiết lập Corpus 9 file, đo thực nghiệm giới hạn an toàn 60 trang / 20 MB.
 * [x] **Tuần 2:** Hoàn thiện Trạm 1 (PDF Ingestion, Scan Detector, Text Normalizer đạt F1 = 1.000, CER = 0.003, FCR = 0.000 trên 67 mẫu benchmark độc lập và 166 trang corpus sạch; 138/138 pytest passed), đo thời gian tách từ (0.0154s/trang), hoàn thành 10 câu dev set.
 * [x] **Tuần 3:** Hoàn thiện Trạm 2 (page-aware chunking với bridge chunk, fixed-size baseline, embedding `vietnamese-bi-encoder`, FAISS `IndexFlatIP`); chạy thành công trên 7/7 file corpus hợp lệ (1313 chunk page-aware gồm 263 bridge chunk, 1155 chunk fixed-size baseline); demo truy hồi end-to-end top-3 đúng chủ đề và đúng số trang.
-* [ ] **Tuần 4:** Chọn ngưỡng cosine similarity trên dev set, tích hợp Gemini sinh câu trả lời kèm trích dẫn trang, chạy song song 2 cấu hình chunking để có số liệu Hit@3 sơ bộ.
+* [x] **Tuần 4:** Hoàn thiện Trạm 3 (Hybrid Search BM25+Dense qua RRF) và Trạm 4 cơ bản (Gemini QA & Citation Generation); mở rộng dev set lên 34 câu (23 answerable / 11 unanswerable); quét ngưỡng cosine trên dải 0.30-0.80 và chạy song song 2 kịch bản ngưỡng (68 lượt Gemini/kịch bản); Hit@3 page_aware = 95.7% (+4.4pp so với fixed_size) → khóa page-aware làm kiến trúc mặc định.
+* [ ] **Tuần 5:** Khóa ngưỡng tau chính thức, hoàn thiện Baseline Long-Context, khóa Test Set độc lập với Dev Set, kết nối luồng end-to-end (upload PDF → hỏi đáp → trích dẫn trang).
