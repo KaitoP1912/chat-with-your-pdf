@@ -1,0 +1,150 @@
+# BÁO CÁO TIẾN ĐỘ THỰC TẬP TỐT NGHIỆP — TUẦN 5
+
+**Đề tài:** Xây dựng ứng dụng hỏi đáp tài liệu PDF tiếng Việt có trích dẫn số trang bằng kỹ thuật RAG (Chat with Your PDF).
+**Sinh viên thực hiện:** Võ Thành Phước — MSSV: 079205022977.
+**Giảng viên hướng dẫn:** ThS. Nguyễn Thanh Tiến.
+**Thời gian báo cáo:** Tuần 5 (Hệ thống end-to-end & Khóa toàn bộ tham số hệ thống).
+**Quản lý mã nguồn (GitHub):** https://github.com/KaitoP1912/chat-with-your-pdf
+
+---
+
+## 1. Mục tiêu Tuần 5
+
+Theo khung tiến độ 8 tuần đã thống nhất với Thầy, Tuần 5 là mốc bắt buộc **hệ thống end-to-end phải hoạt động** và **khóa model, prompt, threshold và test set**. Mục tiêu cụ thể:
+
+1. Xây dựng Baseline Long-Context (cấu hình đối chứng thứ 3), so sánh công bằng với 2 cấu hình RAG.
+2. Khóa toàn bộ tham số hệ thống vào 1 nơi duy nhất, tránh lệch cấu hình giữa các lần chạy.
+3. Sửa 2 giới hạn còn tồn đọng từ Tuần 4 (dev_05 cần ảnh trang; model over-refusal).
+4. Soạn Test Set độc lập với Dev Set, dùng cho đánh giá chính thức ở Tuần 7.
+5. Kết nối luồng end-to-end tối thiểu, chứng minh hệ thống chạy được từ đầu đến cuối.
+
+---
+
+## 2. Công việc đã thực hiện
+
+### 2.1. Khóa tham số hệ thống (`config.py`)
+
+Tạo file `config.py` ở thư mục gốc, tập hợp toàn bộ quyết định đã chốt ở Tuần 4-5 vào 1 nơi duy nhất để mọi script dùng chung, tránh lệch tham số:
+
+| Tham số | Giá trị đã khóa |
+|---|---|
+| Model sinh câu trả lời | `gemini-3.5-flash-lite` |
+| Ngưỡng abstention (tau) | `0.38` (Kịch bản B, dùng chung mọi cấu hình) |
+| Top-k tầng generation | `15` |
+| Kích thước chunk tối đa | `320` token |
+| Overlap | `30` từ |
+| Bridge chunk mỗi bên | `128` từ |
+| Kiến trúc mặc định | `page_aware` |
+| Model embedding | `bkai-foundation-models/vietnamese-bi-encoder` |
+
+### 2.2. Baseline Long-Context — cấu hình đối chứng thứ 3
+
+Mở rộng 2 script pilot Tuần 1 (đọc nguyên văn cả tài liệu, chèn marker `[Trang X]`, temperature=0.0, Prompt Injection Guardrail) thành `script/pilot_tuan5/run_longcontext_baseline.py`, chạy đầy đủ 34 câu dev set, cùng model với 2 cấu hình RAG để so sánh công bằng.
+
+**2 lỗi phát hiện và đã vá trong quá trình chạy thử:**
+- **Lỗi encoding:** bản đầu dùng `pdfplumber` thô trực tiếp, không đi qua chuẩn hóa TCVN3/VNI như 2 cấu hình RAG kia — sửa bằng cách chuyển sang dùng chung `ingest_glue.build_clean_pages()`, đảm bảo cả 3 cấu hình đọc cùng 1 bản text đã chuẩn hóa (đã xác nhận `build_clean_pages()` không đánh số lại trang trắng/scan, không ảnh hưởng marker `[Trang X]`).
+- **Lỗi regex parse trang:** model thường tự gộp nhiều trang trong 1 marker theo nhiều kiểu (`[Trang 7]`, `[Trang 3, 4]`, `[Trang 32-33]`), regex ban đầu chỉ khớp đúng 1 số/marker, bỏ sót 2 kiểu sau — gây sai lệch `citation_correct` ở 1 số câu (VD dev_19, dev_22). Đã sửa để bắt đủ mọi cụm số trong ngoặc.
+
+Trần token an toàn 100.000/file (theo yêu cầu của Thầy từ Tuần 1) — không file nào trong 3 file corpus vượt trần.
+
+### 2.3. Sửa 2 giới hạn tồn đọng từ Tuần 4 (`source/qa/qa_generator.py`)
+
+**Việc 1 — Tích hợp gửi ảnh trang biểu đồ vào pipeline chính thức:** đưa cơ chế đã kiểm chứng ở Tuần 4 (`run_fixes_verification.py`) vào thẳng `generate_answer()`, dùng danh sách thủ công `CHART_HEAVY_PAGES_MANUAL = {("normal_vinamilkbaocao2014_53tr.pdf", 7)}` (đã xác nhận heuristic tự động không dùng được, xem báo cáo bổ sung Tuần 4).
+
+**Việc 2 — Giảm Model Over-Refusal:** nới QUY TẮC 2 trong `build_qa_prompt()` — cho phép trả lời kèm ghi chú độ không chắc chắn khi có ít nhất 1 đoạn liên quan, chỉ từ chối hẳn khi thực sự không có đoạn nào liên quan. Câu chữ bắt buộc khi từ chối thật ("Không tìm thấy thông tin trong tài liệu.") giữ nguyên, không đổi.
+
+**Kiểm chứng an toàn bắt buộc trước khi khóa:** chạy lại toàn bộ 34 câu (`script/pilot_tuan5/run_dev_qa_v2.py`), kiểm tra riêng false acceptance có tăng lên khỏi 0/11 hay không.
+
+### 2.4. Soạn Test Set độc lập (`data/eval_sets/test_questions.json`)
+
+25 câu (17 answerable / 8 unanswerable: 4 out_of_scope + 4 near_miss, tỉ lệ 68%/32% — gần khớp dev set), đúng schema dev set, có 1 câu bridge (test_14), có 5 câu dạng số liệu cụ thể (vượt yêu cầu tối thiểu 3-4 câu). Toàn bộ câu hỏi và đáp án được xác minh trực tiếp bằng nguyên văn PDF, không suy đoán. Đã kiểm tra không trùng trang/nội dung với 34 câu dev set.
+
+**Lưu ý đã ghi nhận:** `test_10` dùng trang 8 (file Vinamilk) — trang dạng sơ đồ/icon, cùng loại rủi ro đã biết như dev_16/dev_18. Nếu câu này bị trả lời sai khi chạy Test Set chính thức ở Tuần 7, đây là biểu hiện của giới hạn hệ thống đã biết, không phải lỗi Test Set.
+
+### 2.5. Kết nối luồng End-to-End (`script/app_cli.py`)
+
+Script CLI chạy trọn vẹn 4 bước: đọc & chuẩn hóa PDF → chia đoạn (`chunk_by_page`, chunk=320) → embedding + dựng Index (Hybrid FAISS + BM25) → tìm kiếm (k=15) + gọi Gemini (tau=0.38). Đã chạy thử thật trên máy, xác nhận hoạt động đúng cả 2 trường hợp:
+
+- Câu answerable ("Nhiệm kỳ Quốc hội là bao nhiêu năm?"): trả lời đúng "năm năm", không từ chối, trích dẫn đúng trang 17.
+- Câu near_miss ("Mức lãi suất tiết kiệm tối đa theo Hiến pháp?"): bị chặn đúng ở `retrieval_threshold`.
+
+### 2.6. Chấm điểm bằng Gemini có kiểm chứng chéo (`script/pilot_tuan5/grade_answers_with_gemini.py`)
+
+Xây script chấm tự động `answer_correctness_manual` bằng Gemini, dùng nguyên văn trang PDF làm bằng chứng gốc. **Phát hiện quan trọng trong quá trình soát lại:** cả người chấm tay lẫn script tự động ban đầu đều chấm sai 2 câu (`dev_10`, `dev_19`) vì chỉ dùng đúng `expected_page` để lấy bằng chứng — thiếu 1 trang liền kề chứa đúng nội dung cần đối chiếu (trang 13 cho dev_10, trang 29 cho dev_19), đã được xác nhận có thật qua oracle-context test Tuần 4. Đã sửa script để mở rộng thêm 1 trang mỗi bên khi trích bằng chứng chấm điểm (cùng logic `PAGE_BUFFER` đã dùng ở `oracle_context_test.py`), và sửa tay lại 2 nhãn bị chấm sai trước khi tổng hợp số liệu chính thức bên dưới.
+
+---
+
+## 3. Kết quả thực nghiệm — So sánh 3 cấu hình trên 34 câu dev set
+
+| Chỉ số | page_aware (Tuần 5, đã sửa) | fixed_size (Tuần 4, không đổi) | long-context (Tuần 5, mới) |
+|---|---|---|---|
+| Đúng hoàn toàn | 21/23 (91,3%) | 17/23 (73,9%) | 22/23 (95,7%) |
+| Đúng một phần | 1/23 | 4/23 | 0/23 |
+| Sai | 1/23 (dev_16) | 2/23 | 1/23 (dev_10, tự thêm 2 chi tiết ngoài trang được cấp — xem ghi chú) |
+| model_refusal (answerable) | 0/23 | 2/23 | 0/23 |
+| Citation accuracy | ~100% (theo metadata chunk) | 95,5% | 82,6% (19/23, model tự định vị trang) |
+| False acceptance (unanswerable) | 0/11 | 0/11 | 0/11 |
+| Token trung bình/câu | ~4.500 | ~2.500 | ~41.000 |
+| Latency trung bình | ~1,5s | ~1,3s | ~2,0s |
+
+*Ghi chú: cột long-context không dùng chung thang chấm điểm với 2 cột kia (chấm riêng bởi Claude #1, chưa qua vòng soát chéo bằng oracle test như page_aware) — con số mang tính tham khảo so sánh xu hướng, không tuyệt đối tương đương phương pháp luận.*
+
+### 3.1. Nhận định chính
+
+- **page_aware** (kiến trúc đã khóa) cải thiện rõ so với Tuần 4: đúng hoàn toàn từ 20/23 → 21/23, model_refusal từ 2/23 → 0/23, không đánh đổi false acceptance. Chỉ còn `dev_16` (lỗi đọc bảng/biểu đồ phức tạp) là hạn chế duy nhất chưa giải quyết triệt để, dù đã thử ảnh trang.
+- **long-context** đạt tỉ lệ đúng hoàn toàn cao nhất (95,7%) — không bị giới hạn ranh giới chunk, nhưng **citation accuracy thấp hơn hẳn** (82,6% so với ~95-100% của 2 cấu hình RAG) vì phải tự định vị trang thay vì lấy trực tiếp từ metadata chunk. Chi phí token gấp ~9 lần page_aware.
+- Cả 3 cấu hình đều giữ vững **0/11 false acceptance** — không có câu unanswerable nào bị trả lời liều ở bất kỳ cấu hình nào.
+
+### 3.2. Quyết định kiến trúc
+
+**Giữ nguyên `page_aware` làm kiến trúc chính thức**, không chuyển sang long-context — dù long-context có tỉ lệ đúng cao hơn nhẹ, nhưng citation accuracy kém hơn đáng kể (yêu cầu cốt lõi của đề tài là trích dẫn đúng số trang) và chi phí vận hành cao gấp nhiều lần, không phù hợp triển khai thực tế.
+
+---
+
+## 4. Đối chiếu với mục tiêu Tuần 5
+
+| Hạng mục cam kết | Trạng thái |
+|---|---|
+| Baseline Long-Context | **ĐẠT** |
+| Khóa toàn bộ tham số hệ thống | **ĐẠT** — `config.py` |
+| Sửa dev_05 (ảnh trang biểu đồ) | **ĐẠT** |
+| Giảm model over-refusal | **ĐẠT** — 2/23 → 0/23, không đánh đổi false acceptance |
+| Test Set độc lập | **ĐẠT** — 25 câu, đã xác minh |
+| Kết nối end-to-end | **ĐẠT** — `app_cli.py`, đã chạy thật |
+| Nghiệm thu 3 cấu hình | **ĐẠT** — bảng mục 3 |
+
+---
+
+## 5. Đánh giá tiến độ tổng thể dự án
+
+Tính theo trọng số thực tế (không chia đều theo tuần, vì khối lượng debug ở Tuần 4 nặng hơn hẳn các tuần khác):
+
+| Tuần | Trạng thái |
+|---|---|
+| 1-4 | Hoàn tất 100% |
+| 5 | Hoàn tất, đạt đúng mục tiêu đề ra |
+| 6 (Giao diện/MVP) | Chưa bắt đầu — hiện chỉ có CLI |
+| 7 (Đánh giá chính thức trên Test Set) | Test Set đã có, **chưa chạy đánh giá chính thức** |
+| 8 (Hoàn thiện hồ sơ) | Báo cáo tuần đã có, chưa có slide/video |
+
+**Ước tính tiến độ tổng thể: ~67-70%** toàn dự án — chưa đạt mốc 80% đặt ra, nhưng phần khó nhất về mặt kỹ thuật (Trạm 1-4, chiếm phần lớn khối lượng debug) đã hoàn tất triệt để. Phần còn lại (giao diện, chạy Test Set chính thức, đóng gói hồ sơ) có độ rủi ro kỹ thuật thấp hơn, dự kiến hoàn thành nhanh hơn giai đoạn trước.
+
+---
+
+## 6. Vấn đề tồn đọng và kế hoạch xử lý
+
+- **`dev_16` vẫn sai** dù đã gửi kèm ảnh trang 7 — model đọc đúng bộ 3 số liệu nhưng vẫn gán nhầm nhãn (SCIC ↔ cổ đông trong nước). Đây là giới hạn kỹ thuật khó (biểu đồ tròn dày đặc số liệu), để lại làm hướng cải tiến nếu còn thời gian ở Tuần 7-8.
+- **`dev_18`** không còn xuất hiện trong danh sách lỗi ở Tuần 5 (đã được sửa nhờ hiệu ứng phụ của k=15+chunk=320 từ Tuần 4, không phải do 2 thay đổi mới của Tuần 5) — xác nhận đây không phải trùng hợp mà là cải thiện thật, đã kiểm chứng qua citation_correct=True và nội dung khớp đầy đủ.
+- **Test Set chưa được chạy đánh giá chính thức** — để dành đúng cho Tuần 7 theo kế hoạch, không chạy trước để tránh vi phạm nguyên tắc "không dùng test set để chọn tham số".
+- **Chưa có giao diện** — CLI hiện tại chỉ đủ để demo nghiệm thu kỹ thuật, chưa phải sản phẩm MVP, để dành cho Tuần 6.
+
+---
+
+## 7. Kế hoạch triển khai Tuần 6
+
+Theo khung tiến độ: Tuần 6 là mốc **Giao diện và tích hợp — Sản phẩm MVP hoàn chỉnh**, và **không còn thay đổi kiến trúc lớn** kể từ tuần này.
+
+1. Xây dựng giao diện tối thiểu (web app đơn giản, VD Streamlit/Gradio) bọc quanh pipeline đã có sẵn trong `app_cli.py` — tái sử dụng toàn bộ logic, không viết lại.
+2. Cho phép người dùng tải PDF lên và hỏi đáp qua giao diện, hiển thị câu trả lời kèm trích dẫn trang.
+3. Kiểm thử giao diện trên toàn bộ 9 file corpus (không chỉ 3 file có trong dev/test set).
+4. Chuẩn bị sẵn sàng cho Tuần 7: khóa cứng toàn bộ hệ thống (không sửa code nữa sau khi bắt đầu chạy Test Set chính thức).

@@ -4,7 +4,7 @@ chunker.py — Bước 2, 3, 4 của Trạm 2
 Hai chiến lược chia đoạn, dùng chung 1 cấu trúc metadata để so sánh công bằng
 (theo đúng yêu cầu đề cương: "chênh lệch kết quả chỉ phản ánh đúng biến ranh giới chunk").
 
-  - chunk_by_page(): chia theo trang, <=256 token/chunk, overlap ~30 từ,
+  - chunk_by_page(): chia theo trang, <=MAX_TOKENS_PER_CHUNK token/chunk, overlap ~30 từ,
     có thêm bridge chunk 128 từ mỗi bên tại MỖI ranh giới trang-trang VÀ
     tại mỗi ranh giới mảnh-mảng nội bộ trong cùng 1 trang (sửa Tuần 4,
     xem lý do chi tiết ở comment trong chunk_by_page()).
@@ -24,7 +24,20 @@ from dataclasses import dataclass, field
 from typing import Callable, List, Optional, TypedDict
 
 # ----- Cấu hình đã chốt, không tự đổi -----
-MAX_TOKENS_PER_CHUNK = 256
+# MAX_TOKENS_PER_CHUNK tăng 256 -> 320 (Tuần 5, sau oracle-context test Tuần 4):
+# dev_10, dev_23 bị trả lời thiếu dù đúng trang nằm trong top-k, do 1 trang dài
+# bị cắt thành nhiều mảnh nhỏ, nội dung cần thiết (VD "chính trị" ở dev_10, điểm
+# 4-5 ở dev_23) rơi vào mảnh khác không được xếp hạng đủ cao. Tăng kích thước
+# mỗi mảnh giúp gộp nhiều nội dung liền mạch hơn vào 1 đoạn, giảm số lần phải
+# cắt trang. Đã thử hướng khác (tăng k từ 3->5 giữ nguyên 256) trước đó nhưng
+# KHÔNG hiệu quả (không cải thiện dev_10/dev_23, còn gây tác dụng phụ ở dev_25)
+# -> đã loại bỏ hướng đó, xem lại kèm log so sánh trong báo cáo Tuần 5.
+# Lưu ý: model embedding vietnamese-bi-encoder chỉ tính điểm dựa trên tối đa
+# 256 token đầu (max_seq_length=256) dù đoạn dài hơn - phần vượt 256 token vẫn
+# được lưu đầy đủ và gửi cho Gemini khi đoạn đó được chọn, nhưng KHÔNG ảnh
+# hưởng tới việc xếp hạng tìm kiếm. Chọn 320 (không tăng quá xa 256) để hạn
+# chế rủi ro giảm độ chính xác tìm kiếm.
+MAX_TOKENS_PER_CHUNK = 320
 OVERLAP_WORDS = 30
 BRIDGE_WORDS_EACH_SIDE = 128
 FIXED_CHUNK_WORDS = 170

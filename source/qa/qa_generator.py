@@ -11,16 +11,45 @@ from __future__ import annotations
 import os
 import time
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Set, Tuple
 
 from dotenv import load_dotenv
 import google.generativeai as genai
+
+try:
+    import pdfplumber
+except ImportError:  # pdfplumber đã là dependency của Trạm 1, nhưng phòng khi thiếu
+    pdfplumber = None
 
 from source.retrieval.vectorstore import SearchHit
 
 DEFAULT_TAU = 0.45
 DEFAULT_MODEL = "gemini-3.5-flash-lite"
 MODEL_ABSTAIN_TEXT = "Không tìm thấy thông tin trong tài liệu."
+
+# --- Tuần 5, Việc 1: Tích hợp gửi ảnh trang biểu đồ vào pipeline chính thức ---
+#
+# Danh sách THỦ CÔNG các trang biểu đồ/infographic đã xác nhận qua thực nghiệm
+# ở Tuần 4 (script/pilot_tuan4/run_fixes_verification.py) là cần gửi kèm ảnh
+# chụp trang cho Gemini đọc trực tiếp, thay vì chỉ dựa vào text trích xuất
+# (bảng/biểu đồ bị pdfplumber trích xuất sai thứ tự/thiếu số liệu).
+#
+# CỐ Ý dùng danh sách thủ công, KHÔNG dùng heuristic tự động dựa trên
+# vector_object_count: heuristic đó đã thử ở Tuần 4 và THẤT BẠI vì tài liệu
+# dạng infographic (normal_vinamilkbaocao2014_53tr.pdf) khiến 44/53 trang bị
+# nhận nhầm là "trang biểu đồ". Khi phạm vi vấn đề nhỏ và đã biết rõ (ở đây
+# chỉ 1 trang), danh sách thủ công an toàn hơn.
+CHART_HEAVY_PAGES_MANUAL: Set[Tuple[str, int]] = {
+    ("normal_vinamilkbaocao2014_53tr.pdf", 7),
+}
+
+# Độ phân giải render ảnh trang, đúng theo cấu hình đã kiểm chứng hiệu quả
+# nhất ở Tuần 4 (fixes_verification_dpi220.csv, k=15+chunk320+ảnh dpi=220).
+CHART_IMAGE_RESOLUTION = 220
+
+# Thư mục corpus mặc định — có thể override qua tham số corpus_dir của
+# generate_answer() khi gọi từ script khác thư mục làm việc.
+DEFAULT_CORPUS_DIR = "data/corpus"
 
 
 def _is_model_abstain_text(text: str) -> bool:
@@ -52,11 +81,73 @@ def _ensure_configured() -> None:
     _configured = True
 
 
+def _chunk_pages(chunk: SearchHit) -> List[int]:
+    """Trả về danh sách số trang thật sự mà 1 chunk bao phủ.
+
+    Chunk thường có đúng 1 trang (page_number). Bridge chunk trang-trang có
+    page_number=None, page_range="N-N+1" -> bao phủ 2 trang. Bridge chunk nội
+    bộ trang (is_bridge=True nhưng page_number không None) chỉ bao phủ 1 trang.
+    """
+    if chunk.page_number is not None:
+        return [chunk.page_number]
+    if chunk.page_range:
+        try:
+            start_str, end_str = chunk.page_range.split("-")
+            return [int(start_str), int(end_str)]
+        except ValueError:
+            return []
+    return []
+
+
+def _chart_pages_for_chunks(chunks: List[SearchHit]) -> List[Tuple[str, int]]:
+    """Trả về danh sách (không trùng, có thứ tự) các cặp (source_file, trang)
+    thuộc CHART_HEAVY_PAGES_MANUAL mà các chunk đã lọt qua ngưỡng tau bao phủ.
+
+    Dùng source_file riêng của TỪNG chunk (không giả định cả batch chỉ có 1
+    file nguồn) — an toàn hơn nếu sau này QA được mở rộng multi-document.
+    """
+    pages: List[Tuple[str, int]] = []
+    for chunk in chunks:
+        for p in _chunk_pages(chunk):
+            key = (chunk.source_file, p)
+            if key in CHART_HEAVY_PAGES_MANUAL and key not in pages:
+                pages.append(key)
+    return pages
+
+
+def _render_page_image(corpus_dir: str, source_file: str, page_number: int):
+    """Render 1 trang PDF thành ảnh PIL bằng pdfplumber (đúng cách đã kiểm
+    chứng ở run_fixes_verification.py: resolution=220).
+
+    Trả về None nếu không render được — lỗi ảnh KHÔNG được phép làm gãy toàn
+    bộ pipeline, chỉ log cảnh báo và pipeline rơi về hành vi text-only cũ cho
+    trang đó (giữ đúng yêu cầu: không đổi/làm chậm kết quả các câu khác khi
+    tính năng ảnh gặp sự cố).
+    """
+    if pdfplumber is None:
+        print("[WARN] Thiếu thư viện pdfplumber, bỏ qua gửi ảnh trang biểu đồ.")
+        return None
+
+    file_path = os.path.join(corpus_dir, source_file)
+    try:
+        with pdfplumber.open(file_path) as pdf:
+            if page_number < 1 or page_number > len(pdf.pages):
+                print(f"[WARN] Trang {page_number} ngoài phạm vi file '{source_file}', bỏ qua ảnh.")
+                return None
+            page = pdf.pages[page_number - 1]
+            page_image = page.to_image(resolution=CHART_IMAGE_RESOLUTION)
+            return page_image.original  # ảnh PIL.Image
+    except Exception as exc:
+        print(f"[WARN] Không render được ảnh trang {page_number} của '{source_file}': {exc}")
+        return None
+
+
 @dataclass
 class PromptBuildResult:
     should_abstain: bool
     prompt: Optional[str]
     used_chunks: List[SearchHit]
+    chart_pages: List[Tuple[str, int]] = field(default_factory=list)
 
 
 def filter_hits_by_threshold(hits: List[SearchHit], tau: float = DEFAULT_TAU) -> List[SearchHit]:
@@ -87,20 +178,41 @@ def build_qa_prompt(question: str, hits: List[SearchHit], tau: float = DEFAULT_T
         return PromptBuildResult(should_abstain=True, prompt=None, used_chunks=[])
 
     document_block = build_document_block(filtered)
+    # Tuần 5, Việc 2 — thử giảm Model Over-Refusal:
+    # QUY TẮC 2 gốc yêu cầu "chắc chắn tuyệt đối mới trả lời", khiến Gemini tự
+    # chối (model_refusal) cả những câu answerable đã có đúng ngữ cảnh trong
+    # top-k (vd dev_05). Nới lỏng: cho phép trả lời kèm ghi chú độ không chắc
+    # chắn khi có ít nhất 1 đoạn liên quan rõ ràng, CHỈ từ chối hẳn khi thực sự
+    # không có đoạn nào liên quan. Câu chữ bắt buộc khi từ chối GIỮ NGUYÊN
+    # nguyên văn ("Không tìm thấy thông tin trong tài liệu.") vì hệ thống dựa
+    # vào đúng câu chữ này để phân biệt model_refusal — không được đổi.
+    #
+    # CẢNH BÁO (bắt buộc theo dõi sau khi chạy lại 34 câu): nới lỏng có rủi ro
+    # làm TĂNG false acceptance ở các câu unanswerable (hiện đang là 0/11) —
+    # nếu tỉ lệ này tăng lên khỏi 0/11 sau khi đổi prompt, PHẢI báo cáo rõ,
+    # không được coi thay đổi này là thành công.
     prompt = (
         "Bạn là một trợ lý AI hỏi đáp tài liệu nghiêm ngặt.\n"
         "Nhiệm vụ: Trả lời CÂU HỎI dựa trên dữ liệu tại mục [NỘI DUNG TÀI LIỆU].\n\n"
         "QUY TẮC:\n"
         "1. Chỉ trả lời dựa trên thông tin có trong [NỘI DUNG TÀI LIỆU] ở trên, "
         "không suy đoán thêm ngoài văn bản.\n"
-        "2. Nếu tài liệu không đủ thông tin để trả lời, bắt buộc trả lời đúng câu: "
-        "\"Không tìm thấy thông tin trong tài liệu.\"\n"
+        "2. Nếu CÓ ít nhất một đoạn trích liên quan trực tiếp đến câu hỏi, hãy trả "
+        "lời dựa trên đoạn đó, kể cả khi thông tin không đầy đủ 100% hoặc bạn "
+        "không hoàn toàn chắc chắn — trong trường hợp đó, nêu rõ phần không chắc "
+        "chắn trong câu trả lời (ví dụ: \"Dựa trên đoạn trích, có thể suy ra... "
+        "nhưng tài liệu không nêu rõ...\"). CHỈ khi KHÔNG có bất kỳ đoạn trích nào "
+        "trong [NỘI DUNG TÀI LIỆU] liên quan đến câu hỏi, bắt buộc trả lời đúng "
+        "nguyên văn câu: \"Không tìm thấy thông tin trong tài liệu.\" — không thêm "
+        "bớt chữ nào vào câu này.\n"
         "3. Trả lời ngắn gọn, chính xác.\n\n"
         f"{document_block}\n\n"
         f"CÂU HỎI: {question}"
     )
 
-    return PromptBuildResult(should_abstain=False, prompt=prompt, used_chunks=filtered)
+    chart_pages = _chart_pages_for_chunks(filtered)
+
+    return PromptBuildResult(should_abstain=False, prompt=prompt, used_chunks=filtered, chart_pages=chart_pages)
 
 
 @dataclass
@@ -116,6 +228,11 @@ class QAAnswer:
     is_error: bool = False
     error_message: Optional[str] = None
     model_used: Optional[str] = None
+    # Tuần 5, Việc 1: các cặp (source_file, trang) đã được gửi kèm ảnh cho Gemini
+    # ở lượt gọi này (rỗng nếu không có trang nào thuộc CHART_HEAVY_PAGES_MANUAL
+    # nằm trong các chunk đã lọt qua tau). Dùng để kiểm chứng dev_05 có thật sự
+    # nhận được ảnh trang 7 hay không khi phân tích kết quả.
+    chart_pages_sent: List[str] = field(default_factory=list)
 
 
 def _build_citations(used_chunks: List[SearchHit]) -> List[dict]:
@@ -129,7 +246,15 @@ def _build_citations(used_chunks: List[SearchHit]) -> List[dict]:
     ]
 
 
-def generate_answer(question: str, hits: List[SearchHit], tau: float = DEFAULT_TAU, target_model: str = DEFAULT_MODEL) -> QAAnswer:
+def generate_answer(
+    question: str,
+    hits: List[SearchHit],
+    tau: float = DEFAULT_TAU,
+    target_model: str = DEFAULT_MODEL,
+    corpus_dir: str = DEFAULT_CORPUS_DIR,
+) -> QAAnswer:
+    """corpus_dir: thư mục chứa file PDF gốc, cần để render ảnh trang biểu đồ
+    (Việc 1). Nếu không truyền, dùng DEFAULT_CORPUS_DIR ("data/corpus")."""
     build_result = build_qa_prompt(question, hits, tau=tau)
 
     if build_result.should_abstain:
@@ -143,6 +268,20 @@ def generate_answer(question: str, hits: List[SearchHit], tau: float = DEFAULT_T
     _ensure_configured()
     model_name = target_model.replace("models/", "")
 
+    # Việc 1: nếu (các) chunk đã lọt qua tau có bao phủ trang thuộc
+    # CHART_HEAVY_PAGES_MANUAL, render ảnh trang đó và gửi kèm cho Gemini
+    # cùng với text — thay vì chỉ gửi text như hành vi cũ. Mọi trang KHÔNG
+    # nằm trong danh sách vẫn giữ nguyên hành vi text-only cũ.
+    chart_images = []
+    chart_pages_sent: List[str] = []
+    for source_file, page_number in build_result.chart_pages:
+        image = _render_page_image(corpus_dir, source_file, page_number)
+        if image is not None:
+            chart_images.append(image)
+            chart_pages_sent.append(f"{source_file}#trang{page_number}")
+
+    gemini_contents = [build_result.prompt] + chart_images if chart_images else build_result.prompt
+
     retry_count = 0
     while True:
         try:
@@ -151,7 +290,7 @@ def generate_answer(question: str, hits: List[SearchHit], tau: float = DEFAULT_T
                 generation_config={"temperature": GENERATION_TEMPERATURE},
             )
             start = time.time()
-            response = model.generate_content(build_result.prompt)
+            response = model.generate_content(gemini_contents)
             elapsed = time.time() - start
 
             um = getattr(response, "usage_metadata", None)
@@ -167,6 +306,7 @@ def generate_answer(question: str, hits: List[SearchHit], tau: float = DEFAULT_T
                 output_tokens=getattr(um, "candidates_token_count", None),
                 total_tokens=getattr(um, "total_token_count", None),
                 model_used=model_name,
+                chart_pages_sent=chart_pages_sent,
             )
 
         except Exception as e:
@@ -183,4 +323,5 @@ def generate_answer(question: str, hits: List[SearchHit], tau: float = DEFAULT_T
                 is_error=True,
                 error_message=str(e),
                 model_used=model_name,
+                chart_pages_sent=chart_pages_sent,
             )

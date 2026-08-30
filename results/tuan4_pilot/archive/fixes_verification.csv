@@ -1,0 +1,42 @@
+question_id,source_file,question,retrieved_pages,used_chart_image,answer_text,answer_reference,is_abstained,abstain_reason,is_error,error_message
+dev_05,normal_vinamilkbaocao2014_53tr.pdf,Doanh thu thuần của Vinamilk năm 2014 đạt bao nhiêu tỷ đồng?,"7, 6, None, None, 6-7",True,"Dựa vào hình ảnh tài liệu, doanh thu thuần của Vinamilk năm 2014 đạt **35.704** tỷ đồng.",Doanh thu năm 2014 đạt 35.704 tỷ đồng.,False,,False,
+dev_06,normal_vinamilkbaocao2014_53tr.pdf,Chính sách khám sức khỏe định kỳ cho nhân viên Vinamilk được quy định cụ thể như thế nào đối với lao động nam và nữ?,"38, 37-38, 37, None, 36-37",True,"Chính sách khám sức khỏe định kỳ cho nhân viên Vinamilk được quy định cụ thể như sau:
+- Lao động nam: 01 lần/năm.
+- Lao động nữ: 02 lần/năm.",Chương trình khám sức khỏe định kỳ cho nhân viên: Lao động nam: 01 lần/năm. Lao động nữ: 02 lần/năm.,False,,False,
+dev_16,normal_vinamilkbaocao2014_53tr.pdf,"Theo Báo cáo Phát triển bền vững 2014, cơ cấu sở hữu vốn của Vinamilk đến cuối năm 2014 giữa SCIC, cổ đông nước ngoài và cổ đông trong nước được phân chia với tỷ lệ bao nhiêu?","7, 17, None, 2, None",True,"Dựa trên biểu đồ cơ cấu sở hữu vốn của Vinamilk đến cuối năm 2014 trong tài liệu, tỷ lệ được phân chia như sau:
+
+- **Cổ đông trong nước (trừ SCIC):** 45,06%
+- **SCIC:** 45%
+- **Cổ đông nước ngoài:** 5,94%","Cơ cấu sở hữu vốn gồm: SCIC nắm giữ 45,06%, Cổ đông nước ngoài chiếm 49%, và Cổ đông trong nước (trừ SCIC) chiếm 5,94%.",False,,False,
+dev_18,normal_vinamilkbaocao2014_53tr.pdf,Hội đồng Quản trị Vinamilk năm 2014 gồm những tiểu ban nào và chức năng chính của từng tiểu ban là gì?,"11-12, None, 12-13, 3-4, 40",True,"Dựa trên tài liệu, Hội đồng Quản trị Vinamilk năm 2014 gồm 04 tiểu ban với các chức năng chính như sau:
+
+1. **Tiểu ban Nhân sự:**
+   * **Chức năng chính:** Quản lý các vấn đề về nhân sự liên quan tới thành viên Hội đồng Quản trị, bộ máy điều hành; đề xuất, đánh giá về quy mô, thành phần của HĐQT; đề xuất về việc bổ nhiệm, bãi nhiệm thành viên HĐQT, Tổng Giám đốc, cán bộ quản lý chủ chốt; xây dựng kế hoạch phát triển nguồn nhân lực.
+
+2. **Tiểu ban Lương thưởng:**
+   * **Chức năng chính:** Xây dựng chính sách về lương, thưởng, thù lao và các lợi ích khác đối với thành viên HĐQT, bộ máy điều hành; tham vấn cho Tổng Giám đốc trong việc xây dựng chính sách về lương, thưởng, thu nhập của Công ty.
+
+3. **Tiểu ban Chính sách phát triển**
+4. **Tiểu ban Quản lý rủi ro** 
+   *(Tài liệu không mô tả chi tiết chức năng chính của hai tiểu ban này).*","Gồm 4 tiểu ban: Tiểu ban Chính sách phát triển (xác định, định hướng chiến lược, mục tiêu dài hạn); Tiểu ban Quản lý rủi ro (định hướng, triển khai và giám sát công tác quản lý rủi ro cấp HĐQT); Tiểu ban Nhân sự (quản lý nhân sự thành viên HĐQT, bộ máy điều hành và kế hoạch nhân lực); Tiểu ban Lương thưởng (xây dựng chính sách lương, thưởng, thù lao cho HĐQT và bộ máy điều hành).",False,,False,
+dev_19,normal_vinamilkbaocao2014_53tr.pdf,"Theo thống kê năm 2014, tổng khối lượng nước sử dụng của Vinamilk là bao nhiêu và lượng nước này được phân bổ cho mục đích sản xuất và chăn nuôi như thế nào?","28-29, 19-20, 26-27, None, None",False,"Dựa trên tài liệu, tổng khối lượng nước sử dụng của Vinamilk năm 2014 là 4.247.455 m3. 
+
+Tuy nhiên, tài liệu không cung cấp thông tin chi tiết về việc lượng nước này được phân bổ cụ thể như thế nào cho mục đích sản xuất và chăn nuôi.","Tổng khối lượng nước sử dụng năm 2014 là 4.247.455 m3, trong đó sử dụng cho sản xuất là 3.860.330 m3 và sử dụng cho chăn nuôi là 387.125 m3.",False,,False,
+dev_10,normal_lichsudang_C1&2_60tr.pdf,"Nguyễn Ái Quốc đã lựa chọn con đường cách mạng nào cho dân tộc Việt Nam và chuẩn bị những gì về mặt tư tưởng, chính trị cho sự ra đời của Đảng?","28, 12, 11, 27-28, None",False,"Dựa trên tài liệu:
+
+- **Con đường cách mạng được lựa chọn:** Nguyễn Ái Quốc đã lựa chọn con đường cách mạng vô sản cho cách mạng Việt Nam.
+- **Sự chuẩn bị về tư tưởng:** 
+  + Năm 1921, tham gia thành lập Hội liên hiệp thuộc địa tại Pháp, sau đó sáng lập tờ báo Người cùng khổ (Le Paria).
+  + Viết bài cho các báo Nhân đạo, Đời sống công nhân, Tạp chí Cộng sản, Tập san Thư tín quốc tế… nhằm lên án bản chất tàn bạo, bóc lột của chủ nghĩa thực dân và kêu gọi nhân dân bị áp bức đứng dậy đấu tranh giải phóng.
+  + Viết tác phẩm “Bản án chế độ thưc dân Pháp” chỉ rõ chủ nghĩa thực dân là kẻ thù chung.
+  + Năm 1922, được cử làm trưởng tiểu ban Nghiên cứu về Đông Dương thuộc Ban Nghiên cứu thuộc địa của Đảng Cộng sản Pháp.
+  + Năm 1927, khẳng định Đảng muốn vững phải có chủ nghĩa làm cốt (chủ nghĩa chân chính nhất, cách mạng nhất là chủ nghĩa Mác - Lênin).
+
+*(Lưu ý: Tài liệu không đề cập chi tiết về việc chuẩn bị riêng về mặt ""chính trị"", chỉ đề cập về tư tưởng).*","Nguyễn Ái Quốc lựa chọn con đường cách mạng vô sản. Người đã chuẩn bị về tư tưởng, chính trị thông qua việc thành lập Hội Liên hiệp thuộc địa, viết sách Đường Kách Mệnh và thành lập Hội Việt Nam Cách mạng Thanh niên.",False,,False,
+dev_23,normal_lichsudang_C1&2_60tr.pdf,Nội dung cơ bản của đường lối toàn quốc kháng chiến chống thực dân Pháp được thể hiện qua các điểm chính nào?,"None, 34, 34, 33, None",False,"Dựa trên tài liệu cung cấp, nội dung cơ bản của đường lối kháng chiến bao gồm:
+
+1. **Về mục tiêu của cuộc kháng chiến:** Đánh đổ thực dân Pháp xâm lược, giành nền độc lập, tự do, thống nhất hoàn toàn; vì nền tự do, dân chủ và góp phần bảo vệ hòa bình thế giới.
+2. **Kháng chiến toàn dân:** Đem toàn bộ sức dân, tài dân, lực dân; động viên toàn dân tích cực tham gia kháng chiến. Xây dựng sự đồng thuận, nhất trí của cả nước, đánh địch ở mọi nơi, mọi lúc, với tinh thần *""mỗi người dân là một chiến sĩ, mỗi làng xã là một pháo đài""*.","Đường lối gồm các nội dung: Mục tiêu kháng chiến (đánh đổ thực dân Pháp xâm lược, giành độc lập, tự do, thống nhất hoàn toàn); Kháng chiến toàn dân (toàn dân tham gia, quân đội làm nòng cốt); Kháng chiến toàn diện (trên mọi lĩnh vực quân sự, chính trị, kinh tế, văn hóa...); Kháng chiến lâu dài (vừa đánh vừa xây dựng, chuyển hóa lực lượng); Kháng chiến dựa vào sức mình là chính (phát huy tối đa nội lực dân tộc).",False,,False,
+dev_25,normal_lichsudang_C1&2_60tr.pdf,Chiến dịch Điện Biên Phủ bắt đầu vào ngày nào và kết quả thắng lợi được ghi nhận vào thời điểm nào?,"None, 40, 57, 57, 40",False,"Dựa trên tài liệu:
+- Chiến dịch Điện Biên Phủ được quyết định mở trong cuộc họp của Bộ Chính trị ngày 6-12-1953 (tài liệu không nêu rõ ngày bắt đầu cụ thể của chiến dịch).
+- Kết quả thắng lợi được ghi nhận vào lúc 17 giờ 30 phút chiều 7-5-1954 (khi Quân đội Nhân dân Việt Nam đánh chiếm hầm chỉ huy, bắt sống tướng Đờ Cátơri và Bộ chỉ huy tập đoàn cứ điểm Điện Biên Phủ, tiêu diệt và bắt sống toàn bộ lực lượng địch ở Điện Biên Phủ).","Chiến dịch bắt đầu nổ súng vào ngày 13-3-1954 tại phân khu phía Bắc trung tâm Mường Thanh; kết thúc thắng lợi vào lúc 17 giờ 30 phút chiều ngày 7-5-1954 khi quân ta đánh chiếm hầm chỉ huy, bắt sống tướng Đờ Cát-xtơ-ri và toàn bộ Bộ chỉ huy tập đoàn cứ điểm.",False,,False,

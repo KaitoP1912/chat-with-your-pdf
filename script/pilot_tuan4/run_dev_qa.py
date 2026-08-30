@@ -73,7 +73,17 @@ def main():
     parser.add_argument("--dev-set", default="data/eval_sets/dev_questions_normalized.json")
     parser.add_argument("--corpus-dir", default="data/corpus")
     parser.add_argument("--vncorenlp-dir", default="vncorenlp_models")
-    parser.add_argument("--k", type=int, default=3, help="Top-k đưa vào QA, khớp k đã dùng ở Bước 2")
+    parser.add_argument("--k", type=int, default=15,
+                        help="Top-k đoạn đưa vào QA (mặc định 15, đã thử k=5 trước đó nhưng "
+                             "KHÔNG hiệu quả — không cải thiện dev_10/dev_23, còn gây tác dụng "
+                             "phụ ở dev_25 (từ 'trả lời được' thành 'từ chối hẳn'). Thử tiếp k=15 "
+                             "kết hợp chunk=320 (xem source/retrieval/chunker.py) qua "
+                             "run_fixes_verification.py: sửa được dev_10, dev_19, dev_25 hoàn toàn/"
+                             "gần hoàn toàn. Chỉ còn dev_16, dev_18 chưa sửa được (lỗi trích xuất "
+                             "PDF bảng/biểu đồ, không phải lỗi thiếu ngữ cảnh — xem báo cáo Tuần 4 "
+                             "mục giới hạn đã biết). Lưu ý: Hit@3 ở Bước 2 (run_dev_retrieval.py) "
+                             "vẫn giữ nguyên k=3 làm chỉ số so sánh chunking gốc, KHÔNG đổi theo "
+                             "giá trị này — đây chỉ là k cho tầng sinh câu trả lời (generation).")
     parser.add_argument("--tau", type=float, default=None,
                         help="[Kịch bản 1] Ngưỡng tau DÙNG CHUNG cho cả 2 cấu hình. "
                              "Nếu truyền, ghi đè --tau-page-aware/--tau-fixed-size.")

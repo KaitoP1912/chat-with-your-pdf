@@ -1,0 +1,43 @@
+question_id,source_file,oracle_pages_used,answer_text,is_abstained,abstain_reason,is_error,error_message,heuristic_match,diagnosis,latency_seconds,model_used
+dev_05,normal_vinamilkbaocao2014_53tr.pdf,"[6, 7, 8]","Dựa trên tài liệu, doanh thu năm 2014 của Vinamilk đạt 35.704 tỷ đồng.",False,,False,,True,retrieval_or_chunking_error_likely,1.397,gemini-3.5-flash-lite
+dev_06,normal_vinamilkbaocao2014_53tr.pdf,"[37, 38, 39]","Dựa trên tài liệu, chính sách khám sức khỏe định kỳ cho nhân viên Vinamilk được quy định cụ thể như sau:
+- Lao động nam: 01 lần/năm.
+- Lao động nữ: 02 lần/năm.",False,,False,,True,retrieval_or_chunking_error_likely,1.313,gemini-3.5-flash-lite
+dev_10,normal_lichsudang_C1&2_60tr.pdf,"[10, 11, 12, 13]","Dựa trên tài liệu:
+
+**1. Lựa chọn con đường cách mạng:**
+* Nguyễn Ái Quốc đã lựa chọn con đường cách mạng vô sản.
+
+**2. Chuẩn bị về mặt tư tưởng:**
+* Lên án bản chất tàn bạo, bóc lột của chủ nghĩa thực dân đối với nhân dân các nước thuộc địa và kêu gọi nhân dân bị áp bức đứng dậy đấu tranh thông qua hoạt động viết báo (báo *Người cùng khổ*, *Nhân đạo*, *Đời sống công nhân*, *Tạp chí Cộng sản*, *Thư tín quốc tế*...) và tác phẩm *""Bản án chế độ thực dân Pháp""*.
+* Năm 1927, Người khẳng định: Đảng muốn vững phải có chủ nghĩa làm cốt, và chủ nghĩa chân chính, cách mạng nhất là chủ nghĩa Mác - Lênin; phải truyền bá chủ nghĩa Mác - Lênin vào phong trào công nhân và phong trào yêu nước Việt Nam.
+
+**3. Chuẩn bị về mặt chính trị:**
+* Từ thực tiễn phong trào cách mạng thế giới và giải phóng dân tộc ở thuộc địa, Người khẳng định con đường cách mạng của các dân tộc bị áp bức là giải phóng giai cấp, giải phóng dân tộc (sự nghiệp của chủ nghĩa cộng sản).
+* Cách mạng giải phóng dân tộc ở thuộc địa là một bộ phận của cách mạng vô sản thế giới. 
+* Khẳng định giữa cách mạng giải phóng dân tộc ở thuộc địa với cách mạng vô sản ở chính quốc có mối quan hệ chặt chẽ, hỗ trợ cho nhau; đồng thời cách mạng ở thuộc địa có tính độc lập tương đối, có thể thành công trước cách mạng vô sản ở chính quốc và góp phần tích cực thúc đẩy cách mạng vô sản ở chính quốc phát triển.",False,,False,,True,retrieval_or_chunking_error_likely,3.107,gemini-3.5-flash-lite
+dev_16,normal_vinamilkbaocao2014_53tr.pdf,"[6, 7, 8]","Theo Báo cáo Phát triển bền vững 2014, cơ cấu sở hữu vốn của Vinamilk đến cuối năm 2014 được phân chia như sau:
+- SCIC: 45,06%
+- Cổ đông nước ngoài: 49%
+- Cổ đông trong nước (trừ SCIC): trong đó cổ đông là tổ chức chiếm 94,41% vốn điều lệ và cổ đông là cá nhân chiếm 5,59% vốn điều lệ.",False,,False,,False,retrieval_or_chunking_error_likely,1.268,gemini-3.5-flash-lite
+dev_18,normal_vinamilkbaocao2014_53tr.pdf,"[11, 12, 13]","Dựa trên tài liệu, Hội đồng Quản trị năm 2014 gồm 04 Tiểu ban với chức năng chính như sau:
+
+1. **Tiểu ban Chính sách phát triển:** Xác định, định hướng các chiến lược phát triển, mục tiêu, kế hoạch chiến lược, xây dựng các định hướng quản lý, phát triển dài hạn cho Công ty.
+2. **Tiểu ban Quản lý rủi ro:** Định hướng và triển khai các công tác quản lý rủi ro ở cấp độ Hội đồng quản trị. Chỉ đạo và giám sát hoạt động của Hội đồng quản lý rủi ro của Công ty để đảm bảo Công ty có hệ thống quản lý rủi ro hiệu quả và vững mạnh.
+3. **Tiểu ban Nhân sự:** Quản lý các vấn đề về nhân sự liên quan tới thành viên Hội đồng Quản trị, bộ máy điều hành: Đề xuất, đánh giá về quy mô, thành phần của HĐQT; đề xuất về việc bổ nhiệm, bãi nhiệm thành viên HĐQT, Tổng Giám đốc, cán bộ quản lý chủ chốt; xây dựng kế hoạch phát triển nguồn nhân lực.
+4. **Tiểu ban Lương thưởng:** Xây dựng chính sách về lương, thưởng, thù lao và các lợi ích khác đối với thành viên HĐQT, bộ máy điều hành; tham vấn cho Tổng Giám đốc trong việc xây dựng chính sách về lương, thưởng, thu nhập của Công ty.",False,,False,,True,retrieval_or_chunking_error_likely,1.745,gemini-3.5-flash-lite
+dev_19,normal_vinamilkbaocao2014_53tr.pdf,"[27, 28, 29]","Theo tài liệu, thống kê năm 2014:
+- **Tổng khối lượng nước sử dụng:** 4.247.455 $m^3$
+- **Phân loại theo mục đích sử dụng:**
+  - Sản xuất: 3.860.330 $m^3$
+  - Chăn nuôi: 387.125 $m^3$",False,,False,,True,retrieval_or_chunking_error_likely,1.158,gemini-3.5-flash-lite
+dev_23,normal_lichsudang_C1&2_60tr.pdf,"[33, 34, 35, 36]","Dựa vào tài liệu, nội dung cơ bản của đường lối kháng chiến chống thực dân Pháp bao gồm các điểm chính sau:
+
+1. **Về mục tiêu của cuộc kháng chiến:** Đánh đổ thực dân Pháp xâm lược, giành nền độc lập, tự do, thống nhất hoàn toàn; vì nền tự do dân chủ và góp phần bảo vệ hòa bình thế giới.
+2. **Kháng chiến toàn dân:** Đem toàn bộ sức dân, tài dân, lực dân; động viên toàn dân tích cực tham gia kháng chiến. Xây dựng sự đồng thuận, nhất trí của cả nước, đánh địch ở mọi nơi, mọi lúc (""mỗi người dân là một chiến sĩ, mỗi làng xã là một pháo đài, mỗi đường phố là một mặt trận""), trong đó quân đội nhân dân làm nòng cốt.
+3. **Kháng chiến toàn diện:** Đánh địch trên mọi lĩnh vực, mọi mặt trận (quân sự, chính trị, kinh tế, văn hóa, tư tưởng, ngoại giao), trong đó mặt trận quân sự, đấu tranh vũ trang giữ vai trò mũi nhọn, mang tính quyết định.
+4. **Kháng chiến lâu dài (Trường kỳ kháng chiến):** Vừa đánh tiêu hao lực lượng địch vừa xây dựng, phát triển lực lượng ta, từng bước làm chuyển biến so sánh lực lượng trên chiến trường có lợi cho ta; lấy thời gian làm lực lượng vật chất để chuyển hóa yếu thành mạnh. Thắng từng bước để đi đến thắng lợi cuối cùng.
+5. **Kháng chiến dựa vào sức mình là chính:** Lấy nguồn nội lực của dân tộc, phát huy nguồn sức mạnh vật chất, tinh thần vốn có trong nhân dân làm chỗ dựa chủ yếu; đồng thời tranh thu, phát huy cao độ và có hiệu quả sự ủng hộ, giúp đỡ quốc tế khi có điều kiện. Lấy độc lập, tự chủ về đường lối làm yếu tố quan trọng hàng đầu.",False,,False,,True,retrieval_or_chunking_error_likely,2.372,gemini-3.5-flash-lite
+dev_25,normal_lichsudang_C1&2_60tr.pdf,"[39, 40, 41]","Dựa vào tài liệu:
+- Chiến dịch Điện Biên Phủ bắt đầu vào ngày **13-3-1954** (quân ta nổ súng tấn công địch ở phân khu phía Bắc trung tâm Mường Thanh).
+- Kết quả thắng lợi được ghi nhận vào hồi **17 giờ 30 phút chiều 7-5-1954** (Quân đội Nhân dân Việt Nam đã đánh chiếm hầm chỉ huy, bắt sống tướng Đờ Cátơri và Bộ chỉ huy tập đoàn cứ điểm Điện Biên Phủ).",False,,False,,True,retrieval_or_chunking_error_likely,1.3,gemini-3.5-flash-lite
