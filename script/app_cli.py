@@ -44,6 +44,8 @@ import time
 # mà không cần cài package / set PYTHONPATH thủ công.
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from source.ingestion.pdf_loader import load_pdf_pages
+from source.ingestion.scan_detector import detect_scan, should_reject
 from source.retrieval.ingest_glue import build_clean_pages
 from source.retrieval.chunker import chunk_by_page
 from source.retrieval.vectorstore import build_index, search
@@ -93,6 +95,17 @@ def main() -> None:
     _print_header("BƯỚC 1/4 — Đọc & chuẩn hóa PDF (Trạm 1 + ingest_glue)")
     t0 = time.time()
     try:
+        raw_pages = load_pdf_pages(pdf_path)
+        scan_result = detect_scan(raw_pages)
+
+        if should_reject(scan_result):
+            print(
+                f"[LỖI] File '{pdf_path}' là PDF scan hoàn toàn "
+                "(không có lớp text) — ứng dụng hiện chỉ hỗ trợ PDF có text layer. "
+                "Vui lòng dùng OCR trước khi tải lên."
+            )
+            sys.exit(1)
+
         pages = build_clean_pages(pdf_path)
     except Exception as exc:
         print(f"[LỖI] Không đọc được file PDF '{pdf_path}': {exc}")

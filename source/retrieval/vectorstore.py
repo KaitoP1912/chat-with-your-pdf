@@ -80,17 +80,35 @@ class ChunkIndex:
         self._bm25: Optional[BM25Okapi] = None
         self._vncorenlp_dir: Optional[str] = None
 
-    def add(self, vectors: np.ndarray, chunks: List[dict], vncorenlp_dir: Optional[str] = None) -> None:
+    def add(
+        self,
+        vectors: np.ndarray,
+        chunks: List[dict],
+        vncorenlp_dir: Optional[str] = None,
+        segmented_texts: Optional[List[str]] = None,
+    ) -> None:
+        """segmented_texts (tùy chọn): kết quả tách từ ĐÃ TÍNH SẴN của từng chunk
+        (cùng thứ tự với chunks), tái sử dụng từ bước embedding để tránh gọi
+        VnCoreNLP/JVM lần thứ 2 cho cùng nội dung — build_index() truyền vào
+        tham số này. Nếu không truyền (gọi add() độc lập, không qua
+        build_index), hàm tự tách từ như cũ, hành vi và kết quả BM25 giống
+        hệt, chỉ khác về số lần gọi JVM.
+        """
         assert vectors.shape[0] == len(chunks), "Số vector và số chunk phải khớp nhau"
         self._index.add(vectors)
         self._metadatas.extend(chunks)
         self._vncorenlp_dir = vncorenlp_dir
 
         if vncorenlp_dir and chunks:
-            corpus_tokens = [
-                segment_text(c["text"], vncorenlp_dir).lower().split()
-                for c in chunks
-            ]
+            if segmented_texts is not None:
+                assert len(segmented_texts) == len(chunks), \
+                    "Số segmented_texts phải khớp số chunk"
+                corpus_tokens = [s.lower().split() for s in segmented_texts]
+            else:
+                corpus_tokens = [
+                    segment_text(c["text"], vncorenlp_dir).lower().split()
+                    for c in chunks
+                ]
             self._bm25 = BM25Okapi(corpus_tokens)
 
     def search_dense(self, query_vector: np.ndarray, k: int = 3) -> List[SearchHit]:
@@ -168,10 +186,27 @@ class ChunkIndex:
 
 
 def build_index(chunks: List[dict], vncorenlp_dir: str) -> ChunkIndex:
-    """Embed toàn bộ chunk và dựng index Hybrid (FAISS + BM25)."""
-    vectors = embed_chunks(chunks, vncorenlp_dir)
-    index = ChunkIndex(dim=vectors.shape[1] if vectors.shape[0] else EMBED_DIM)
-    index.add(vectors, chunks, vncorenlp_dir=vncorenlp_dir)
+    """Embed toàn bộ chunk và dựng index Hybrid (FAISS + BM25).
+
+    Tối ưu hiệu năng (không đổi kết quả): tách từ (VnCoreNLP) MỘT LẦN cho mỗi
+    chunk, dùng chung cho cả embedding và BM25 — trước đây mỗi chunk bị tách
+    từ 2 lần (1 lần ẩn trong embed_chunks(), 1 lần trong add()), với tài liệu
+    nhiều trang (VD báo cáo Vinamilk 53 trang, ~300 chunk) việc gọi JVM dư
+    thừa gấp đôi là nguyên nhân chính khiến dựng index chậm bất thường.
+    """
+    if not chunks:
+        index = ChunkIndex(dim=EMBED_DIM)
+        index.add(np.zeros((0, EMBED_DIM), dtype=np.float32), chunks, vncorenlp_dir=vncorenlp_dir)
+        return index
+
+    segmented_texts = [segment_text(c["text"], vncorenlp_dir) for c in chunks]
+
+    model = _get_model()
+    vectors = model.encode(segmented_texts, convert_to_numpy=True).astype(np.float32)
+    vectors = _l2_normalize(vectors)
+
+    index = ChunkIndex(dim=vectors.shape[1])
+    index.add(vectors, chunks, vncorenlp_dir=vncorenlp_dir, segmented_texts=segmented_texts)
     return index
 
 

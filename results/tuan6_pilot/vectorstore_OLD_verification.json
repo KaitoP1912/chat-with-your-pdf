@@ -1,0 +1,671 @@
+[
+  {
+    "id": "dev_01",
+    "question": "Nước Cộng hòa xã hội chủ nghĩa Việt Nam là một quốc gia như thế nào theo Điều 1 của Hiến pháp?",
+    "source_file": "normal_hienphap_33tr.pdf",
+    "config": "page_aware",
+    "k": 15,
+    "tau": 0.38,
+    "model": "gemini-3.5-flash-lite",
+    "answer_text": "Dựa trên Điều 1 tại tài liệu (Đoạn 1 và Đoạn 4), Nước Cộng hòa xã hội chủ nghĩa Việt Nam là một nước độc lập, có chủ quyền, thống nhất và toàn vẹn lãnh thổ, bao gồm đất liền, hải đảo, vùng biển và vùng trời.",
+    "citations": [
+      {
+        "page_number": 2,
+        "page_range": null,
+        "is_bridge": false
+      },
+      {
+        "page_number": null,
+        "page_range": "4-5",
+        "is_bridge": true
+      },
+      {
+        "page_number": 5,
+        "page_range": null,
+        "is_bridge": true
+      },
+      {
+        "page_number": null,
+        "page_range": "1-2",
+        "is_bridge": true
+      },
+      {
+        "page_number": 4,
+        "page_range": null,
+        "is_bridge": true
+      },
+      {
+        "page_number": 5,
+        "page_range": null,
+        "is_bridge": false
+      }
+    ],
+    "is_abstained": false,
+    "abstain_reason": null,
+    "is_error": false,
+    "error_message": null,
+    "retrieval_hits": [
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p2_c0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 2,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.48336195945739746,
+        "bm25_score": 9.730569164532191,
+        "rrf_score": 0.03200204813108039,
+        "text": "CHƯƠNG I CHẾ ĐỘ CHÍNH TRỊ Điều 1 Nước Cộng hòa xã hội chủ nghĩa Việt Nam là một nước độc lập, có chủ quyền, thống nhất và toàn vẹn lãnh thổ, bao gồm đất liền, hải đảo, vùng biển và vùng trời. Điều 2 1. Nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam là nhà nước pháp quyền xã hội chủ nghĩa của Nhân dân, do Nhân dân, vì Nhân dân. 2. Nước Cộng hòa xã hội chủ nghĩa Việt Nam do Nhân dân làm chủ; tất cả quyền lực nhà nước thuộc về Nhân dân mà nền tảng là liên minh giữa giai cấp công nhân với giai cấp nông dân và đội ngũ trí thức. 3. Quyền lực nhà nước là thống nhất, có sự phân công, phối hợp, kiểm soát giữa các cơ quan nhà nước trong việc thực hiện các quyền lập pháp, hành pháp, tư pháp. Điều 3 Nhà nước bảo đảm và phát huy quyền làm chủ của Nhân dân; công nhận, tôn trọng, bảo vệ và bảo đảm quyền con người, quyền công dân; thực hiện mục tiêu dân giàu, nước mạnh, dân chủ, công bằng, văn minh, mọi người có cuộc sống ấm no, tự do, hạnh phúc, có điều kiện phát triển toàn diện. Điều 4 1. Đảng Cộng sản Việt Nam - Đội tiên phong của giai cấp công nhân, đồng thời là đội tiên phong của nhân dân lao động và của dân tộc Việt Nam, đại biểu trung thành lợi ích"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_4-5",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "4-5",
+        "is_bridge": true,
+        "score": 0.45122891664505005,
+        "bm25_score": 9.28587953012543,
+        "rrf_score": 0.03125763125763126,
+        "text": "quốc Việt Nam là thiêng liêng, bất khả xâm phạm. 2. Mọi hành vi chống lại độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ, chống lại sự nghiệp xây dựng và bảo vệ Tổ quốc đều bị nghiêm trị. Điều 12 Nước Cộng hòa xã hội chủ nghĩa Việt Nam thực hiện nhất quán đường lối đối ngoại độc lập, tự chủ, hòa bình, hữu nghị, hợp tác và phát triển; đa phương 2 Điều này được sửa đổi, bổ sung theo quy định tại khoản 2 Điều 1 của Nghị quyết số 203/2025/QH15 sửa đổi, bổ sung một số điều của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam, có hiệu lực thi hành từ ngày 16 tháng 6 năm 2025. hóa, đa dạng hóa quan hệ, chủ động và tích cực hội nhập, hợp tác quốc tế trên cơ sở tôn trọng độc lập, chủ quyền và toàn vẹn lãnh thổ, không can thiệp vào công việc nội bộ của nhau, bình đẳng, cùng có lợi; tuân thủ Hiến chương Liên hợp quốc và điều ước quốc tế mà Cộng hòa xã hội chủ nghĩa Việt Nam là thành viên; là bạn, đối tác tin cậy và thành viên có trách nhiệm trong cộng đồng quốc tế vì lợi ích quốc gia, dân tộc, góp phần vào sự nghiệp hòa bình, độc lập dân tộc, dân chủ và tiến bộ xã hội trên thế giới. Điều 13 1. Quốc kỳ nước Cộng hòa xã hội chủ nghĩa Việt"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p5_intrabridge0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 5,
+        "page_range": null,
+        "is_bridge": true,
+        "score": 0.48846960067749023,
+        "bm25_score": 8.975919495273628,
+        "rrf_score": 0.0304147465437788,
+        "text": "rộng bằng hai phần ba chiều dài, nền đỏ, ở giữa có ngôi sao vàng năm cánh. 2. Quốc huy nước Cộng hòa xã hội chủ nghĩa Việt Nam hình tròn, nền đỏ, ở giữa có ngôi sao vàng năm cánh, xung quanh có bông lúa, ở dưới có nửa bánh xe răng và dòng chữ Cộng hòa xã hội chủ nghĩa Việt Nam. 3. Quốc ca nước Cộng hòa xã hội chủ nghĩa Việt Nam là nhạc và lời của bài Tiến quân ca. 4. Quốc khánh nước Cộng hòa xã hội chủ nghĩa Việt Nam là ngày Tuyên ngôn độc lập 2 tháng 9 năm 1945. 5. Thủ đô nước Cộng hòa xã hội chủ nghĩa Việt Nam là Hà Nội. CHƯƠNG II QUYỀN CON NGƯỜI, ngày Tuyên ngôn độc lập 2 tháng 9 năm 1945. 5. Thủ đô nước Cộng hòa xã hội chủ nghĩa Việt Nam là Hà Nội. CHƯƠNG II QUYỀN CON NGƯỜI, QUYỀN VÀ NGHĨA VỤ CƠ BẢN CỦA CÔNG DÂN Điều 14 1. Ở nước Cộng hòa xã hội chủ nghĩa Việt Nam, các quyền con người, quyền công dân về chính trị, dân sự, kinh tế, văn hóa, xã hội được công nhận, tôn trọng, bảo vệ, bảo đảm theo Hiến pháp và pháp luật. 2. Quyền con người, quyền công dân chỉ có thể bị hạn chế theo quy định của luật trong trường hợp cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_1-2",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "1-2",
+        "is_bridge": true,
+        "score": 0.4246816039085388,
+        "bm25_score": 9.086875836778038,
+        "rrf_score": 0.03007688828584351,
+        "text": "bạn bè trên thế giới, Nhân dân ta đã giành chiến thắng vĩ đại trong các cuộc đấu tranh giải phóng dân tộc, thống nhất đất nước, bảo vệ Tổ quốc và làm nghĩa vụ quốc tế, đạt được những thành tựu to lớn, có ý nghĩa lịch sử trong công cuộc đổi mới, đưa đất nước đi lên chủ nghĩa xã hội. Thể chế hóa Cương lĩnh xây dựng đất nước trong thời kỳ quá độ lên chủ nghĩa xã hội, kế thừa Hiến pháp năm 1946, Hiến pháp năm 1959, Hiến pháp năm 1980 và Hiến pháp năm 1992, Nhân dân Việt Nam xây dựng, thi hành và bảo vệ Hiến pháp này vì mục tiêu dân giàu, nước mạnh, dân chủ, công bằng, văn minh. CHƯƠNG I CHẾ ĐỘ CHÍNH TRỊ Điều 1 Nước Cộng hòa xã hội chủ nghĩa Việt Nam là một nước độc lập, có chủ quyền, thống nhất và toàn vẹn lãnh thổ, bao gồm đất liền, hải đảo, vùng biển và vùng trời. Điều 2 1. Nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam là nhà nước pháp quyền xã hội chủ nghĩa của Nhân dân, do Nhân dân, vì Nhân dân. 2. Nước Cộng hòa xã hội chủ nghĩa Việt Nam do Nhân dân làm chủ; tất cả quyền lực nhà nước thuộc về Nhân dân mà nền tảng là liên minh giữa giai cấp công nhân với giai cấp nông dân và đội ngũ trí thức. 3. Quyền lực nhà nước là thống nhất,"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p5_c1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 5,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.35431787371635437,
+        "bm25_score": 9.280353511766867,
+        "rrf_score": 0.029709507042253523,
+        "text": "ngày Tuyên ngôn độc lập 2 tháng 9 năm 1945. 5. Thủ đô nước Cộng hòa xã hội chủ nghĩa Việt Nam là Hà Nội. CHƯƠNG II QUYỀN CON NGƯỜI, QUYỀN VÀ NGHĨA VỤ CƠ BẢN CỦA CÔNG DÂN Điều 14 1. Ở nước Cộng hòa xã hội chủ nghĩa Việt Nam, các quyền con người, quyền công dân về chính trị, dân sự, kinh tế, văn hóa, xã hội được công nhận, tôn trọng, bảo vệ, bảo đảm theo Hiến pháp và pháp luật. 2. Quyền con người, quyền công dân chỉ có thể bị hạn chế theo quy định của luật trong trường hợp cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Điều 15 1. Quyền công dân không tách rời nghĩa vụ công dân. 2. Mọi người có nghĩa vụ tôn trọng quyền của người khác. 3. Công dân có trách nhiệm thực hiện nghĩa vụ đối với Nhà nước và xã hội."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p4_intrabridge1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 4,
+        "page_range": null,
+        "is_bridge": true,
+        "score": 0.40819960832595825,
+        "bm25_score": 8.866265921277778,
+        "rrf_score": 0.02862400327131466,
+        "text": "của người lao động; tuyên truyền, vận động người lao động học tập, nâng cao trình độ, kỹ năng nghề nghiệp, chấp hành pháp luật, xây dựng và bảo vệ Tổ quốc. Điều 11 1. Tổ quốc Việt Nam là thiêng liêng, bất khả xâm phạm. 2. Mọi hành vi chống lại độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ, chống lại sự nghiệp xây dựng và bảo vệ Tổ quốc đều bị nghiêm trị. Điều 12 Nước Cộng hòa xã hội chủ nghĩa Việt Nam thực hiện nhất quán đường lối đối ngoại độc lập, tự chủ, hòa bình, hữu nghị, hợp tác và phát triển; đa phương 2 Điều này được sửa đổi, bổ sung theo quy định tại khoản 2 Điều 1 lập, tự chủ, hòa bình, hữu nghị, hợp tác và phát triển; đa phương 2 Điều này được sửa đổi, bổ sung theo quy định tại khoản 2 Điều 1 của Nghị quyết số 203/2025/QH15 sửa đổi, bổ sung một số điều của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam, có hiệu lực thi hành từ ngày 16 tháng 6 năm 2025."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p21_c1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 21,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.2615850269794464,
+        "bm25_score": 9.133133125956562,
+        "rrf_score": 0.0264957264957265,
+        "text": "thông qua, trừ trường hợp Chủ tịch nước đề nghị xem xét lại pháp lệnh. CHƯƠNG VI CHỦ TỊCH NƯỚC Điều 86 Chủ tịch nước là người đứng đầu Nhà nước, thay mặt nước Cộng hòa xã hội chủ nghĩa Việt Nam về đối nội và đối ngoại. Điều 87 Chủ tịch nước do Quốc hội bầu trong số đại biểu Quốc hội. Chủ tịch nước chịu trách nhiệm và báo cáo công tác trước Quốc hội. Nhiệm kỳ của Chủ tịch nước theo nhiệm kỳ của Quốc hội. Khi Quốc hội hết nhiệm kỳ, Chủ tịch nước tiếp tục làm nhiệm vụ cho đến khi Quốc hội khóa mới bầu ra Chủ tịch nước. Điều 88 Chủ tịch nước có những nhiệm vụ và quyền hạn sau đây: 3 Khoản này được sửa đổi, bổ sung theo quy định tại khoản 3 Điều 1 của Nghị quyết số 203/2025/QH15 sửa đổi, bổ sung một số điều của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam, có hiệu lực thi hành từ ngày 16 tháng 6 năm 2025."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_23-24",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "23-24",
+        "is_bridge": true,
+        "score": 0.23100917041301727,
+        "bm25_score": 10.00351133013043,
+        "rrf_score": 0.02639344262295082,
+        "text": "Chủ tịch nước thì Phó Chủ tịch nước giữ quyền Chủ tịch nước cho đến khi Quốc hội bầu ra Chủ tịch nước mới. CHƯƠNG VII CHÍNH PHỦ Điều 94 Chính phủ là cơ quan hành chính nhà nước cao nhất của nước Cộng hòa xã hội chủ nghĩa Việt Nam, thực hiện quyền hành pháp, là cơ quan chấp hành của Quốc hội. Chính phủ chịu trách nhiệm trước Quốc hội và báo cáo công tác trước Quốc hội, Ủy ban thường vụ Quốc hội, Chủ tịch nước. Điều 95 1. Chính phủ gồm Thủ tướng Chính phủ, các Phó Thủ tướng Chính phủ, các Bộ trưởng và Thủ trưởng cơ quan ngang bộ. Cơ cấu, số lượng thành viên Chính phủ do Quốc hội quyết định. Chính phủ làm việc theo chế độ tập thể, quyết định theo đa số. 2. Thủ tướng Chính phủ là người đứng đầu Chính phủ, chịu trách nhiệm trước Quốc hội về hoạt động của Chính phủ và những nhiệm vụ được giao; báo cáo công tác của Chính phủ, Thủ tướng Chính phủ trước Quốc hội, Ủy ban thường vụ Quốc hội, Chủ tịch nước. 3. Phó Thủ tướng Chính phủ giúp Thủ tướng Chính phủ làm nhiệm vụ theo sự phân công của Thủ tướng Chính phủ và chịu trách nhiệm trước Thủ tướng Chính phủ về nhiệm vụ được phân công. Khi Thủ tướng Chính phủ vắng mặt, một Phó Thủ tướng Chính phủ được Thủ tướng Chính phủ ủy nhiệm thay mặt Thủ tướng"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p5_c0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 5,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.5454935431480408,
+        "bm25_score": 7.438033817596626,
+        "rrf_score": 0.026008827238335436,
+        "text": "hóa, đa dạng hóa quan hệ, chủ động và tích cực hội nhập, hợp tác quốc tế trên cơ sở tôn trọng độc lập, chủ quyền và toàn vẹn lãnh thổ, không can thiệp vào công việc nội bộ của nhau, bình đẳng, cùng có lợi; tuân thủ Hiến chương Liên hợp quốc và điều ước quốc tế mà Cộng hòa xã hội chủ nghĩa Việt Nam là thành viên; là bạn, đối tác tin cậy và thành viên có trách nhiệm trong cộng đồng quốc tế vì lợi ích quốc gia, dân tộc, góp phần vào sự nghiệp hòa bình, độc lập dân tộc, dân chủ và tiến bộ xã hội trên thế giới. Điều 13 1. Quốc kỳ nước Cộng hòa xã hội chủ nghĩa Việt Nam hình chữ nhật, chiều rộng bằng hai phần ba chiều dài, nền đỏ, ở giữa có ngôi sao vàng năm cánh. 2. Quốc huy nước Cộng hòa xã hội chủ nghĩa Việt Nam hình tròn, nền đỏ, ở giữa có ngôi sao vàng năm cánh, xung quanh có bông lúa, ở dưới có nửa bánh xe răng và dòng chữ Cộng hòa xã hội chủ nghĩa Việt Nam. 3. Quốc ca nước Cộng hòa xã hội chủ nghĩa Việt Nam là nhạc và lời của bài Tiến quân ca. 4. Quốc khánh nước Cộng hòa xã hội chủ nghĩa Việt Nam là ngày Tuyên ngôn độc lập 2 tháng 9 năm 1945. 5. Thủ đô nước Cộng hòa xã hội chủ nghĩa Việt Nam là Hà Nội. CHƯƠNG II QUYỀN CON NGƯỜI,"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p2_c1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 2,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.3588491380214691,
+        "bm25_score": 7.948042337841985,
+        "rrf_score": 0.025274725274725275,
+        "text": "tiên phong của giai cấp công nhân, đồng thời là đội tiên phong của nhân dân lao động và của dân tộc Việt Nam, đại biểu trung thành lợi ích của giai cấp công nhân, nhân dân lao động và của cả dân tộc, lấy chủ nghĩa Mác - Lê nin và tư tưởng Hồ Chí Minh làm nền tảng tư tưởng, là lực lượng lãnh đạo Nhà nước và xã hội. 2. Đảng Cộng sản Việt Nam gắn bó mật thiết với Nhân dân, phục vụ Nhân dân, chịu sự giám sát của Nhân dân, chịu trách nhiệm trước Nhân dân về những quyết định của mình. 3. Các tổ chức của Đảng và đảng viên Đảng Cộng sản Việt Nam hoạt động trong khuôn khổ Hiến pháp và pháp luật. Điều 5 1. Nước Cộng hòa xã hội chủ nghĩa Việt Nam là quốc gia thống nhất của các dân tộc cùng sinh sống trên đất nước Việt Nam."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p4_c1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 4,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.3248043656349182,
+        "bm25_score": 8.198736168679625,
+        "rrf_score": 0.02523809523809524,
+        "text": "tổ chức thành viên của Mặt trận và các tổ chức xã hội khác hoạt động. Điều 102 Công đoàn Việt Nam là tổ chức chính trị - xã hội của giai cấp công nhân và của người lao động; đại diện, chăm lo và bảo vệ quyền, lợi ích hợp pháp, chính đáng cho đoàn viên công đoàn và người lao động; là đại diện duy nhất của người lao động ở cấp quốc gia trong quan hệ lao động và quan hệ quốc tế về công đoàn; tham gia quản lý nhà nước, quản lý kinh tế - xã hội; tham gia kiểm tra, thanh tra, giám sát hoạt động của cơ quan nhà nước, tổ chức, đơn vị, doanh nghiệp về những vấn đề liên quan đến quyền, nghĩa vụ của người lao động; tuyên truyền, vận động người lao động học tập, nâng cao trình độ, kỹ năng nghề nghiệp, chấp hành pháp luật, xây dựng và bảo vệ Tổ quốc. Điều 11 1. Tổ quốc Việt Nam là thiêng liêng, bất khả xâm phạm. 2. Mọi hành vi chống lại độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ, chống lại sự nghiệp xây dựng và bảo vệ Tổ quốc đều bị nghiêm trị. Điều 12 Nước Cộng hòa xã hội chủ nghĩa Việt Nam thực hiện nhất quán đường lối đối ngoại độc lập, tự chủ, hòa bình, hữu nghị, hợp tác và phát triển; đa phương 2 Điều này được sửa đổi, bổ sung theo quy định tại khoản 2 Điều 1"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p3_c1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 3,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.2574986219406128,
+        "bm25_score": 8.938568223507156,
+        "rrf_score": 0.02507351803126451,
+        "text": "thực hiện nguyên tắc tập trung dân chủ. 2. Các cơ quan nhà nước, cán bộ, công chức, viên chức phải tôn trọng Nhân dân, tận tụy phục vụ Nhân dân, liên hệ chặt chẽ với Nhân dân, lắng nghe ý kiến và chịu sự giám sát của Nhân dân; kiên quyết đấu tranh chống tham nhũng, lãng phí và mọi biểu hiện quan liêu, hách dịch, cửa quyền. Điều 91 1. Mặt trận Tổ quốc Việt Nam là tổ chức liên minh chính trị, liên hiệp tự nguyện của tổ chức chính trị, các tổ chức chính trị - xã hội, tổ chức xã hội và các cá nhân tiêu biểu trong các giai cấp, tầng lớp xã hội, dân tộc, tôn giáo, người Việt Nam định cư ở nước ngoài. Mặt trận Tổ quốc Việt Nam là bộ phận của hệ thống chính trị của nước Cộng hòa xã hội chủ nghĩa Việt Nam, do Đảng Cộng sản Việt Nam lãnh đạo; là cơ sở chính trị của chính quyền nhân dân; tập hợp, phát huy sức mạnh đại đoàn kết toàn dân tộc; thể hiện ý chí, nguyện vọng và phát huy quyền làm chủ của 1 Điều này được sửa đổi, bổ sung theo quy định tại khoản 1 Điều 1 của Nghị quyết số 203/2025/QH15 sửa đổi, bổ sung một số điều của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam, có hiệu lực thi hành từ ngày 16 tháng 6 năm 2025."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_10-11",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "10-11",
+        "is_bridge": true,
+        "score": 0.31864985823631287,
+        "bm25_score": 8.364426133075536,
+        "rrf_score": 0.025015634771732333,
+        "text": "Mọi người có quyền được sống trong môi trường trong lành và có nghĩa vụ bảo vệ môi trường. Điều 44 Công dân có nghĩa vụ trung thành với Tổ quốc. Phản bội Tổ quốc là tội nặng nhất. Điều 45 1. Bảo vệ Tổ quốc là nghĩa vụ thiêng liêng và quyền cao quý của công dân. 2. Công dân phải thực hiện nghĩa vụ quân sự và tham gia xây dựng nền quốc phòng toàn dân. Điều 46 Công dân có nghĩa vụ tuân theo Hiến pháp và pháp luật; tham gia bảo vệ an ninh quốc gia, trật tự, an toàn xã hội và chấp hành những quy tắc sinh hoạt công cộng. Điều 47 Mọi người có nghĩa vụ nộp thuế theo luật định. Điều 48 Người nước ngoài cư trú ở Việt Nam phải tuân theo Hiến pháp và pháp luật Việt Nam; được bảo hộ tính mạng, tài sản và các quyền, lợi ích chính đáng theo pháp luật Việt Nam. Điều 49 Người nước ngoài đấu tranh vì tự do và độc lập dân tộc, vì chủ nghĩa xã hội, dân chủ và hòa bình hoặc vì sự nghiệp khoa học mà bị bức hại thì được Nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam xem xét cho cư trú. CHƯƠNG III KINH TẾ, XÃ HỘI, VĂN HÓA, GIÁO DỤC, KHOA HỌC, CÔNG NGHỆ VÀ MÔI TRƯỜNG Điều 50 Nước Cộng hòa xã hội chủ nghĩa Việt Nam xây dựng nền kinh tế độc lập, tự chủ,"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_3-4",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "3-4",
+        "is_bridge": true,
+        "score": 0.27454689145088196,
+        "bm25_score": 8.666944334462583,
+        "rrf_score": 0.02478580171358629,
+        "text": "giáo, người Việt Nam định cư ở nước ngoài. Mặt trận Tổ quốc Việt Nam là bộ phận của hệ thống chính trị của nước Cộng hòa xã hội chủ nghĩa Việt Nam, do Đảng Cộng sản Việt Nam lãnh đạo; là cơ sở chính trị của chính quyền nhân dân; tập hợp, phát huy sức mạnh đại đoàn kết toàn dân tộc; thể hiện ý chí, nguyện vọng và phát huy quyền làm chủ của 1 Điều này được sửa đổi, bổ sung theo quy định tại khoản 1 Điều 1 của Nghị quyết số 203/2025/QH15 sửa đổi, bổ sung một số điều của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam, có hiệu lực thi hành từ ngày 16 tháng 6 năm 2025. Nhân dân; đại diện, bảo vệ quyền và lợi ích hợp pháp, chính đáng của Nhân dân; thực hiện dân chủ, tăng cường đồng thuận xã hội; giám sát, phản biện xã hội; phản ánh ý kiến, kiến nghị của Nhân dân đến các cơ quan nhà nước; tham gia xây dựng Đảng, Nhà nước, hoạt động đối ngoại nhân dân, góp phần xây dựng và bảo vệ Tổ quốc. 2. Công đoàn Việt Nam, Hội Nông dân Việt Nam, Đoàn Thanh niên Cộng sản Hồ Chí Minh, Hội Liên hiệp Phụ nữ Việt Nam, Hội Cựu chiến binh Việt Nam là các tổ chức chính trị - xã hội trực thuộc Mặt trận Tổ quốc Việt Nam, được thành lập trên cơ sở tự nguyện, đại diện"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p26_intrabridge0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 26,
+        "page_range": null,
+        "is_bridge": true,
+        "score": 0.2913976311683655,
+        "bm25_score": 8.112366193088368,
+        "rrf_score": 0.024127906976744187,
+        "text": "lý. Điều 100 Chính phủ, Thủ tướng Chính phủ, Bộ trưởng, Thủ trưởng cơ quan ngang bộ ban hành văn bản pháp luật để thực hiện nhiệm vụ, quyền hạn của mình, kiểm tra việc thi hành các văn bản đó và xử lý các văn bản trái pháp luật theo quy định của luật. Điều 101 Chủ tịch Ủy ban trung ương Mặt trận Tổ quốc Việt Nam và người đứng đầu cơ quan trung ương của tổ chức chính trị - xã hội được mời tham dự phiên họp của Chính phủ khi bàn các vấn đề có liên quan. CHƯƠNG VIII TÒA ÁN NHÂN DÂN, VIỆN KIỂM SÁT NHÂN DÂN Điều 102 1. Tòa án nhân dân là cơ quan xét xử của nước Cộng đề có liên quan. CHƯƠNG VIII TÒA ÁN NHÂN DÂN, VIỆN KIỂM SÁT NHÂN DÂN Điều 102 1. Tòa án nhân dân là cơ quan xét xử của nước Cộng hòa xã hội chủ nghĩa Việt Nam, thực hiện quyền tư pháp. 2. Tòa án nhân dân gồm Tòa án nhân dân tối cao và các Tòa án khác do luật định. 3. Tòa án nhân dân có nhiệm vụ bảo vệ công lý, bảo vệ quyền con người, quyền công dân, bảo vệ chế độ xã hội chủ nghĩa, bảo vệ lợi ích của Nhà nước, quyền và lợi ích hợp pháp của tổ chức, cá nhân. Điều 103 1. Việc xét xử sơ thẩm của Tòa án nhân dân có Hội thẩm tham gia, trừ trường"
+      }
+    ]
+  },
+  {
+    "id": "dev_02",
+    "question": "Mọi người có những quyền gì đối với tính mạng và thân thể theo quy định tại Điều 19 và Điều 20?",
+    "source_file": "normal_hienphap_33tr.pdf",
+    "config": "page_aware",
+    "k": 15,
+    "tau": 0.38,
+    "model": "gemini-3.5-flash-lite",
+    "answer_text": "Dựa trên tài liệu, quyền đối với tính mạng và thân thể theo Điều 19 và Điều 20 bao gồm:\n\n* **Theo Điều 19:**\n  * Mọi người có quyền sống.\n  * Tính mạng con người được pháp luật bảo hộ.\n  * Không ai bị tước đoạt tính mạng trái luật.\n\n* **Theo Điều 20:**\n  * Mọi người có quyền bất khả xâm phạm về thân thể, được pháp luật bảo hộ về sức khoẻ, danh dự và nhân phẩm.\n  * Không ai bị tra tấn, bạo lực, truy bức, nhục hình hay bất kỳ hình thức đối xử nào khác xâm phạm thân thể, sức khỏe, xúc phạm danh dự, nhân phẩm.\n  * Không ai bị bắt nếu không có quyết định của Tòa án nhân dân, quyết định hoặc phê chuẩn của Viện kiểm sát nhân dân, trừ trường hợp phạm tội quả tang (việc bắt, giam, giữ người do luật định).\n  * Mọi người có quyền hiến mô, bộ phận cơ thể người và hiến xác theo quy định của luật.\n  * Việc thử nghiệm y học, dược học, khoa học hay bất kỳ hình thức thử nghiệm nào khác trên cơ thể người phải có sự đồng ý của người được thử nghiệm.",
+    "citations": [
+      {
+        "page_number": 6,
+        "page_range": null,
+        "is_bridge": true
+      },
+      {
+        "page_number": 6,
+        "page_range": null,
+        "is_bridge": false
+      },
+      {
+        "page_number": null,
+        "page_range": "6-7",
+        "is_bridge": true
+      },
+      {
+        "page_number": 10,
+        "page_range": null,
+        "is_bridge": false
+      },
+      {
+        "page_number": 5,
+        "page_range": null,
+        "is_bridge": false
+      },
+      {
+        "page_number": null,
+        "page_range": "5-6",
+        "is_bridge": true
+      },
+      {
+        "page_number": null,
+        "page_range": "9-10",
+        "is_bridge": true
+      },
+      {
+        "page_number": 7,
+        "page_range": null,
+        "is_bridge": false
+      },
+      {
+        "page_number": null,
+        "page_range": "10-11",
+        "is_bridge": true
+      },
+      {
+        "page_number": 10,
+        "page_range": null,
+        "is_bridge": true
+      },
+      {
+        "page_number": 9,
+        "page_range": null,
+        "is_bridge": false
+      },
+      {
+        "page_number": 8,
+        "page_range": null,
+        "is_bridge": false
+      },
+      {
+        "page_number": 6,
+        "page_range": null,
+        "is_bridge": false
+      },
+      {
+        "page_number": 7,
+        "page_range": null,
+        "is_bridge": true
+      }
+    ],
+    "is_abstained": false,
+    "abstain_reason": null,
+    "is_error": false,
+    "error_message": null,
+    "retrieval_hits": [
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p6_intrabridge0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 6,
+        "page_range": null,
+        "is_bridge": true,
+        "score": 0.6867243647575378,
+        "bm25_score": 28.151615285789163,
+        "rrf_score": 0.03278688524590164,
+        "text": "Nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam khuyến khích và tạo điều kiện để người Việt Nam định cư ở nước ngoài giữ gìn và phát huy bản sắc văn hóa dân tộc Việt Nam, giữ quan hệ gắn bó với gia đình và quê hương, góp phần xây dựng quê hương, đất nước. Điều 19 Mọi người có quyền sống. Tính mạng con người được pháp luật bảo hộ. Không ai bị tước đoạt tính mạng trái luật. Điều 20 1. Mọi người có quyền bất khả xâm phạm về thân thể, được pháp luật bảo hộ về sức khoẻ, danh dự và nhân phẩm; không bị tra tấn, bạo lực, truy bức, nhục hình hay bất kỳ hình thức đối xử nào khác luật bảo hộ về sức khoẻ, danh dự và nhân phẩm; không bị tra tấn, bạo lực, truy bức, nhục hình hay bất kỳ hình thức đối xử nào khác xâm phạm thân thể, sức khỏe, xúc phạm danh dự, nhân phẩm. 2. Không ai bị bắt nếu không có quyết định của Tòa án nhân dân, quyết định hoặc phê chuẩn của Viện kiểm sát nhân dân, trừ trường hợp phạm tội quả tang. Việc bắt, giam, giữ người do luật định. 3. Mọi người có quyền hiến mô, bộ phận cơ thể người và hiến xác theo quy định của luật. Việc thử nghiệm y học, dược học, khoa học hay bất kỳ hình thức thử nghiệm nào khác trên cơ thể người phải có sự"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p6_c0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 6,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.5398211479187012,
+        "bm25_score": 25.928459894440333,
+        "rrf_score": 0.03200204813108039,
+        "text": "4. Việc thực hiện quyền con người, quyền công dân không được xâm phạm lợi ích quốc gia, dân tộc, quyền và lợi ích hợp pháp của người khác. Điều 16 1. Mọi người đều bình đẳng trước pháp luật. 2. Không ai bị phân biệt đối xử trong đời sống chính trị, dân sự, kinh tế, văn hóa, xã hội. Điều 17 1. Công dân nước Cộng hòa xã hội chủ nghĩa Việt Nam là người có quốc tịch Việt Nam. 2. Công dân Việt Nam không thể bị trục xuất, giao nộp cho nhà nước khác. 3. Công dân Việt Nam ở nước ngoài được Nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam bảo hộ. Điều 18 1. Người Việt Nam định cư ở nước ngoài là bộ phận không tách rời của cộng đồng dân tộc Việt Nam. 2. Nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam khuyến khích và tạo điều kiện để người Việt Nam định cư ở nước ngoài giữ gìn và phát huy bản sắc văn hóa dân tộc Việt Nam, giữ quan hệ gắn bó với gia đình và quê hương, góp phần xây dựng quê hương, đất nước. Điều 19 Mọi người có quyền sống. Tính mạng con người được pháp luật bảo hộ. Không ai bị tước đoạt tính mạng trái luật. Điều 20 1. Mọi người có quyền bất khả xâm phạm về thân thể, được pháp luật bảo hộ về sức khoẻ, danh dự và nhân phẩm; không bị tra tấn, bạo lực, truy bức, nhục hình hay bất kỳ hình thức đối xử nào khác"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_6-7",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "6-7",
+        "is_bridge": true,
+        "score": 0.5531780123710632,
+        "bm25_score": 15.110460042291853,
+        "rrf_score": 0.031754032258064516,
+        "text": "dự và nhân phẩm; không bị tra tấn, bạo lực, truy bức, nhục hình hay bất kỳ hình thức đối xử nào khác xâm phạm thân thể, sức khỏe, xúc phạm danh dự, nhân phẩm. 2. Không ai bị bắt nếu không có quyết định của Tòa án nhân dân, quyết định hoặc phê chuẩn của Viện kiểm sát nhân dân, trừ trường hợp phạm tội quả tang. Việc bắt, giam, giữ người do luật định. 3. Mọi người có quyền hiến mô, bộ phận cơ thể người và hiến xác theo quy định của luật. Việc thử nghiệm y học, dược học, khoa học hay bất kỳ hình thức thử nghiệm nào khác trên cơ thể người phải có sự đồng ý của người được thử nghiệm. Điều 21 1. Mọi người có quyền bất khả xâm phạm về đời sống riêng tư, bí mật cá nhân và bí mật gia đình; có quyền bảo vệ danh dự, uy tín của mình. Thông tin về đời sống riêng tư, bí mật cá nhân, bí mật gia đình được pháp luật bảo đảm an toàn. 2. Mọi người có quyền bí mật thư tín, điện thoại, điện tín và các hình thức trao đổi thông tin riêng tư khác. Không ai được bóc mở, kiểm soát, thu giữ trái luật thư tín, điện thoại, điện tín và các hình thức trao đổi thông tin riêng tư của người khác. Điều 22 1. Công dân có quyền có nơi ở hợp pháp. 2. Mọi người có quyền"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p10_c0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 10,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.5382003784179688,
+        "bm25_score": 14.555212461248919,
+        "rrf_score": 0.030776515151515152,
+        "text": "Điều 38 1. Mọi người có quyền được bảo vệ, chăm sóc sức khỏe, bình đẳng trong việc sử dụng các dịch vụ y tế và có nghĩa vụ thực hiện các quy định về phòng bệnh, khám bệnh, chữa bệnh. 2. Nghiêm cấm các hành vi đe dọa cuộc sống, sức khỏe của người khác và cộng đồng. Điều 39 Công dân có quyền và nghĩa vụ học tập. Điều 40 Mọi người có quyền nghiên cứu khoa học và công nghệ, sáng tạo văn học, nghệ thuật và thụ hưởng lợi ích từ các hoạt động đó. Điều 41 Mọi người có quyền hưởng thụ và tiếp cận các giá trị văn hoá, tham gia vào đời sống văn hóa, sử dụng các cơ sở văn hóa. Điều 42 Công dân có quyền xác định dân tộc của mình, sử dụng ngôn ngữ mẹ đẻ, lựa chọn ngôn ngữ giao tiếp. Điều 43 Mọi người có quyền được sống trong môi trường trong lành và có nghĩa vụ bảo vệ môi trường. Điều 44 Công dân có nghĩa vụ trung thành với Tổ quốc. Phản bội Tổ quốc là tội nặng nhất. Điều 45 1. Bảo vệ Tổ quốc là nghĩa vụ thiêng liêng và quyền cao quý của công dân. 2. Công dân phải thực hiện nghĩa vụ quân sự và tham gia xây dựng nền quốc phòng toàn dân. Điều 46 Công dân có nghĩa vụ tuân theo Hiến pháp và pháp luật; tham gia bảo vệ an ninh quốc gia, trật tự, an toàn xã hội và chấp hành những quy tắc sinh hoạt công cộng. Điều 47 Mọi"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p5_c1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 5,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.5196089744567871,
+        "bm25_score": 14.618749947165597,
+        "rrf_score": 0.030536130536130537,
+        "text": "ngày Tuyên ngôn độc lập 2 tháng 9 năm 1945. 5. Thủ đô nước Cộng hòa xã hội chủ nghĩa Việt Nam là Hà Nội. CHƯƠNG II QUYỀN CON NGƯỜI, QUYỀN VÀ NGHĨA VỤ CƠ BẢN CỦA CÔNG DÂN Điều 14 1. Ở nước Cộng hòa xã hội chủ nghĩa Việt Nam, các quyền con người, quyền công dân về chính trị, dân sự, kinh tế, văn hóa, xã hội được công nhận, tôn trọng, bảo vệ, bảo đảm theo Hiến pháp và pháp luật. 2. Quyền con người, quyền công dân chỉ có thể bị hạn chế theo quy định của luật trong trường hợp cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Điều 15 1. Quyền công dân không tách rời nghĩa vụ công dân. 2. Mọi người có nghĩa vụ tôn trọng quyền của người khác. 3. Công dân có trách nhiệm thực hiện nghĩa vụ đối với Nhà nước và xã hội."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_5-6",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "5-6",
+        "is_bridge": true,
+        "score": 0.5024985074996948,
+        "bm25_score": 14.361488664210135,
+        "rrf_score": 0.029631255487269532,
+        "text": "xã hội chủ nghĩa Việt Nam, các quyền con người, quyền công dân về chính trị, dân sự, kinh tế, văn hóa, xã hội được công nhận, tôn trọng, bảo vệ, bảo đảm theo Hiến pháp và pháp luật. 2. Quyền con người, quyền công dân chỉ có thể bị hạn chế theo quy định của luật trong trường hợp cần thiết vì lý do quốc phòng, an ninh quốc gia, trật tự, an toàn xã hội, đạo đức xã hội, sức khỏe của cộng đồng. Điều 15 1. Quyền công dân không tách rời nghĩa vụ công dân. 2. Mọi người có nghĩa vụ tôn trọng quyền của người khác. 3. Công dân có trách nhiệm thực hiện nghĩa vụ đối với Nhà nước và xã hội. 4. Việc thực hiện quyền con người, quyền công dân không được xâm phạm lợi ích quốc gia, dân tộc, quyền và lợi ích hợp pháp của người khác. Điều 16 1. Mọi người đều bình đẳng trước pháp luật. 2. Không ai bị phân biệt đối xử trong đời sống chính trị, dân sự, kinh tế, văn hóa, xã hội. Điều 17 1. Công dân nước Cộng hòa xã hội chủ nghĩa Việt Nam là người có quốc tịch Việt Nam. 2. Công dân Việt Nam không thể bị trục xuất, giao nộp cho nhà nước khác. 3. Công dân Việt Nam ở nước ngoài được Nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam bảo hộ. Điều 18 1. Người Việt Nam định cư ở"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_9-10",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "9-10",
+        "is_bridge": true,
+        "score": 0.5266966819763184,
+        "bm25_score": 12.781600090400477,
+        "rrf_score": 0.029083245521601686,
+        "text": "hội bảo vệ, chăm sóc và giáo dục; được tham gia vào các vấn đề về trẻ em. Nghiêm cấm xâm hại, hành hạ, ngược đãi, bỏ mặc, lạm dụng, bóc lột sức lao động và những hành vi khác vi phạm quyền trẻ em. 2. Thanh niên được Nhà nước, gia đình và xã hội tạo điều kiện học tập, lao động, giải trí, phát triển thể lực, trí tuệ, bồi dưỡng đạo đức, truyền thống dân tộc, ý thức công dân; đi đầu trong công cuộc lao động sáng tạo và bảo vệ Tổ quốc. 3. Người cao tuổi được Nhà nước, gia đình và xã hội tôn trọng, chăm sóc và phát huy vai trò trong sự nghiệp xây dựng và bảo vệ Tổ quốc. Điều 38 1. Mọi người có quyền được bảo vệ, chăm sóc sức khỏe, bình đẳng trong việc sử dụng các dịch vụ y tế và có nghĩa vụ thực hiện các quy định về phòng bệnh, khám bệnh, chữa bệnh. 2. Nghiêm cấm các hành vi đe dọa cuộc sống, sức khỏe của người khác và cộng đồng. Điều 39 Công dân có quyền và nghĩa vụ học tập. Điều 40 Mọi người có quyền nghiên cứu khoa học và công nghệ, sáng tạo văn học, nghệ thuật và thụ hưởng lợi ích từ các hoạt động đó. Điều 41 Mọi người có quyền hưởng thụ và tiếp cận các giá trị văn hoá, tham gia vào đời sống văn hóa, sử dụng các cơ sở văn"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p7_c0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 7,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.5009245872497559,
+        "bm25_score": 13.12842555781087,
+        "rrf_score": 0.028991596638655463,
+        "text": "Điều 21 1. Mọi người có quyền bất khả xâm phạm về đời sống riêng tư, bí mật cá nhân và bí mật gia đình; có quyền bảo vệ danh dự, uy tín của mình. Thông tin về đời sống riêng tư, bí mật cá nhân, bí mật gia đình được pháp luật bảo đảm an toàn. 2. Mọi người có quyền bí mật thư tín, điện thoại, điện tín và các hình thức trao đổi thông tin riêng tư khác. Không ai được bóc mở, kiểm soát, thu giữ trái luật thư tín, điện thoại, điện tín và các hình thức trao đổi thông tin riêng tư của người khác. Điều 22 1. Công dân có quyền có nơi ở hợp pháp. 2. Mọi người có quyền bất khả xâm phạm về chỗ ở. Không ai được tự ý vào chỗ ở của người khác nếu không được người đó đồng ý. 3. Việc khám xét chỗ ở do luật định. Điều 23 Công dân có quyền tự do đi lại và cư trú ở trong nước, có quyền ra nước ngoài và từ nước ngoài về nước. Việc thực hiện các quyền này do pháp luật quy định. Điều 24 1. Mọi người có quyền tự do tín ngưỡng, tôn giáo, theo hoặc không theo một tôn giáo nào. Các tôn giáo bình đẳng trước pháp luật. 2. Nhà nước tôn trọng và bảo hộ quyền tự do tín ngưỡng, tôn giáo. 3. Không ai được xâm phạm tự do tín ngưỡng, tôn giáo hoặc lợi dụng tín ngưỡng, tôn giáo để vi phạm pháp"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_10-11",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "10-11",
+        "is_bridge": true,
+        "score": 0.39093416929244995,
+        "bm25_score": 16.766076700329684,
+        "rrf_score": 0.02886002886002886,
+        "text": "Mọi người có quyền được sống trong môi trường trong lành và có nghĩa vụ bảo vệ môi trường. Điều 44 Công dân có nghĩa vụ trung thành với Tổ quốc. Phản bội Tổ quốc là tội nặng nhất. Điều 45 1. Bảo vệ Tổ quốc là nghĩa vụ thiêng liêng và quyền cao quý của công dân. 2. Công dân phải thực hiện nghĩa vụ quân sự và tham gia xây dựng nền quốc phòng toàn dân. Điều 46 Công dân có nghĩa vụ tuân theo Hiến pháp và pháp luật; tham gia bảo vệ an ninh quốc gia, trật tự, an toàn xã hội và chấp hành những quy tắc sinh hoạt công cộng. Điều 47 Mọi người có nghĩa vụ nộp thuế theo luật định. Điều 48 Người nước ngoài cư trú ở Việt Nam phải tuân theo Hiến pháp và pháp luật Việt Nam; được bảo hộ tính mạng, tài sản và các quyền, lợi ích chính đáng theo pháp luật Việt Nam. Điều 49 Người nước ngoài đấu tranh vì tự do và độc lập dân tộc, vì chủ nghĩa xã hội, dân chủ và hòa bình hoặc vì sự nghiệp khoa học mà bị bức hại thì được Nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam xem xét cho cư trú. CHƯƠNG III KINH TẾ, XÃ HỘI, VĂN HÓA, GIÁO DỤC, KHOA HỌC, CÔNG NGHỆ VÀ MÔI TRƯỜNG Điều 50 Nước Cộng hòa xã hội chủ nghĩa Việt Nam xây dựng nền kinh tế độc lập, tự chủ,"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p10_intrabridge0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 10,
+        "page_range": null,
+        "is_bridge": true,
+        "score": 0.3963017463684082,
+        "bm25_score": 14.442887781283446,
+        "rrf_score": 0.028083267871170464,
+        "text": "đẻ, lựa chọn ngôn ngữ giao tiếp. Điều 43 Mọi người có quyền được sống trong môi trường trong lành và có nghĩa vụ bảo vệ môi trường. Điều 44 Công dân có nghĩa vụ trung thành với Tổ quốc. Phản bội Tổ quốc là tội nặng nhất. Điều 45 1. Bảo vệ Tổ quốc là nghĩa vụ thiêng liêng và quyền cao quý của công dân. 2. Công dân phải thực hiện nghĩa vụ quân sự và tham gia xây dựng nền quốc phòng toàn dân. Điều 46 Công dân có nghĩa vụ tuân theo Hiến pháp và pháp luật; tham gia bảo vệ an ninh quốc gia, trật tự, an toàn xã hội và chấp hành những quy tắc sinh hoạt công cộng. Điều 47 Mọi và pháp luật; tham gia bảo vệ an ninh quốc gia, trật tự, an toàn xã hội và chấp hành những quy tắc sinh hoạt công cộng. Điều 47 Mọi người có nghĩa vụ nộp thuế theo luật định."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p9_c0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 9,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.49811598658561707,
+        "bm25_score": 12.598487173103273,
+        "rrf_score": 0.028006267136701922,
+        "text": "Điều 32 1. Mọi người có quyền sở hữu về thu nhập hợp pháp, của cải để dành, nhà ở, tư liệu sinh hoạt, tư liệu sản xuất, phần vốn góp trong doanh nghiệp hoặc trong các tổ chức kinh tế khác. 2. Quyền sở hữu tư nhân và quyền thừa kế được pháp luật bảo hộ. 3. Trường hợp thật cần thiết vì lý do quốc phòng, an ninh hoặc vì lợi ích quốc gia, tình trạng khẩn cấp, phòng, chống thiên tai, Nhà nước trưng mua hoặc trưng dụng có bồi thường tài sản của tổ chức, cá nhân theo giá thị trường. Điều 33 Mọi người có quyền tự do kinh doanh trong những ngành nghề mà pháp luật không cấm. Điều 34 Công dân có quyền được bảo đảm an sinh xã hội. Điều 35 1. Công dân có quyền làm việc, lựa chọn nghề nghiệp, việc làm và nơi làm việc. 2. Người làm công ăn lương được bảo đảm các điều kiện làm việc công bằng, an toàn; được hưởng lương, chế độ nghỉ ngơi. 3. Nghiêm cấm phân biệt đối xử, cưỡng bức lao động, sử dụng nhân công dưới độ tuổi lao động tối thiểu. Điều 36 1. Nam, nữ có quyền kết hôn, ly hôn. Hôn nhân theo nguyên tắc tự nguyện, tiến bộ, một vợ một chồng, vợ chồng bình đẳng, tôn trọng lẫn nhau. 2. Nhà nước bảo hộ hôn nhân và gia đình, bảo hộ quyền lợi của người mẹ và trẻ em. Điều 37"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p8_c0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 8,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.4297342300415039,
+        "bm25_score": 13.089455528547251,
+        "rrf_score": 0.027417840375586856,
+        "text": "Điều 27 Công dân đủ mười tám tuổi trở lên có quyền bầu cử và đủ hai mươi mốt tuổi trở lên có quyền ứng cử vào Quốc hội, Hội đồng nhân dân. Việc thực hiện các quyền này do luật định. Điều 28 1. Công dân có quyền tham gia quản lý nhà nước và xã hội, tham gia thảo luận và kiến nghị với cơ quan nhà nước về các vấn đề của cơ sở, địa phương và cả nước. 2. Nhà nước tạo điều kiện để công dân tham gia quản lý nhà nước và xã hội; công khai, minh bạch trong việc tiếp nhận, phản hồi ý kiến, kiến nghị của công dân. Điều 29 Công dân đủ mười tám tuổi trở lên có quyền biểu quyết khi Nhà nước tổ chức trưng cầu ý dân. Điều 30 1. Mọi người có quyền khiếu nại, tố cáo với cơ quan, tổ chức, cá nhân có thẩm quyền về những việc làm trái pháp luật của cơ quan, tổ chức, cá nhân. 2. Cơ quan, tổ chức, cá nhân có thẩm quyền phải tiếp nhận, giải quyết khiếu nại, tố cáo. Người bị thiệt hại có quyền được bồi thường về vật chất, tinh thần và phục hồi danh dự theo quy định của pháp luật. 3. Nghiêm cấm việc trả thù người khiếu nại, tố cáo hoặc lợi dụng quyền khiếu nại, tố cáo để vu khống, vu cáo làm hại người khác. Điều 31 1. Người bị buộc tội được coi là không có tội cho đến khi được chứng minh theo trình"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p6_c1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 6,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.49682608246803284,
+        "bm25_score": 12.458333927678275,
+        "rrf_score": 0.027272727272727275,
+        "text": "luật bảo hộ về sức khoẻ, danh dự và nhân phẩm; không bị tra tấn, bạo lực, truy bức, nhục hình hay bất kỳ hình thức đối xử nào khác xâm phạm thân thể, sức khỏe, xúc phạm danh dự, nhân phẩm. 2. Không ai bị bắt nếu không có quyết định của Tòa án nhân dân, quyết định hoặc phê chuẩn của Viện kiểm sát nhân dân, trừ trường hợp phạm tội quả tang. Việc bắt, giam, giữ người do luật định. 3. Mọi người có quyền hiến mô, bộ phận cơ thể người và hiến xác theo quy định của luật. Việc thử nghiệm y học, dược học, khoa học hay bất kỳ hình thức thử nghiệm nào khác trên cơ thể người phải có sự đồng ý của người được thử nghiệm."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p7_intrabridge0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 7,
+        "page_range": null,
+        "is_bridge": true,
+        "score": 0.4762239456176758,
+        "bm25_score": 12.521485371530153,
+        "rrf_score": 0.027046783625730993,
+        "text": "ý vào chỗ ở của người khác nếu không được người đó đồng ý. 3. Việc khám xét chỗ ở do luật định. Điều 23 Công dân có quyền tự do đi lại và cư trú ở trong nước, có quyền ra nước ngoài và từ nước ngoài về nước. Việc thực hiện các quyền này do pháp luật quy định. Điều 24 1. Mọi người có quyền tự do tín ngưỡng, tôn giáo, theo hoặc không theo một tôn giáo nào. Các tôn giáo bình đẳng trước pháp luật. 2. Nhà nước tôn trọng và bảo hộ quyền tự do tín ngưỡng, tôn giáo. 3. Không ai được xâm phạm tự do tín ngưỡng, tôn giáo hoặc lợi dụng tín ngưỡng, tôn giáo để vi phạm pháp quyền tự do tín ngưỡng, tôn giáo. 3. Không ai được xâm phạm tự do tín ngưỡng, tôn giáo hoặc lợi dụng tín ngưỡng, tôn giáo để vi phạm pháp luật. Điều 25 Công dân có quyền tự do ngôn luận, tự do báo chí, tiếp cận thông tin, hội họp, lập hội, biểu tình. Việc thực hiện các quyền này do pháp luật quy định. Điều 26 1. Công dân nam, nữ bình đẳng về mọi mặt. Nhà nước có chính sách bảo đảm quyền và cơ hội bình đẳng giới. 2. Nhà nước, xã hội và gia đình tạo điều kiện để phụ nữ phát triển toàn diện, phát huy vai trò của mình trong xã hội. 3. Nghiêm cấm phân biệt đối xử về giới."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p4_intrabridge1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 4,
+        "page_range": null,
+        "is_bridge": true,
+        "score": 0.3302164673805237,
+        "bm25_score": 12.5291330545107,
+        "rrf_score": 0.02523809523809524,
+        "text": "của người lao động; tuyên truyền, vận động người lao động học tập, nâng cao trình độ, kỹ năng nghề nghiệp, chấp hành pháp luật, xây dựng và bảo vệ Tổ quốc. Điều 11 1. Tổ quốc Việt Nam là thiêng liêng, bất khả xâm phạm. 2. Mọi hành vi chống lại độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ, chống lại sự nghiệp xây dựng và bảo vệ Tổ quốc đều bị nghiêm trị. Điều 12 Nước Cộng hòa xã hội chủ nghĩa Việt Nam thực hiện nhất quán đường lối đối ngoại độc lập, tự chủ, hòa bình, hữu nghị, hợp tác và phát triển; đa phương 2 Điều này được sửa đổi, bổ sung theo quy định tại khoản 2 Điều 1 lập, tự chủ, hòa bình, hữu nghị, hợp tác và phát triển; đa phương 2 Điều này được sửa đổi, bổ sung theo quy định tại khoản 2 Điều 1 của Nghị quyết số 203/2025/QH15 sửa đổi, bổ sung một số điều của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam, có hiệu lực thi hành từ ngày 16 tháng 6 năm 2025."
+      }
+    ]
+  },
+  {
+    "id": "dev_03",
+    "question": "Nhiệm kỳ của mỗi khóa Quốc hội được quy định bao nhiêu năm?",
+    "source_file": "normal_hienphap_33tr.pdf",
+    "config": "page_aware",
+    "k": 15,
+    "tau": 0.38,
+    "model": "gemini-3.5-flash-lite",
+    "answer_text": "Dựa trên tài liệu, nhiệm kỳ của mỗi khóa Quốc hội là năm năm.",
+    "citations": [
+      {
+        "page_number": 17,
+        "page_range": null,
+        "is_bridge": false
+      },
+      {
+        "page_number": null,
+        "page_range": "16-17",
+        "is_bridge": true
+      },
+      {
+        "page_number": null,
+        "page_range": "20-21",
+        "is_bridge": true
+      },
+      {
+        "page_number": 20,
+        "page_range": null,
+        "is_bridge": false
+      }
+    ],
+    "is_abstained": false,
+    "abstain_reason": null,
+    "is_error": false,
+    "error_message": null,
+    "retrieval_hits": [
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p17_c0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 17,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.6845691204071045,
+        "bm25_score": 18.419198637669997,
+        "rrf_score": 0.03278688524590164,
+        "text": "Điều 71 1. Nhiệm kỳ của mỗi khóa Quốc hội là năm năm. 2. Sáu mươi ngày trước khi Quốc hội hết nhiệm kỳ, Quốc hội khóa mới phải được bầu xong. 3. Trong trường hợp đặc biệt, nếu được ít nhất hai phần ba tổng số đại biểu Quốc hội biểu quyết tán thành thì Quốc hội quyết định rút ngắn hoặc kéo dài nhiệm kỳ của mình theo đề nghị của Ủy ban thường vụ Quốc hội. Việc kéo dài nhiệm kỳ của một khóa Quốc hội không được quá mười hai tháng, trừ trường hợp có chiến tranh. Điều 72 Chủ tịch Quốc hội chủ tọa các phiên họp của Quốc hội; ký chứng thực Hiến pháp, luật, nghị quyết của Quốc hội; lãnh đạo công tác của Ủy ban thường vụ Quốc hội; tổ chức thực hiện quan hệ đối ngoại của Quốc hội; giữ quan hệ với các đại biểu Quốc hội. Các Phó Chủ tịch Quốc hội giúp Chủ tịch Quốc hội làm nhiệm vụ theo sự phân công của Chủ tịch Quốc hội. Điều 73 1. Ủy ban thường vụ Quốc hội là cơ quan thường trực của Quốc hội. 2. Ủy ban thường vụ Quốc hội gồm Chủ tịch Quốc hội, các Phó Chủ tịch Quốc hội và các Ủy viên. 3. Số thành viên Ủy ban thường vụ Quốc hội do Quốc hội quyết định. Thành viên Ủy ban thường vụ Quốc hội không thể đồng thời là thành viên Chính phủ. 4. Ủy ban thường vụ Quốc hội của mỗi khóa Quốc hội thực hiện nhiệm vụ, quyền hạn của mình cho đến khi Quốc"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_16-17",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "16-17",
+        "is_bridge": true,
+        "score": 0.5001593828201294,
+        "bm25_score": 17.55535791095557,
+        "rrf_score": 0.03225806451612903,
+        "text": "vấn đề chiến tranh và hòa bình; quy định về tình trạng khẩn cấp, các biện pháp đặc biệt khác bảo đảm quốc phòng và an ninh quốc gia; 14. Quyết định chính sách cơ bản về đối ngoại; phê chuẩn, quyết định gia nhập hoặc chấm dứt hiệu lực của điều ước quốc tế liên quan đến chiến tranh, hòa bình, chủ quyền quốc gia, tư cách thành viên của Cộng hòa xã hội chủ nghĩa Việt Nam tại các tổ chức quốc tế và khu vực quan trọng, điều ước quốc tế về quyền con người, quyền và nghĩa vụ cơ bản của công dân và điều ước quốc tế khác trái với luật, nghị quyết của Quốc hội; 15. Quyết định trưng cầu ý dân. Điều 71 1. Nhiệm kỳ của mỗi khóa Quốc hội là năm năm. 2. Sáu mươi ngày trước khi Quốc hội hết nhiệm kỳ, Quốc hội khóa mới phải được bầu xong. 3. Trong trường hợp đặc biệt, nếu được ít nhất hai phần ba tổng số đại biểu Quốc hội biểu quyết tán thành thì Quốc hội quyết định rút ngắn hoặc kéo dài nhiệm kỳ của mình theo đề nghị của Ủy ban thường vụ Quốc hội. Việc kéo dài nhiệm kỳ của một khóa Quốc hội không được quá mười hai tháng, trừ trường hợp có chiến tranh. Điều 72 Chủ tịch Quốc hội chủ tọa các phiên họp của Quốc hội; ký chứng thực Hiến pháp, luật, nghị quyết của Quốc hội; lãnh đạo"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_20-21",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "20-21",
+        "is_bridge": true,
+        "score": 0.41281789541244507,
+        "bm25_score": 12.230910786924111,
+        "rrf_score": 0.03149801587301587,
+        "text": "phủ hoặc của ít nhất một phần ba tổng số đại biểu Quốc hội, Quốc hội quyết định họp kín. 2. Quốc hội họp mỗi năm hai kỳ. Trường hợp Chủ tịch nước, Ủy ban thường vụ Quốc hội, Thủ tướng Chính phủ hoặc ít nhất một phần ba tổng số đại biểu Quốc hội yêu cầu thì Quốc hội họp bất thường. Ủy ban thường vụ Quốc hội triệu tập kỳ họp Quốc hội. 3. Kỳ họp thứ nhất của Quốc hội khóa mới được triệu tập chậm nhất là sáu mươi ngày, kể từ ngày bầu cử đại biểu Quốc hội, do Chủ tịch Quốc hội khóa trước khai mạc và chủ tọa cho đến khi Quốc hội khóa mới bầu ra Chủ tịch Quốc hội. Điều 84 1.3 Chủ tịch nước, Ủy ban thường vụ Quốc hội, Hội đồng dân tộc, Ủy ban của Quốc hội, Chính phủ, Tòa án nhân dân tối cao, Viện kiểm sát nhân dân tối cao, Kiểm toán nhà nước, Ủy ban trung ương Mặt trận Tổ quốc Việt Nam và cơ quan trung ương của tổ chức chính trị - xã hội có quyền trình dự án luật trước Quốc hội, trình dự án pháp lệnh trước Ủy ban thường vụ Quốc hội. 2. Đại biểu Quốc hội có quyền trình kiến nghị về luật, pháp lệnh và dự án luật, dự án pháp lệnh trước Quốc hội, Ủy ban thường vụ Quốc hội. Điều 85 1. Luật, nghị quyết của Quốc hội phải được quá nửa"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p21_c1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 21,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.3164759576320648,
+        "bm25_score": 12.633319512600714,
+        "rrf_score": 0.031024531024531024,
+        "text": "thông qua, trừ trường hợp Chủ tịch nước đề nghị xem xét lại pháp lệnh. CHƯƠNG VI CHỦ TỊCH NƯỚC Điều 86 Chủ tịch nước là người đứng đầu Nhà nước, thay mặt nước Cộng hòa xã hội chủ nghĩa Việt Nam về đối nội và đối ngoại. Điều 87 Chủ tịch nước do Quốc hội bầu trong số đại biểu Quốc hội. Chủ tịch nước chịu trách nhiệm và báo cáo công tác trước Quốc hội. Nhiệm kỳ của Chủ tịch nước theo nhiệm kỳ của Quốc hội. Khi Quốc hội hết nhiệm kỳ, Chủ tịch nước tiếp tục làm nhiệm vụ cho đến khi Quốc hội khóa mới bầu ra Chủ tịch nước. Điều 88 Chủ tịch nước có những nhiệm vụ và quyền hạn sau đây: 3 Khoản này được sửa đổi, bổ sung theo quy định tại khoản 3 Điều 1 của Nghị quyết số 203/2025/QH15 sửa đổi, bổ sung một số điều của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam, có hiệu lực thi hành từ ngày 16 tháng 6 năm 2025."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p20_c1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 20,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.4018702507019043,
+        "bm25_score": 11.910271617107252,
+        "rrf_score": 0.030776515151515152,
+        "text": "ban thường vụ Quốc hội xem xét, quyết định. Điều 82 1. Đại biểu Quốc hội có trách nhiệm thực hiện đầy đủ nhiệm vụ đại biểu, có quyền tham gia làm thành viên của Hội đồng dân tộc hoặc Ủy ban của Quốc hội. 2. Ủy ban thường vụ Quốc hội, Thủ tướng Chính phủ, Phó Thủ tướng Chính phủ, Bộ trưởng, Thủ trưởng cơ quan ngang bộ và các cơ quan khác của Nhà nước có trách nhiệm tạo điều kiện để đại biểu Quốc hội làm nhiệm vụ đại biểu. 3. Nhà nước bảo đảm kinh phí hoạt động của đại biểu Quốc hội. Điều 83 1. Quốc hội họp công khai. Trong trường hợp cần thiết, theo đề nghị của Chủ tịch nước, Ủy ban thường vụ Quốc hội, Thủ tướng Chính phủ hoặc của ít nhất một phần ba tổng số đại biểu Quốc hội, Quốc hội quyết định họp kín. 2. Quốc hội họp mỗi năm hai kỳ. Trường hợp Chủ tịch nước, Ủy ban thường vụ Quốc hội, Thủ tướng Chính phủ hoặc ít nhất một phần ba tổng số đại biểu Quốc hội yêu cầu thì Quốc hội họp bất thường. Ủy ban thường vụ Quốc hội triệu tập kỳ họp Quốc hội. 3. Kỳ họp thứ nhất của Quốc hội khóa mới được triệu tập chậm nhất là sáu mươi ngày, kể từ ngày bầu cử đại biểu Quốc hội, do Chủ tịch Quốc hội khóa trước khai mạc và chủ tọa cho đến khi Quốc hội khóa mới bầu ra Chủ tịch Quốc hội."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_21-22",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "21-22",
+        "is_bridge": true,
+        "score": 0.30115824937820435,
+        "bm25_score": 12.08899252919747,
+        "rrf_score": 0.030090497737556562,
+        "text": "do Quốc hội bầu trong số đại biểu Quốc hội. Chủ tịch nước chịu trách nhiệm và báo cáo công tác trước Quốc hội. Nhiệm kỳ của Chủ tịch nước theo nhiệm kỳ của Quốc hội. Khi Quốc hội hết nhiệm kỳ, Chủ tịch nước tiếp tục làm nhiệm vụ cho đến khi Quốc hội khóa mới bầu ra Chủ tịch nước. Điều 88 Chủ tịch nước có những nhiệm vụ và quyền hạn sau đây: 3 Khoản này được sửa đổi, bổ sung theo quy định tại khoản 3 Điều 1 của Nghị quyết số 203/2025/QH15 sửa đổi, bổ sung một số điều của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam, có hiệu lực thi hành từ ngày 16 tháng 6 năm 2025. 1. Công bố Hiến pháp, luật, pháp lệnh; đề nghị Ủy ban thường vụ Quốc hội xem xét lại pháp lệnh trong thời hạn mười ngày, kể từ ngày pháp lệnh được thông qua, nếu pháp lệnh đó vẫn được Ủy ban thường vụ Quốc hội biểu quyết tán thành mà Chủ tịch nước vẫn không nhất trí thì Chủ tịch nước trình Quốc hội quyết định tại kỳ họp gần nhất; 2. Đề nghị Quốc hội bầu, miễn nhiệm, bãi nhiệm Phó Chủ tịch nước, Thủ tướng Chính phủ; căn cứ vào nghị quyết của Quốc hội, bổ nhiệm, miễn nhiệm, cách chức Phó Thủ tướng Chính phủ, Bộ trưởng và thành viên khác của Chính phủ; 3. Đề nghị Quốc hội bầu, miễn nhiệm, bãi nhiệm"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p25_c0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 25,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.3242112100124359,
+        "bm25_score": 9.30935878359798,
+        "rrf_score": 0.02967032967032967,
+        "text": "6. Bảo vệ quyền và lợi ích của Nhà nước và xã hội, quyền con người, quyền công dân; bảo đảm trật tự, an toàn xã hội; 7. Tổ chức đàm phán, ký điều ước quốc tế nhân danh Nhà nước theo ủy quyền của Chủ tịch nước; quyết định việc ký, gia nhập, phê duyệt hoặc chấm dứt hiệu lực điều ước quốc tế nhân danh Chính phủ, trừ điều ước quốc tế trình Quốc hội phê chuẩn quy định tại khoản 14 Điều 70; bảo vệ lợi ích của Nhà nước, lợi ích chính đáng của tổ chức và công dân Việt Nam ở nước ngoài; 8. Phối hợp với Ủy ban trung ương Mặt trận Tổ quốc Việt Nam và cơ quan trung ương của tổ chức chính trị - xã hội trong việc thực hiện nhiệm vụ, quyền hạn của mình. Điều 97 Nhiệm kỳ của Chính phủ theo nhiệm kỳ của Quốc hội. Khi Quốc hội hết nhiệm kỳ, Chính phủ tiếp tục làm nhiệm vụ cho đến khi Quốc hội khóa mới thành lập Chính phủ. Điều 98 Thủ tướng Chính phủ do Quốc hội bầu trong số đại biểu Quốc hội. Thủ tướng Chính phủ có những nhiệm vụ và quyền hạn sau đây: 1. Lãnh đạo công tác của Chính phủ; lãnh đạo việc xây dựng chính sách và tổ chức thi hành pháp luật; 2. Lãnh đạo và chịu trách nhiệm về hoạt động của hệ thống hành chính nhà nước từ trung ương đến địa phương, bảo đảm tính thống nhất và thông suốt của nền hành chính quốc gia; 3. Trình Quốc hội phê chuẩn đề nghị"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p21_intrabridge0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 21,
+        "page_range": null,
+        "is_bridge": true,
+        "score": 0.3012970983982086,
+        "bm25_score": 10.685871334398861,
+        "rrf_score": 0.029418126757516764,
+        "text": "biểu Quốc hội biểu quyết tán thành; trường hợp làm Hiến pháp, sửa đổi Hiến pháp, quyết định rút ngắn hoặc kéo dài nhiệm kỳ của Quốc hội, bãi nhiệm đại biểu Quốc hội phải được ít nhất hai phần ba tổng số đại biểu Quốc hội biểu quyết tán thành. Pháp lệnh, nghị quyết của Ủy ban thường vụ Quốc hội phải được quá nửa tổng số thành viên Ủy ban thường vụ Quốc hội biểu quyết tán thành. 2. Luật, pháp lệnh phải được công bố chậm nhất là mười lăm ngày, kể từ ngày được thông qua, trừ trường hợp Chủ tịch nước đề nghị xem xét lại pháp lệnh. CHƯƠNG VI CHỦ TỊCH NƯỚC Điều 86 Chủ tịch nước là người đứng đầu Nhà thông qua, trừ trường hợp Chủ tịch nước đề nghị xem xét lại pháp lệnh. CHƯƠNG VI CHỦ TỊCH NƯỚC Điều 86 Chủ tịch nước là người đứng đầu Nhà nước, thay mặt nước Cộng hòa xã hội chủ nghĩa Việt Nam về đối nội và đối ngoại. Điều 87 Chủ tịch nước do Quốc hội bầu trong số đại biểu Quốc hội. Chủ tịch nước chịu trách nhiệm và báo cáo công tác trước Quốc hội. Nhiệm kỳ của Chủ tịch nước theo nhiệm kỳ của Quốc hội. Khi Quốc hội hết nhiệm kỳ, Chủ tịch nước tiếp tục làm nhiệm vụ cho đến khi Quốc hội khóa mới bầu ra Chủ tịch nước. Điều 88 Chủ tịch nước có những nhiệm vụ và quyền hạn sau"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p27_c1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 27,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.2874686121940613,
+        "bm25_score": 8.442889827546363,
+        "rrf_score": 0.027984344422700584,
+        "text": "nhất pháp luật trong xét xử. Điều 105 1. Nhiệm kỳ của Chánh án Tòa án nhân dân tối cao theo nhiệm kỳ của Quốc hội. Việc bổ nhiệm, miễn nhiệm, cách chức và nhiệm kỳ của Chánh án Tòa án khác do luật định. 2. Chánh án Tòa án nhân dân tối cao chịu trách nhiệm và báo cáo công tác trước Quốc hội; trong thời gian Quốc hội không họp, chịu trách nhiệm và báo cáo công tác trước Ủy ban thường vụ Quốc hội, Chủ tịch nước. Chế độ báo cáo công tác của Chánh án các Tòa án khác do luật định. 3. Việc bổ nhiệm, phê chuẩn, miễn nhiệm, cách chức, nhiệm kỳ của Thẩm phán và việc bầu, nhiệm kỳ của Hội thẩm do luật định. Điều 106 Bản án, quyết định của Tòa án nhân dân có hiệu lực pháp luật phải được cơ quan, tổ chức, cá nhân tôn trọng; cơ quan, tổ chức, cá nhân hữu quan phải nghiêm chỉnh chấp hành."
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p17_c1",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 17,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.2358502894639969,
+        "bm25_score": 11.30151795255842,
+        "rrf_score": 0.02661064425770308,
+        "text": "thời là thành viên Chính phủ. 4. Ủy ban thường vụ Quốc hội của mỗi khóa Quốc hội thực hiện nhiệm vụ, quyền hạn của mình cho đến khi Quốc hội khóa mới bầu ra Ủy ban thường vụ Quốc hội. Điều 74 Ủy ban thường vụ Quốc hội có những nhiệm vụ và quyền hạn sau đây: 1. Tổ chức việc chuẩn bị, triệu tập và chủ trì kỳ họp Quốc hội; 2. Ra pháp lệnh về những vấn đề được Quốc hội giao; giải thích Hiến pháp, luật, pháp lệnh; 3. Giám sát việc thi hành Hiến pháp, luật, nghị quyết của Quốc hội, pháp lệnh, nghị quyết của Ủy ban thường vụ Quốc hội; giám sát hoạt động của Chính phủ, Tòa án nhân dân tối cao, Viện kiểm sát nhân dân tối cao, Kiểm toán nhà nước và cơ quan khác do Quốc hội thành lập;"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p1_c0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 1,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.24083808064460754,
+        "bm25_score": 9.216461701538318,
+        "rrf_score": 0.026279628993473032,
+        "text": "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM Độc lập - Tự do - Hạnh phúc HIẾN PHÁP NƯỚC CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam được Quốc hội khóa XIII, Kỳ họp thứ 6 thông qua ngày 28 tháng 11 năm 2013, có hiệu lực thi hành từ ngày 01 tháng 01 năm 2014, được sửa đổi, bổ sung bởi: Nghị quyết số 203/2025/QH15 ngày 16 tháng 6 năm 2025 của Quốc hội sửa đổi, bổ sung một số điều của Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam, có hiệu lực thi hành từ ngày 16 tháng 6 năm 2025. LỜI NÓI ĐẦU Trải qua mấy nghìn năm lịch sử, Nhân dân Việt Nam lao động cần cù, sáng tạo, đấu tranh anh dũng để dựng nước và giữ nước, đã hun đúc nên truyền thống yêu nước, đoàn kết, nhân nghĩa, kiên cường, bất khuất và xây dựng nên nền văn hiến Việt Nam. Từ năm 1930, dưới sự lãnh đạo của Đảng Cộng sản Việt Nam do Chủ tịch Hồ Chí Minh sáng lập và rèn luyện, Nhân dân ta tiến hành cuộc đấu tranh lâu dài, đầy gian khổ, hy sinh vì độc lập, tự do của dân tộc, vì hạnh phúc của Nhân dân. Cách mạng tháng Tám thành công, ngày 2 tháng 9 năm 1945, Chủ tịch"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p25_intrabridge0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 25,
+        "page_range": null,
+        "is_bridge": true,
+        "score": 0.24376647174358368,
+        "bm25_score": 8.321458863570967,
+        "rrf_score": 0.026013513513513515,
+        "text": "Chính phủ theo nhiệm kỳ của Quốc hội. Khi Quốc hội hết nhiệm kỳ, Chính phủ tiếp tục làm nhiệm vụ cho đến khi Quốc hội khóa mới thành lập Chính phủ. Điều 98 Thủ tướng Chính phủ do Quốc hội bầu trong số đại biểu Quốc hội. Thủ tướng Chính phủ có những nhiệm vụ và quyền hạn sau đây: 1. Lãnh đạo công tác của Chính phủ; lãnh đạo việc xây dựng chính sách và tổ chức thi hành pháp luật; 2. Lãnh đạo và chịu trách nhiệm về hoạt động của hệ thống hành chính nhà nước từ trung ương đến địa phương, bảo đảm tính thống nhất và thông suốt của nền hành chính quốc gia; 3. Trình Quốc hội phê chuẩn đề nghị nhà nước từ trung ương đến địa phương, bảo đảm tính thống nhất và thông suốt của nền hành chính quốc gia; 3. Trình Quốc hội phê chuẩn đề nghị bổ nhiệm, miễn nhiệm, cách chức Phó Thủ tướng Chính phủ, Bộ trưởng và thành viên khác của Chính phủ; bổ nhiệm, miễn nhiệm, cách chức Thứ trưởng, chức vụ tương đương thuộc bộ, cơ quan ngang bộ; phê chuẩn việc bầu, miễn nhiệm và quyết định điều động, cách chức Chủ tịch, Phó Chủ tịch Ủy ban nhân dân tỉnh, thành phố trực thuộc trung ương; 4. Đình chỉ việc thi hành hoặc bãi bỏ văn bản của Bộ trưởng, Thủ trưởng cơ quan ngang bộ, Ủy ban nhân dân, Chủ tịch Ủy ban nhân dân tỉnh,"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p27_intrabridge0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 27,
+        "page_range": null,
+        "is_bridge": true,
+        "score": 0.23477208614349365,
+        "bm25_score": 8.737764645273137,
+        "rrf_score": 0.025516795865633074,
+        "text": "thẩm, phúc thẩm được bảo đảm. 7. Quyền bào chữa của bị can, bị cáo, quyền bảo vệ lợi ích hợp pháp của đương sự được bảo đảm. Điều 104 1. Tòa án nhân dân tối cao là cơ quan xét xử cao nhất của nước Cộng hòa xã hội chủ nghĩa Việt Nam. 2. Tòa án nhân dân tối cao giám đốc việc xét xử của các Tòa án khác, trừ trường hợp do luật định. 3. Tòa án nhân dân tối cao thực hiện việc tổng kết thực tiễn xét xử, bảo đảm áp dụng thống nhất pháp luật trong xét xử. Điều 105 1. Nhiệm kỳ của Chánh án Tòa án nhân dân tối cao theo nhiệm kỳ của Quốc hội. Việc bổ nhiệm, miễn nhất pháp luật trong xét xử. Điều 105 1. Nhiệm kỳ của Chánh án Tòa án nhân dân tối cao theo nhiệm kỳ của Quốc hội. Việc bổ nhiệm, miễn nhiệm, cách chức và nhiệm kỳ của Chánh án Tòa án khác do luật định. 2. Chánh án Tòa án nhân dân tối cao chịu trách nhiệm và báo cáo công tác trước Quốc hội; trong thời gian Quốc hội không họp, chịu trách nhiệm và báo cáo công tác trước Ủy ban thường vụ Quốc hội, Chủ tịch nước. Chế độ báo cáo công tác của Chánh án các Tòa án khác do luật định. 3. Việc bổ nhiệm, phê chuẩn, miễn nhiệm, cách chức, nhiệm kỳ của Thẩm phán và việc bầu, nhiệm kỳ của Hội"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_bridge_31-32",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": null,
+        "page_range": "31-32",
+        "is_bridge": true,
+        "score": 0.24581214785575867,
+        "bm25_score": 7.16130166368778,
+        "rrf_score": 0.02531645569620253,
+        "text": "Ủy ban thường vụ Quốc hội, Chính phủ hoặc ít nhất một phần ba tổng số đại biểu Quốc hội có quyền đề nghị làm Hiến pháp, sửa đổi Hiến pháp. Quốc hội quyết định việc làm Hiến pháp, sửa đổi Hiến pháp khi có ít nhất hai phần ba tổng số đại biểu Quốc hội biểu quyết tán thành. 2. Quốc hội thành lập Ủy ban dự thảo Hiến pháp. Thành phần, số lượng thành viên, nhiệm vụ và quyền hạn của Ủy ban dự thảo Hiến pháp do Quốc hội quyết định theo đề nghị của Ủy ban thường vụ Quốc hội. 3. Ủy ban dự thảo Hiến pháp soạn thảo, tổ chức lấy ý kiến Nhân dân và trình Quốc hội dự thảo Hiến pháp. 4. Hiến pháp được thông qua khi có ít nhất hai phần ba tổng số đại biểu Quốc hội biểu quyết tán thành. Việc trưng cầu ý dân về Hiến pháp do Quốc hội quyết định. 5. Thời hạn công bố, thời điểm có hiệu lực của Hiến pháp do Quốc hội quyết định. --------------------------------------------------Quy định về việc thi hành: Việc thi hành Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam được quy định tại Nghị quyết số 64/2013/QH13 ngày 28 tháng 11 năm 2013 của Quốc hội quy định một số điểm thi hành Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam. Điều 2 của Nghị quyết số 203/2025/QH15 ngày 16 tháng 6 năm 2025 của Quốc hội sửa đổi, bổ"
+      },
+      {
+        "chunk_id": "normal_hienphap_33tr.pdf_p21_c0",
+        "source_file": "normal_hienphap_33tr.pdf",
+        "page_number": 21,
+        "page_range": null,
+        "is_bridge": false,
+        "score": 0.24219974875450134,
+        "bm25_score": 6.922610657814493,
+        "rrf_score": 0.024691358024691357,
+        "text": "Điều 84 1.3 Chủ tịch nước, Ủy ban thường vụ Quốc hội, Hội đồng dân tộc, Ủy ban của Quốc hội, Chính phủ, Tòa án nhân dân tối cao, Viện kiểm sát nhân dân tối cao, Kiểm toán nhà nước, Ủy ban trung ương Mặt trận Tổ quốc Việt Nam và cơ quan trung ương của tổ chức chính trị - xã hội có quyền trình dự án luật trước Quốc hội, trình dự án pháp lệnh trước Ủy ban thường vụ Quốc hội. 2. Đại biểu Quốc hội có quyền trình kiến nghị về luật, pháp lệnh và dự án luật, dự án pháp lệnh trước Quốc hội, Ủy ban thường vụ Quốc hội. Điều 85 1. Luật, nghị quyết của Quốc hội phải được quá nửa tổng số đại biểu Quốc hội biểu quyết tán thành; trường hợp làm Hiến pháp, sửa đổi Hiến pháp, quyết định rút ngắn hoặc kéo dài nhiệm kỳ của Quốc hội, bãi nhiệm đại biểu Quốc hội phải được ít nhất hai phần ba tổng số đại biểu Quốc hội biểu quyết tán thành. Pháp lệnh, nghị quyết của Ủy ban thường vụ Quốc hội phải được quá nửa tổng số thành viên Ủy ban thường vụ Quốc hội biểu quyết tán thành. 2. Luật, pháp lệnh phải được công bố chậm nhất là mười lăm ngày, kể từ ngày được thông qua, trừ trường hợp Chủ tịch nước đề nghị xem xét lại pháp lệnh. CHƯƠNG VI CHỦ TỊCH NƯỚC Điều 86 Chủ tịch nước là người đứng đầu Nhà"
+      }
+    ]
+  }
+]

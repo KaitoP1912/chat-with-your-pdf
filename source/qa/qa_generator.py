@@ -14,7 +14,8 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Set, Tuple
 
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 try:
     import pdfplumber
@@ -63,22 +64,30 @@ RATE_LIMIT_RETRY_SECONDS = 20.0
 
 def _is_rate_limit_error(e: Exception) -> bool:
     text = str(e).lower()
-    return any(marker in text for marker in ("429", "quota", "rate limit", "resource_exhausted", "resourceexhausted"))
+    return any(marker in text for marker in (
+        "429", "quota", "rate limit", "resource_exhausted", "resourceexhausted",
+        "503", "unavailable",  # lỗi quá tải tạm thời của Google — cũng nên retry kiên nhẫn
+    ))
 
 
-_configured = False
+_client: Optional["genai.Client"] = None
 
 
-def _ensure_configured() -> None:
-    global _configured
-    if _configured:
-        return
+def _get_client() -> "genai.Client":
+    """Trả về client genai đã cấu hình (khởi tạo 1 lần, dùng lại cho các lượt gọi sau).
+
+    Thay cho genai.configure() của SDK cũ (google.generativeai) — SDK mới
+    (google.genai) dùng mô hình client tường minh thay vì cấu hình toàn cục.
+    """
+    global _client
+    if _client is not None:
+        return _client
     load_dotenv()
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key or "dán_key" in api_key:
         raise RuntimeError("Không tìm thấy GEMINI_API_KEY hợp lệ trong file .env.")
-    genai.configure(api_key=api_key)
-    _configured = True
+    _client = genai.Client(api_key=api_key)
+    return _client
 
 
 def _chunk_pages(chunk: SearchHit) -> List[int]:
@@ -265,7 +274,7 @@ def generate_answer(
             citations=[],
         )
 
-    _ensure_configured()
+    client = _get_client()
     model_name = target_model.replace("models/", "")
 
     # Việc 1: nếu (các) chunk đã lọt qua tau có bao phủ trang thuộc
@@ -285,12 +294,19 @@ def generate_answer(
     retry_count = 0
     while True:
         try:
-            model = genai.GenerativeModel(
-                model_name,
-                generation_config={"temperature": GENERATION_TEMPERATURE},
-            )
             start = time.time()
-            response = model.generate_content(gemini_contents)
+            response = client.models.generate_content(
+                model=model_name,
+                contents=gemini_contents,
+                config=types.GenerateContentConfig(
+                    temperature=GENERATION_TEMPERATURE,
+                    # Dự án không dùng tool/function calling ở đâu cả — tắt hẳn AFC
+                    # (SDK mới google.genai bật ngầm định) để tránh round-trip xử lý
+                    # thừa nghi là nguồn gây latency tăng bất thường (~30x) đã quan
+                    # sát được. Cần chạy lại 2 câu test ít nhất 2 lần để xác nhận.
+                    automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+                ),
+            )
             elapsed = time.time() - start
 
             um = getattr(response, "usage_metadata", None)

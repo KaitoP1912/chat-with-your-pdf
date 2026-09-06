@@ -1,0 +1,222 @@
+# BÁO CÁO TIẾN ĐỘ THỰC TẬP TỐT NGHIỆP — TUẦN 6
+
+**Đề tài:** Xây dựng ứng dụng hỏi đáp tài liệu PDF tiếng Việt có trích dẫn số trang bằng kỹ thuật RAG (Chat with Your PDF).
+**Sinh viên thực hiện:** Võ Thành Phước — MSSV: 079205022977.
+**Giảng viên hướng dẫn:** ThS. Nguyễn Thanh Tiến.
+**Thời gian báo cáo:** Tuần 6 (Giao diện & Tích hợp — Sản phẩm MVP hoàn chỉnh).
+**Quản lý mã nguồn (GitHub):** https://github.com/KaitoP1912/chat-with-your-pdf
+
+---
+
+## 1. Mục tiêu Tuần 6
+
+Theo khung 8 tuần: Tuần 6 là mốc **giao diện và tích hợp — sản phẩm MVP hoàn chỉnh**, và từ tuần này **không còn thay đổi kiến trúc lớn**. Mục tiêu cụ thể:
+
+1. Xây giao diện web tối thiểu bọc quanh pipeline đã khóa (Tuần 1-5).
+2. Kiểm thử hệ thống trên toàn bộ 9 file corpus (trước giờ chỉ dùng 3/9 file).
+3. Soạn tài liệu khóa cứng hệ thống, làm căn cứ chính thức trước khi chạy Test Set Tuần 7.
+
+---
+
+## 2. Công việc đã thực hiện
+
+### 2.1. Giao diện web tối thiểu (`script/app_ui.py`, `script/app_ui_style.py`)
+
+Xây bằng Streamlit, dùng lại nguyên hàm từ `source/` (không viết lại logic RAG). Trong quá trình làm, phát hiện đã tồn tại sẵn 1 bản giao diện đầy đủ hơn dự kiến ban đầu (sidebar, chat nhiều lượt, gợi ý câu hỏi, cảnh báo trang scan) — quyết định giữ bản đầy đủ này làm chính thức, refactor lại: sửa lỗi `st.set_page_config()` gọi trùng 2 lần (vi phạm ràng buộc Streamlit), tách ~350 dòng CSS/markup ra file riêng cho gọn.
+
+**Đã kiểm chứng bằng chạy thật:**
+- Câu answerable: trả lời đúng, trích dẫn đúng trang, độ trễ ~1,1s.
+- Câu unanswerable: từ chối đúng, không trả lời liều.
+
+### 2.2. Kiểm thử toàn bộ 9 file Corpus (`results/tuan6_pilot/corpus_test_log.md`)
+
+Trước giờ Dev Set/Test Set chỉ dùng 3/9 file "chuẩn". Lần đầu chạy `app_cli.py` trên cả 9 file phát hiện 2 vấn đề hạ tầng cần xử lý trước khi có kết quả tin cậy:
+
+- **Bug môi trường:** `--vncorenlp_dir` mặc định là đường dẫn tương đối, gây lỗi JVM ở 7/8 file khi không truyền tay đường dẫn tuyệt đối — đã biết cách khắc phục (giống các script Tuần 3), cần sửa default trong `app_cli.py`.
+- **Câu hỏi thăm dò ban đầu quá chung chung** (dạng tóm tắt) khiến 4/8 file abstain không có ý nghĩa chẩn đoán — đã sửa bằng câu hỏi cụ thể có đáp án tra cứu được từ nguồn ngoài đáng tin cậy.
+
+**Kết quả sau khi sửa cả 2 vấn đề (8/8 file có kết luận rõ ràng):**
+
+| Kết luận | Số file | Chi tiết |
+|---|---|---|
+| ✅ Đạt — trả lời đúng | 4/8 | 3 file chuẩn + file mã hóa TCVN3 (xác nhận chuẩn hóa hoạt động tốt) |
+| 🟢 Có thể đúng thiết kế | 1/8 | File mixed-scan — model tự chối hợp lý do trang chứa "Phạm vi điều chỉnh" bị scan |
+| 🟡 Xác nhận giới hạn đã biết, nghiêm trọng hơn dự kiến | 1/8 | File mất dấu — Tuần 2 chỉ ghi "phát hiện", nay có bằng chứng nó khiến **retrieval thất bại hoàn toàn**, không chỉ ảnh hưởng chính tả |
+| 🔴 Cần điều tra thêm | 1/8 | File mã hóa VNI — cùng dạng lỗi với TCVN3 nhưng vẫn abstain dù đổi câu hỏi cụ thể; đã có lệnh chẩn đoán sẵn, chưa chạy dứt điểm |
+| ⚠️ Phát hiện kiến trúc | 1/8 | File full-scan: `build_clean_pages()` không gọi `scan_detector`, nên chính sách từ chối FULL_SCAN đã khóa từ Tuần 1-2 **không được áp dụng** trong luồng CLI — hệ thống không crash nhưng trả lời "không tìm thấy" y hệt câu hỏi ngoài phạm vi bình thường, không phân biệt được 2 tình huống khác nhau |
+
+3 file "chuẩn" hoạt động đúng 100%; việc kiểm thử toàn corpus (thay vì chỉ 3 file quen thuộc) đã phát hiện đúng những rủi ro mà Dev Set/Test Set (chỉ dùng 3 file) không thể thấy được.
+
+### 2.3. Khóa cứng hệ thống (`SYSTEM_LOCK.md`)
+
+Tài liệu duy nhất tổng hợp toàn bộ tham số, prompt, danh sách file đã khóa — làm căn cứ chính thức trước Test Set Tuần 7. Gồm bảng tham số (model, tau, k, chunk...), nguyên văn prompt đã khóa, danh sách file "không sửa nữa từ Tuần 6", checklist xác nhận, và lịch sử thay đổi tham số quan trọng (có giải trình lý do từng lần đổi).
+
+### 2.4. Phát hiện phát sinh — Migrate SDK Gemini + vá 2 lỗi hạ tầng
+
+Trong lúc chạy thử phát hiện gói `google.generativeai` đã bị Google **ngừng hỗ trợ hoàn toàn**. Quyết định migrate sớm sang SDK chính thức mới `google.genai` (tránh rủi ro gói cũ ngừng hoạt động đột ngột trước khi khóa cứng Tuần 7 — đã có tiền lệ với model bị deprecate ở Tuần 4).
+
+**2 lỗi hạ tầng phát hiện và vá trong quá trình migrate:**
+- **Lỗ hổng retry:** cơ chế tự động thử lại chỉ nhận diện lỗi `429` (rate limit), không nhận diện lỗi `503` (server quá tải tạm thời) — đã tái hiện thực tế 1 lần (câu hỏi Vinamilk lỗi hẳn, mất câu trả lời oan). Đã vá: bổ sung `"503"`, `"unavailable"` vào danh sách nhận diện lỗi cần retry.
+- **AFC (Automatic Function Calling)** của SDK mới bật ngầm định dù dự án không dùng tool/function calling — đã tắt (vô hại, đúng khuyến nghị phòng ngừa).
+
+**Điều tra latency tăng bất thường (43,68s so với baseline 1,46s) — đã cô lập đúng nguyên nhân bằng thí nghiệm đối chứng:** chạy lại **cùng câu hỏi, cùng khung giờ, đổi đúng 1 biến** (SDK cũ không có AFC vs SDK mới đã tắt AFC) → ra cùng latency (~24-25s) → **bác bỏ giả thuyết AFC là nguyên nhân**. Đối chiếu timestamp: latency thấp rơi vào giờ vắng traffic Mỹ, latency cao rơi vào giờ cao điểm Mỹ (0h-2h sáng giờ Việt Nam). Quan sát bước đầu (chưa đủ số liệu để kết luận chắc chắn — mới 4-5 lần đo): latency phụ thuộc tải server Google theo giờ, không phải lỗi code.
+
+Đã kiểm chứng đầy đủ trước khi commit: nội dung câu trả lời/trích dẫn/ảnh trang biểu đồ **khớp 100%** giữa SDK cũ và mới, qua nhiều lần chạy.
+
+### 2.5. Phát hiện quan trọng nhất — Chạy sớm Test Set, tìm ra 1 ca False Acceptance thật
+
+Trong lúc chuẩn bị hạ tầng Tuần 7, đã chạy thử Test Set (25 câu, độc lập với Dev Set) trên cả 3 cấu hình. **Xác nhận việc chạy sớm này không vi phạm nguyên tắc "Test Set không dùng để chọn tham số":** `tau_used=0.38` cố định 100% trong toàn bộ kết quả, không file tham số lõi nào (`config.py`, `chunker.py`, `qa_generator.py`) bị sửa dựa trên kết quả này — chỉ có `vectorstore.py` (tối ưu hiệu năng, phát hiện độc lập trước khi chạy Test Set) bị sửa.
+
+**Bảng kết quả (25 câu Test Set, 3 cấu hình):**
+
+| Chỉ số | page_aware | fixed_size | long-context |
+|---|---|---|---|
+| Hit@3 | 94,1% | 88,2% | n/a |
+| Citation accuracy | 100% | 87,5% | 82,4% |
+| **False acceptance rate** | **12,5%** | **12,5%** | 0% |
+| False refusal rate | 5,9% | 5,9% | 0% |
+| Latency trung bình | 1,92s | 1,81s | 1,30s |
+| Token trung bình | 4.139 | 2.788 | 42.012 |
+
+Các chỉ số Hit@3, citation accuracy, tỉ lệ token đều **nhất quán với xu hướng đã thấy ở Dev Set** (page_aware > fixed_size, long-context tốn ~10 lần token) — xác nhận độ tin cậy của cả 2 bộ đánh giá.
+
+**Phát hiện đáng chú ý nhất:** câu `test_25` (near_miss — hỏi tổng số giặc lái Mỹ bị bắt sống trong **2 lần** chống chiến tranh phá hoại) bị lọt qua ở cả `page_aware` lẫn `fixed_size`. Đọc kỹ câu trả lời: hệ thống nêu đúng 1 sự thật có thật trong tài liệu (43 giặc lái bị bắt trong 12 ngày đêm tháng 12/1972 — chỉ 1 trong 2 đợt), đồng thời **tự nói rõ** tài liệu không có tổng số cho cả 2 đợt. Đây **không phải bịa số** (khác hẳn kiểu lỗi cũ ở Tuần 4 — bịa "37,9%" vô căn cứ), mà là hệ quả **đã được cảnh báo trước** của thay đổi Tuần 5 (nới QUY TẮC 2 để giảm over-refusal): comment gốc trong code ghi rõ "nếu false acceptance tăng khỏi 0/11, PHẢI báo cáo rõ". `Hit@3 = False` cho câu này — tức đoạn chứa "43 giặc lái" không nằm trong top-3 đo Recall@3, nhưng vẫn lọt qua ở tầng generation (k=15).
+
+Dev Set (34 câu) không phát hiện được rủi ro này vì các câu near_miss của Dev Set đều thuộc loại "hoàn toàn không liên quan" — còn `test_25` là loại near_miss khó hơn: có 1 sự thật liên quan rất gần chủ đề, chỉ sai phạm vi câu hỏi. **Đây chính xác là giá trị của việc có Test Set độc lập** — bắt được đúng loại rủi ro mà Dev Set không đủ đa dạng để phát hiện.
+
+---
+
+## 3. Đối chiếu với mục tiêu Tuần 6
+
+| Hạng mục cam kết | Trạng thái |
+|---|---|
+| Giao diện web tối thiểu | **ĐẠT** — đã chạy thật, đúng cả 2 trường hợp |
+| Kiểm thử toàn bộ 9 file corpus | **ĐẠT** — 8/8 file có kết luận, phát hiện 3 vấn đề mới (file 5, 6, 8) |
+| Khóa cứng hệ thống | **ĐẠT** — `SYSTEM_LOCK.md` đầy đủ, đã cập nhật sau khi vá SDK |
+| Không thay đổi kiến trúc lớn | **ĐẠT** — mọi thay đổi (SDK, retry, AFC) chỉ ở tầng hạ tầng, không đổi tham số khoa học |
+
+---
+
+## 4. Đánh giá tiến độ tổng thể dự án
+
+Ước tính **~79-80%** toàn dự án. Tuần 6 hoàn thành gần trọn vẹn (còn 1 việc nhỏ để lại: kết luận dứt điểm lỗi file VNI — không chặn tiến độ; lỗ hổng scan-detection trong CLI đã khắc phục và verify, xem Mục 8). Ngoài kế hoạch, đã có sẵn dữ liệu thô Test Set trên cả 3 cấu hình — phần việc phân tích/chấm điểm/kết luận chính thức vẫn để dành đúng cho Tuần 7 như kế hoạch.
+
+---
+
+## 5. Vấn đề tồn đọng và kế hoạch xử lý
+
+- **False acceptance 12,5% trên Test Set (test_25):** cần đưa vào phân tích chính thức Tuần 7, cân nhắc bổ sung thêm câu hỏi near_miss "khó" (có sự thật liên quan gần nhưng sai phạm vi) để đo chính xác hơn tỉ lệ thật — không vội đảo ngược thay đổi prompt Tuần 5 chỉ từ 1 điểm dữ liệu.
+- ~~**`app_cli.py` không áp dụng chính sách từ chối FULL_SCAN đã khóa Tuần 1-2**~~ → **ĐÃ KHẮC PHỤC** (xem Mục 8.1) — đã sửa và verify cả 2 trường hợp (file scan bị chặn đúng, file thường không bị ảnh hưởng).
+- **File mã hóa VNI (`oldenc_vni_118-2025-qh15_23tr.pdf`) vẫn abstain dù câu hỏi cụ thể:** có lệnh chẩn đoán sẵn (`check_all.py`), chưa chạy dứt điểm.
+- **File mất dấu tiếng Việt:** xác nhận ảnh hưởng nghiêm trọng hơn dự kiến (mất khả năng trả lời, không chỉ ảnh hưởng chính tả) — ghi nhận là giới hạn đã biết, cần nêu rõ trong hồ sơ cuối kỳ.
+
+---
+
+## 6. Chi tiết bổ sung — `script/pilot_tuan6/` và `results/tuan6_pilot/`
+
+### 6.1. Tối ưu `source/retrieval/vectorstore.py`
+
+Trước đây `build_index()` tách từ (VnCoreNLP) **2 lần** cho mỗi chunk — 1 lần ẩn trong bước embedding, 1 lần trong bước dựng BM25 (`ChunkIndex.add()`). Bản sửa tính `segmented_texts` **một lần duy nhất** rồi truyền lại cho `add()` để tái sử dụng, tránh gọi JVM (VnCoreNLP) dư thừa gấp đôi — theo docstring, đây là nguyên nhân chính khiến việc dựng index chậm bất thường với tài liệu nhiều trang (ví dụ báo cáo Vinamilk 53 trang, ~300 chunk). Hành vi/kết quả BM25 và embedding không đổi, chỉ giảm số lần gọi JVM.
+
+**Cập nhật:** tại thời điểm soạn tài liệu khóa cứng, thay đổi này **chưa được verify bằng số liệu dev set thật**. Việc verify đã được thực hiện sau đó — xem chi tiết và bảng đối chiếu tại Mục 8.2. Kết luận: retrieval (citations, score, BM25, RRF) giống hệt tuyệt đối giữa bản cũ và bản mới trên cả 3 câu dev_01/02/03 — thay đổi được coi là an toàn, chính thức.
+
+### 6.2. Cơ chế `script/pilot_tuan6/run_test_qa.py`
+
+Script chạy đánh giá 2 cấu hình RAG (`page_aware`, `fixed_size`) trên Test Set 25 câu; baseline long-context dùng lại nguyên script Tuần 5 (`run_longcontext_baseline.py`, chỉ đổi `--dev-set` sang `test_questions.json`). Các điểm kỹ thuật đáng chú ý:
+
+- **Dựng index 1 lần cho mỗi file nguồn duy nhất** xuất hiện trong test set (không dựng lại theo từng câu hỏi) — giữ đúng tinh thần tối ưu đã dùng ở `run_longcontext_baseline.py` Tuần 5.
+- **Hit@3 cố định k=3**, tách biệt hoàn toàn với k=15 dùng cho generation: Hit@3 đo retriever theo đúng chỉ số đã dùng xuyên suốt từ Tuần 4 để so sánh 2 chiến lược chunking; k=15 (`config.TOP_K_GENERATION`) chỉ để đưa ngữ cảnh cho Gemini sinh câu trả lời — hai việc đo hai thứ khác nhau, không được gộp.
+- **Cảnh báo tự áp đặt trong code:** không dùng script này để tinh chỉnh `tau`/`k` sau khi thấy kết quả — các giá trị đã khóa ở `config.py` từ Tuần 4-5; kết quả tệ ở câu nào là dữ liệu cho error analysis, không phải lý do đổi tham số rồi chạy lại.
+- **Cơ chế `--resume`:** cho phép chạy lại và bỏ qua các câu đã thành công ở lần trước (đọc lại file `--out` cũ), phòng trường hợp bị đứt giữa chừng do rate limit hoặc mất mạng — không cần chạy lại từ đầu, không ảnh hưởng tới các dòng đã có.
+- Ghi CSV cùng schema với `run_longcontext_baseline.py` (chỉ thêm cột `hit_at_3`) để 3 cấu hình gộp được vào chung 1 bảng so sánh.
+
+### 6.3. Cơ chế `script/pilot_tuan6/aggregate_results.py`
+
+Script gộp 3 file CSV kết quả thành 1 bảng so sánh (`bang_so_sanh_3_cau_hinh.csv`). Điểm quan trọng nhất: `answer_correctness` (đúng hoàn toàn / đúng một phần / sai — 3 mức) **không thể tự động chấm**. Cột `answer_correctness_manual` trong mỗi CSV phải tự điền tay (so `answer_text` với đáp án mẫu trong `test_questions.json`) theo đúng 3 giá trị quy ước `full` / `partial` / `wrong` **trước khi** chạy script này thì mới có số liệu đó trong bảng tổng hợp.
+
+Kiểm tra trực tiếp `bang_so_sanh_3_cau_hinh.csv` hiện có: cột `n_graded` và 3 cột `answer_*_pct` đều **rỗng** ở cả 3 cấu hình — nghĩa là **việc chấm tay `answer_correctness_manual` chưa được thực hiện**. Bảng ở mục 2.5 phía trên (Hit@3, citation accuracy, false acceptance/refusal, latency, token) là toàn bộ phần chỉ số **tự động chấm được**; cột "Answer correctness (full/partial/wrong)" vẫn **chưa chấm** ở cả 3 cấu hình. Việc chấm tay 25×3 = 75 câu trả lời này là phần việc còn nợ lại, đúng như kế hoạch Tuần 7 đã định.
+
+### 6.4. Bổ sung 1 phát hiện khi đọc trực tiếp dữ liệu thô
+
+Mục 2.5 đã mô tả phát hiện `test_25` (near_miss khó, cả `page_aware` và `fixed_size` đều để lọt 1 phần thông tin không liên quan phạm vi câu hỏi). Đọc trực tiếp 3 file CSV cho thấy thêm 2 chi tiết:
+
+- **`long-context` từ chối đúng câu `test_25`** (`is_abstained=True`, `abstain_reason=model_refusal`, trả lời đúng câu bắt buộc "Không tìm thấy thông tin trong tài liệu.") — trong khi cả `page_aware` lẫn `fixed_size` đều trả lời (có kèm ghi chú không chắc chắn). Đây là điểm tương phản đáng đưa vào phân tích lỗi Tuần 7: cùng 1 câu hỏi khó, baseline không bị giới hạn ranh giới chunk lại có đủ ngữ cảnh để nhận ra chỉ có 1 phần thông tin liên quan, còn 2 cấu hình RAG (ngữ cảnh hẹp hơn) thì không.
+- **`fixed_size` trả lời `test_25` theo cách khác `page_aware`**, không chỉ nêu con số 43 mà còn trích thêm 1 câu trong tài liệu nói bắt "hàng trăm giặc lái Mỹ" (số liệu chung chung hơn) — cho thấy 2 cấu hình lấy được 2 đoạn trích khác nhau cho cùng câu hỏi, đáng xem lại khi làm error analysis chi tiết theo câu.
+
+### 6.5. Mục còn treo trong `SYSTEM_LOCK.md`
+
+Mục 2.5 khẳng định việc chạy sớm Test Set "không vi phạm nguyên tắc". Tuy nhiên đọc trực tiếp checklist trong `SYSTEM_LOCK.md` cho thấy đây vẫn là mục **chưa được tick, còn treo**, không phải đã đóng hẳn: ô "Test Set chưa từng được dùng để chạy thử/điều chỉnh tham số" **KHÔNG được tick** cho tới khi tự xác nhận (a) kết quả Test Set chạy sớm có bị dùng để chỉnh sửa tham số nào ở Mục 1 hay không, và (b) nếu có, phải báo cáo rõ với GVHD.
+
+Ngoài ra, `SYSTEM_LOCK.md` liệt kê 2 việc xác nhận thêm chưa làm dứt điểm:
+- File VNI (file 6): cần chạy `check_all.py` để soi text đã chuẩn hóa, xác nhận còn sót ký tự VNI thô hay không — hiện mới dừng ở mức giả thuyết.
+- File mixedscan (file 4): cần xác nhận trực tiếp nội dung trang 1 gốc có đúng chứa "Phạm vi điều chỉnh" hay không bằng `xem_noi_dung_trang.py`, để kết luận chắc chắn `model_refusal` ở file này là đúng thiết kế (chứ không phải suy luận).
+
+---
+
+## 7. Kế hoạch triển khai Tuần 7
+
+Theo khung tiến độ: Tuần 7 là mốc **Đánh giá chính thức — có metric, output thô và error analysis**, **không được tối ưu trên test**.
+
+1. ~~Verify thay đổi `vectorstore.py`~~ → **ĐÃ XONG**, xem Mục 8.2.
+2. Chấm tay `answer_correctness_manual` cho 75 dòng (25 câu × 3 cấu hình), chạy lại `aggregate_results.py` để có đầy đủ bảng so sánh (dùng đúng dữ liệu đã chạy sẵn ở Tuần 6, không chạy lại).
+3. Phân tích error analysis đầy đủ theo khung đã thống nhất với Thầy (tách theo có/không evidence trong top-k), bao gồm điểm tương phản long-context vs 2 cấu hình RAG ở `test_25`.
+4. Tự xác nhận dứt điểm ô checklist còn treo trong `SYSTEM_LOCK.md` (Test Set có bị dùng để chỉnh tham số hay không) trước khi coi dữ liệu Test Set Tuần 6 là hợp lệ cho Tuần 7.
+5. Chẩn đoán dứt điểm file VNI bằng `check_all.py` và xác nhận file mixedscan bằng `xem_noi_dung_trang.py` (scan-detection trong CLI đã xử lý xong, xem Mục 8.1).
+6. Viết báo cáo đánh giá chính thức, tổng hợp toàn bộ 3 cấu hình trên Test Set.
+
+---
+
+## 8. Cập nhật sau báo cáo — khắc phục 2 vấn đề tồn đọng
+
+### 8.1. Vá lỗi FULL_SCAN không bị chặn trong `app_cli.py`
+
+**Nguyên nhân (đã nêu ở Mục 2.2):** `build_clean_pages()` — hàm `app_cli.py` dùng để đọc PDF — không gọi `scan_detector.detect_scan()`/`should_reject()`, khiến file FULL_SCAN chạy qua tới tận bước abstain với lý do `retrieval_threshold`, giống hệt câu hỏi ngoài phạm vi thông thường.
+
+**Bản sửa** (chỉ trong `script/app_cli.py`, không đụng `build_clean_pages()`, `config.py`, hay bất kỳ tham số khóa nào — đúng khuôn mẫu đã dùng ở `app_ui.py`):
+
+```python
+from source.ingestion.pdf_loader import load_pdf_pages
+from source.ingestion.scan_detector import detect_scan, should_reject
+```
+
+```python
+    try:
+        raw_pages = load_pdf_pages(pdf_path)
+        scan_result = detect_scan(raw_pages)
+        if should_reject(scan_result):
+            print(
+                f"[LỖI] File '{pdf_path}' là PDF scan hoàn toàn "
+                "(không có lớp text) — ứng dụng hiện chỉ hỗ trợ PDF có text layer. "
+                "Vui lòng dùng OCR trước khi tải lên."
+            )
+            sys.exit(1)
+        pages = build_clean_pages(pdf_path)
+    except Exception as exc:
+        print(f"[LỖI] Không đọc được file PDF '{pdf_path}': {exc}")
+        sys.exit(1)
+```
+
+Toàn bộ đoạn kiểm tra scan nằm **trong** khối `try/except` sẵn có, để hành vi báo lỗi khi file hỏng thật (không phải scan) không bị thụt lùi so với trước; `sys.exit(1)` không bị `except Exception` bắt lại nên thông báo scan không bị ghi đè.
+
+**Kiểm chứng bằng chạy thật (2 trường hợp):**
+
+| Trường hợp | Lệnh | Kết quả |
+|---|---|---|
+| File FULL_SCAN | `app_cli.py --pdf scan_nd238_14tr.pdf` | Dừng ngay ở BƯỚC 1/4 với thông báo `[LỖI] File ... là PDF scan hoàn toàn...` — không chạy tới chunk/index |
+| File bình thường | `app_cli.py --pdf normal_hienphap_33tr.pdf --question "Nhiệm kỳ Quốc hội là bao nhiêu năm?"` | Chạy đủ 4 bước, trả lời "nhiệm kỳ của mỗi khóa Quốc hội là năm năm", trích dẫn trang 17 + bridge 16-17, 20-21, trang 20, **1697 token — khớp tuyệt đối** với số liệu đã ghi ở Mục 2.2 trước khi sửa |
+
+Kết quả file bình thường khớp 100% với số liệu cũ → xác nhận bản sửa không ảnh hưởng tới luồng hoạt động thông thường, đúng nguyên tắc "Tuần 6 không đổi kiến trúc lớn".
+
+### 8.2. Verify tối ưu `vectorstore.py`
+
+Chạy lại đúng 3 câu `dev_01`, `dev_02`, `dev_03` bằng 2 phiên bản: bản đã tối ưu (hiện tại) và bản gốc lấy trực tiếp từ `git show HEAD` (trước khi tối ưu).
+
+| Câu | Citations (cũ vs mới) | Top-3 score/BM25/RRF (cũ vs mới) |
+|---|---|---|
+| `dev_01` | Giống hệt | Giống hệt tuyệt đối từng chữ số thập phân |
+| `dev_02` | Giống hệt | Giống hệt tuyệt đối từng chữ số thập phân |
+| `dev_03` | Giống hệt | Giống hệt tuyệt đối từng chữ số thập phân |
+
+`answer_text` của `dev_02` có khác biệt nhỏ về câu chữ giữa 2 lần chạy (nội dung ý nghĩa vẫn đúng Điều 19/20) — vì retrieval score giống hệt nhau, ngữ cảnh đưa vào Gemini ở 2 lần chạy là y hệt, nên khác biệt này đến từ chính việc Gemini không đảm bảo output giống 100% giữa các lần gọi (kể cả temperature=0.0), không phải do thay đổi trong `vectorstore.py`.
+
+**Kết luận:** thay đổi tối ưu (tách từ VnCoreNLP 1 lần thay vì 2 lần) không làm đổi bất kỳ kết quả retrieval nào — an toàn, chính thức coi là đã khóa. File bằng chứng: `results/tuan6_pilot/vectorstore_current_verification.json` và `vectorstore_OLD_verification.json`.

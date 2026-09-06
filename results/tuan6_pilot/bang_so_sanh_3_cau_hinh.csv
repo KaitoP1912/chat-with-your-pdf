@@ -1,0 +1,4 @@
+config,n,n_answerable,n_unanswerable,n_errors,hit_at_3_rate,citation_accuracy,false_acceptance_rate,false_refusal_rate,answer_full_pct,answer_partial_pct,answer_wrong_pct,n_graded,avg_latency_seconds,avg_total_tokens
+page_aware,25,17,8,0,94.1%,100.0%,12.5%,5.9%,,,,,1.92,4139
+fixed_size,25,17,8,0,88.2%,87.5%,12.5%,5.9%,,,,,1.81,2788
+longcontext,25,17,8,0,,82.4%,0.0%,0.0%,,,,,1.30,42012
