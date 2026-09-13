@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 from pathlib import Path
 from typing import Dict, List
 
@@ -43,7 +44,19 @@ def _to_float(v: str):
         return None
 
 
-def summarize(rows: List[dict], config_label: str) -> dict:
+def load_bridge_map() -> Dict[str, bool]:
+    """Tải thông tin bridge case từ test_questions.json"""
+    test_path = Path('data/eval_sets/test_questions.json')
+    if not test_path.exists():
+        return {}
+    try:
+        data = json.loads(test_path.read_text(encoding='utf-8'))
+        return {q['id']: _to_bool(q.get('is_bridge_case', 'false')) for q in data.get('questions', [])}
+    except:
+        return {}
+
+
+def summarize(rows: List[dict], config_label: str, bridge_map: Dict[str, bool]) -> dict:
     n = len(rows)
     if n == 0:
         return {"config": config_label, "n": 0}
@@ -101,6 +114,25 @@ def summarize(rows: List[dict], config_label: str) -> dict:
     tokens = [_to_float(r.get("total_tokens")) for r in non_error]
     tokens = [x for x in tokens if x is not None]
 
+    # Tính p50 latency (median)
+    p50_latency = None
+    if latencies:
+        sorted_lat = sorted(latencies)
+        p50_latency = sorted_lat[len(sorted_lat) // 2]
+
+    # Bridge-case metrics
+    bridge_rows = [r for r in rows if bridge_map.get(r.get('id'), False)]
+    non_bridge_rows = [r for r in rows if not bridge_map.get(r.get('id'), False)]
+    
+    bridge_hit3 = None
+    if bridge_rows:
+        bridge_answerable = [r for r in bridge_rows if _to_bool(r.get("is_answerable"))]
+        bridge_hit3_rows = [r for r in bridge_answerable if str(r.get("hit_at_3", "")).strip() != ""]
+        bridge_hit3 = (
+            sum(1 for r in bridge_hit3_rows if _to_bool(r.get("hit_at_3"))) / len(bridge_hit3_rows)
+            if bridge_hit3_rows else None
+        )
+
     return {
         "config": config_label,
         "n": n,
@@ -113,7 +145,11 @@ def summarize(rows: List[dict], config_label: str) -> dict:
         "false_refusal_rate": false_refusal_rate,
         "answer_correctness": correctness,
         "avg_latency_seconds": (sum(latencies) / len(latencies)) if latencies else None,
+        "p50_latency_seconds": p50_latency,
         "avg_total_tokens": (sum(tokens) / len(tokens)) if tokens else None,
+        "bridge_count": len(bridge_rows),
+        "bridge_hit3_rate": bridge_hit3,
+        "non_bridge_count": len(non_bridge_rows),
     }
 
 
@@ -150,7 +186,13 @@ def print_report(summaries: List[dict]) -> None:
         else:
             print(f"  Answer correctness     : (chưa điền answer_correctness_manual)")
         print(f"  Latency trung bình     : {_fmt_num(s['avg_latency_seconds'])}s")
+        print(f"  Latency p50 (median)   : {_fmt_num(s['p50_latency_seconds'])}s")
         print(f"  Token trung bình       : {_fmt_num(s['avg_total_tokens'], 0)}")
+        if s['bridge_count'] > 0:
+            print(f"  Bridge-case Hit@3      : {_fmt_pct(s['bridge_hit3_rate'])} ({s['bridge_count']} cases)"
+                  + ("" if s['bridge_hit3_rate'] is not None else " (n/a)"))
+        if s['non_bridge_count'] > 0:
+            print(f"  Non-bridge cases       : {s['non_bridge_count']}")
     print("\n" + "=" * 78)
 
 
@@ -159,7 +201,8 @@ def write_csv(summaries: List[dict], out_path: Path) -> None:
         "config", "n", "n_answerable", "n_unanswerable", "n_errors",
         "hit_at_3_rate", "citation_accuracy", "false_acceptance_rate",
         "false_refusal_rate", "answer_full_pct", "answer_partial_pct",
-        "answer_wrong_pct", "n_graded", "avg_latency_seconds", "avg_total_tokens",
+        "answer_wrong_pct", "n_graded", "avg_latency_seconds", "p50_latency_seconds",
+        "avg_total_tokens", "bridge_count", "bridge_hit3_rate", "non_bridge_count",
     ]
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", newline="", encoding="utf-8") as f:
@@ -182,7 +225,11 @@ def write_csv(summaries: List[dict], out_path: Path) -> None:
                 "answer_wrong_pct": _fmt_pct(c.get("wrong_pct")),
                 "n_graded": c.get("n_graded", ""),
                 "avg_latency_seconds": _fmt_num(s.get("avg_latency_seconds")),
+                "p50_latency_seconds": _fmt_num(s.get("p50_latency_seconds")),
                 "avg_total_tokens": _fmt_num(s.get("avg_total_tokens"), 0),
+                "bridge_count": s.get("bridge_count", ""),
+                "bridge_hit3_rate": _fmt_pct(s.get("bridge_hit3_rate")),
+                "non_bridge_count": s.get("non_bridge_count", ""),
             })
     print(f"\nĐã ghi bảng tổng hợp vào: {out_path}")
 
@@ -204,10 +251,13 @@ def main() -> None:
     parser.add_argument("--out", default="results/tuan6_pilot/bang_so_sanh_3_cau_hinh.csv")
     args = parser.parse_args()
 
+    # Load bridge case map
+    bridge_map = load_bridge_map()
+
     summaries = [
-        summarize(load_csv(args.page_aware), "page_aware"),
-        summarize(load_csv(args.fixed_size), "fixed_size"),
-        summarize(load_csv(args.longcontext), "longcontext"),
+        summarize(load_csv(args.page_aware), "page_aware", bridge_map),
+        summarize(load_csv(args.fixed_size), "fixed_size", bridge_map),
+        summarize(load_csv(args.longcontext), "longcontext", bridge_map),
     ]
 
     print_report(summaries)

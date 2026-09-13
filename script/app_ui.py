@@ -44,6 +44,7 @@ import config  # noqa: E402  (đọc tham số đã khóa: TAU, TOP_K_GENERATION
 
 from source.ingestion.pdf_loader import load_pdf_pages, PDFLoadError  # noqa: E402
 from source.ingestion.scan_detector import detect_scan, should_reject, DocScanStatus  # noqa: E402
+from source.ingestion.text_normalizer import detect_missing_diacritics  # noqa: E402
 from source.retrieval.ingest_glue import build_clean_pages  # noqa: E402
 from source.retrieval.chunker import chunk_by_page  # noqa: E402
 from source.retrieval.vectorstore import build_index, search  # noqa: E402
@@ -84,7 +85,8 @@ def _format_citations(citations: list[dict]) -> str:
 
 def _reset_session() -> None:
     for key in ("doc_hash", "doc_name", "pdf_path", "index", "chunks", "scan_summary",
-                "corpus_dir", "chat_history"):
+                "corpus_dir", "chat_history", "n_pages_missing_diacritics",
+                "total_pages_checked"):
         st.session_state.pop(key, None)
 
 
@@ -125,6 +127,12 @@ def _build_index_for_upload(uploaded_file) -> None:
             return
 
         pages = build_clean_pages(pdf_path)
+        n_pages_missing_diacritics = sum(
+            detect_missing_diacritics(page["text"]).likely_missing_diacritics
+            for page in pages
+        )
+        st.session_state["n_pages_missing_diacritics"] = n_pages_missing_diacritics
+        st.session_state["total_pages_checked"] = len(pages)
 
     with st.spinner("Đang chia đoạn văn bản..."):
         chunks = chunk_by_page(pages)
@@ -193,6 +201,15 @@ def _render_document_card() -> None:
         st.warning(
             f"Phát hiện {len(scan_result.scan_pages)} trang scan/không đọc được text "
             f"(bỏ qua khi tìm kiếm): {scan_result.scan_pages or '(không có)'}"
+        )
+
+    n_pages_missing_diacritics = st.session_state.get("n_pages_missing_diacritics", 0)
+    if n_pages_missing_diacritics > 0:
+        total_pages_checked = st.session_state.get("total_pages_checked", 0)
+        st.warning(
+            f"Phát hiện {n_pages_missing_diacritics} trang có dấu hiệu mất dấu tiếng Việt "
+            f"trên tổng {total_pages_checked} trang — kết quả trả lời từ các trang này "
+            "có thể không chính xác."
         )
 
 

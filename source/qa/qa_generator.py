@@ -24,7 +24,7 @@ except ImportError:  # pdfplumber đã là dependency của Trạm 1, nhưng ph�
 
 from source.retrieval.vectorstore import SearchHit
 
-DEFAULT_TAU = 0.45
+DEFAULT_TAU = 0.38
 DEFAULT_MODEL = "gemini-3.5-flash-lite"
 MODEL_ABSTAIN_TEXT = "Không tìm thấy thông tin trong tài liệu."
 

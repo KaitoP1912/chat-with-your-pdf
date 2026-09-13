@@ -1,217 +1,258 @@
-# Chat With Your PDF
+# Chat with Your PDF
 
 Ứng dụng hỏi-đáp tài liệu PDF tiếng Việt có trích dẫn số trang, sử dụng kỹ thuật RAG (Retrieval-Augmented Generation).
-Đồ án thực tập tốt nghiệp — Sinh viên: **Võ Thành Phước** (MSSV: 079205022977).
-Giảng viên hướng dẫn: **ThS. Nguyễn Thanh Tiến**.
+
+- **Sinh viên thực hiện:** Võ Thành Phước — MSSV: 079205022977
+- **Giảng viên hướng dẫn:** ThS. Nguyễn Thanh Tiến
+- **Thời gian thực hiện:** Tuần 1 – Tuần 8
+- **Mã nguồn:** <https://github.com/KaitoP1912/chat-with-your-pdf>
+
+Đề tài tập trung trả lời câu hỏi nghiên cứu: *chunking theo ranh giới trang có cải thiện độ chính xác trích dẫn số trang so với (a) chunking cố định không theo trang, và (b) không dùng truy hồi (đưa nguyên văn bản vào ngữ cảnh dài của Gemini) hay không?*
+
+Phạm vi chính thức: PDF tiếng Việt có text layer. Hỗ trợ Word/.docx là phần mở rộng, không thuộc cam kết chính thức.
 
 ---
 
-## Kiến trúc hệ thống
+## 1. Kiến trúc hệ thống
 
-Hệ thống được thiết kế theo luồng xử lý RAG đa tầng:
-1. **Trạm 1 (Ingestion & Normalization):** Đọc PDF theo từng trang, phân loại Scan/Text, chuẩn hóa bảng mã cũ (TCVN3, VNI) về Unicode NFC, phát hiện mất dấu, và lọc rác header/footer.
-2. **Trạm 2 (Page-aware Chunking & Indexing):** Chia đoạn văn bản giữ nguyên metadata số trang gốc (kèm bridge chunk tại ranh giới trang và nội bộ trang), nhúng vector đặc trưng bằng `vietnamese-bi-encoder` và lập chỉ mục FAISS.
-3. **Trạm 3 (Retrieval):** Truy xuất ngữ nghĩa top-k đoạn văn bản liên quan nhất theo câu hỏi, kết hợp Dense (FAISS cosine) và BM25 qua Reciprocal Rank Fusion (Hybrid Search).
-4. **Trạm 4 (QA & Citation Generation):** Gọi Gemini sinh câu trả lời kèm trích dẫn chính xác số trang tài liệu nguồn (từ metadata, không để model tự bịa), có cơ chế 2 lớp phòng vệ abstention (ngưỡng cosine + model tự nhận biết) và gửi kèm ảnh trang cho các trang biểu đồ/bảng phức tạp.
+| Trạm | Module | Mô tả |
+|---|---|---|
+| 1 — Ingestion | `source/ingestion/pdf_loader.py`, `scan_detector.py`, `text_normalizer.py` | Đọc PDF theo trang (`pdfplumber`), giữ metadata số trang gốc; phân loại `TEXT`/`LOW_TEXT`/`SCAN`/`EMPTY`/`MIXED_SCAN`/`FULL_SCAN`; chuẩn hóa bảng mã cũ (TCVN3/VNI → Unicode NFC) bằng Candidate Ranking + Lexicon Scoring; khôi phục lỗi glyph "ư" rớt; phát hiện trang mất dấu |
+| 2 — Chunking & Indexing | `source/retrieval/chunker.py`, `word_segmenter.py`, `vectorstore.py` | Tách từ tiếng Việt (VnCoreNLP, chỉ annotator `wseg`); 2 chiến lược: `page_aware` (theo trang, bridge chunk 128 từ mỗi bên tại ranh giới trang, chunk tối đa 320 token, overlap 30 từ) và `fixed_size` (170 từ/chunk, không theo trang, baseline so sánh); embedding bằng `bkai-foundation-models/vietnamese-bi-encoder`; **Hybrid Search: FAISS (dense, `IndexFlatIP`) + BM25 (sparse), kết hợp qua Reciprocal Rank Fusion (RRF)** |
+| 3 — Generation | `source/qa/qa_generator.py` | Gọi Gemini sinh câu trả lời; citation lấy từ metadata chunk, không cho LLM tự bịa số trang; abstention 2 tầng (ngưỡng retrieval `tau` + model tự nhận biết); gửi kèm ảnh trang cho các trang biểu đồ/bảng phức tạp đã xác định thủ công; cơ chế retry cho lỗi 429/503 |
+| 4 — UI | `script/app_ui.py`, `script/app_ui_style.py` | Streamlit, 1 tài liệu/phiên, chat nhiều lượt, trích dẫn dạng chip, cảnh báo trang scan, cảnh báo trang mất dấu tiếng Việt |
+| 5 — Evaluation | `script/pilot_tuan*/` | Hit@k, citation accuracy, false acceptance/refusal, answer correctness, latency, token, bridge-case riêng |
 
-**Tham số hệ thống đã khóa chính thức (Tuần 4-5, xem `config.py`):** model `gemini-3.5-flash-lite`, ngưỡng tau=0.38 (dùng chung mọi cấu hình), top-k tầng generation=15, kích thước chunk tối đa=320 token, kiến trúc mặc định `page_aware`.
+### Tham số đã khóa (`config.py`, ổn định từ 28/8/2026)
+
+```
+MODEL_NAME               = gemini-3.5-flash-lite
+TAU                       = 0.38
+TOP_K_GENERATION          = 15
+CHUNK_MAX_TOKENS          = 320   (page_aware)
+FIXED_CHUNK_WORDS         = 170   (fixed_size baseline)
+CHUNK_OVERLAP_WORDS       = 30
+BRIDGE_WORDS_EACH_SIDE    = 128
+DEFAULT_CHUNKING_STRATEGY = page_aware
+EMBED_MODEL_NAME          = bkai-foundation-models/vietnamese-bi-encoder
+GENERATION_TEMPERATURE    = 0.0
+```
+
+Xem đầy đủ lịch sử khóa hệ thống (bằng chứng thời gian, thay đổi sau khóa) tại `report/tuan_7/BaoCao_ChatWithYourPDF_Tuan07_VoThanhPhuoc.md`, mục 2.
 
 ---
 
-## Cấu trúc thư mục
+## 2. Cấu trúc thư mục
 
-```text
+```
 chat-with-your-pdf/
-├── config.py                  # Tham số hệ thống đã khóa (Tuần 5), mọi script đọc chung từ đây
+├── config.py                    # Tham số đã khóa
+├── SYSTEM_LOCK.md                # Khóa cứng hệ thống (Tuần 6), xác minh Tuần 7
+├── requirements.txt
+├── .env                          # GEMINI_API_KEY (tự tạo, KHÔNG commit)
+│
 ├── data/
-│   ├── corpus/                # Tập tài liệu PDF kiểm thử chính thức (9 file, khóa từ Tuần 1)
-│   └── eval_sets/             # dev_questions_normalized.json (34 câu, Dev Set)
-│                               # test_questions.json (25 câu, Test Set độc lập, dùng cho Tuần 7)
+│   ├── corpus/                   # 9 file PDF/docx gốc, khóa từ Tuần 1
+│   ├── eval_sets/                 # dev_questions_normalized.json (34 câu)
+│   │                              # test_questions.json (50 câu, chính thức)
+│   └── held_out/                  # Dữ liệu thử nghiệm khắc phục lỗi, KHÔNG dùng đánh giá chính thức
+│
 ├── source/
-│   ├── ingestion/              # Trạm 1: pdf_loader, scan_detector, text_normalizer
-│   ├── retrieval/               # Trạm 2 & 3: ingest_glue, word_segmenter, chunker (chunk=320),
-│   │                            # vectorstore (Hybrid Dense+BM25 RRF)
-│   ├── qa/                     # Trạm 4: qa_generator (Gemini QA, citation, abstention 2 tầng,
-│   │                            # gửi ảnh trang biểu đồ, prompt đã nới giảm over-refusal)
-│   ├── evaluation/              # Module đo Hit@k, CER, độ chính xác trích dẫn
-│   └── vietnamese_wordlist_external.txt
+│   ├── ingestion/                 # Trạm 1
+│   ├── retrieval/                  # Trạm 2-3 (chunking, embedding, hybrid search)
+│   ├── qa/                        # Trạm 4 (Gemini QA, citation, abstention)
+│   ├── evaluation/                 # Module đo Hit@k, CER, citation accuracy
+│   └── ui/
+│
 ├── script/
-│   ├── app_cli.py               # Tuần 5: CLI end-to-end demo (upload PDF -> hỏi đáp -> trích dẫn)
-│   ├── pilot_tuan1/             # Kịch bản thực nghiệm đo đạc Tuần 1 (gồm baseline long-context sơ bộ)
-│   ├── pilot_tuan2/             # Kịch bản kiểm thử Ingestion, Encoding, Wordseg Tuần 2
-│   ├── pilot_tuan3/             # Kịch bản demo truy hồi và đo đạc Chunking/Embedding/FAISS Tuần 3
-│   ├── pilot_tuan4/             # Kịch bản Tuần 4: dev set, threshold, Gemini QA, chẩn đoán lỗi
-│   │   ├── normalize_dev_questions.py
-│   │   ├── run_dev_retrieval.py
-│   │   ├── threshold_sweep.py
-│   │   ├── run_dev_qa.py         # Hỗ trợ --tau chung/riêng, mặc định --k 15
-│   │   ├── run_tuan4_pipeline.py
-│   │   ├── check_tuan4_status.py
-│   │   ├── oracle_context_test.py    # Chẩn đoán lỗi retrieval/chunking vs lỗi model
-│   │   ├── run_fixes_verification.py # Kiểm chứng tăng chunk + gửi ảnh trang biểu đồ
-│   │   └── archive/               # Script thử nghiệm sơ bộ, không dùng số liệu chính thức
-│   └── pilot_tuan5/             # Kịch bản Tuần 5
-│       ├── run_longcontext_baseline.py  # Baseline Long-Context chính thức (cấu hình đối chứng thứ 3)
-│       ├── run_dev_qa_v2.py             # Chạy lại QA (page_aware) với qa_generator.py đã sửa
-│       ├── grade_answers_with_gemini.py # Chấm answer_correctness_manual bằng Gemini + PDF gốc
-│       └── archive/                     # File phụ trợ soạn Test Set (không phải deliverable chính)
-├── tests/
-│   └── test_encoding_pipeline.py  # Hệ thống kiểm thử hồi quy tự động (138 tests)
-├── vncorenlp_models/           # Model VnCoreNLP (tải qua py_vncorenlp.download_model())
+│   ├── app_cli.py                 # Demo CLI, 1 câu hỏi qua dòng lệnh
+│   ├── app_ui.py                  # Ứng dụng Streamlit chính thức (ENTRY POINT chính)
+│   ├── app_ui_style.py
+│   ├── pilot_tuan1/ … pilot_tuan5/ # Script thực nghiệm/đánh giá từng tuần
+│   ├── pilot_tuan6/                # run_test_qa.py, aggregate_results.py, chấm điểm
+│   └── pilot_tuan7/
+│       └── audit_scripts/          # Script kiểm chứng mở rộng Test Set 25→50 câu (có README riêng)
+│
 ├── results/
-│   ├── full_text_inspect/     # Văn bản trích xuất toàn văn để kiểm tra thủ công
-│   ├── tuan1_pilot/           # Kết quả đo thời gian embedding và baseline Tuần 1
-│   ├── tuan2_pilot/           # Kết quả tổng hợp Ingestion CSV và log tách từ Tuần 2
-│   ├── tuan3_pilot/           # CSV đo chunking/embedding/FAISS và log demo truy hồi Tuần 3
-│   ├── tuan4_pilot/           # CSV retrieval, threshold, kết quả Gemini QA, oracle test, thử nghiệm sửa lỗi
-│   │   └── archive/            # Kết quả thử nghiệm heuristic đã loại bỏ (không dùng)
-│   └── tuan5_pilot/           # CSV baseline long-context, QA v2 (page_aware đã sửa) đã chấm điểm
-└── report/                    # Báo cáo tiến độ và tài liệu chốt kỹ thuật theo tuần
-    ├── tuan_1/                 # report/tuan_1/chot_cau_hoi_nghien_cuu_tuan1.md
-    ├── tuan_2/                 # report/tuan_2/BaoCao_ChatWithYourPDF_Tuan02_VoThanhPhuoc.md
-    ├── tuan_3/                 # report/tuan_3/BaoCao_ChatWithYourPDF_Tuan03_VoThanhPhuoc.md
-    ├── tuan_4/                 # BaoCao_ChatWithYourPDF_Tuan04_VoThanhPhuoc.md
-    │                            # + BaoCao_BoSung_Tuan4.md (oracle test, khóa k=15/chunk=320)
-    └── tuan_5/                 # BaoCao_ChatWithYourPDF_Tuan05_VoThanhPhuoc.md
+│   └── tuan1_pilot/ … tuan6_pilot/  # CSV kết quả, bảng tổng hợp từng tuần
+│
+├── report/
+│   └── tuan_1/ … tuan_8/            # Báo cáo tiến độ theo tuần
+│
+├── tests/
+│   └── test_encoding_pipeline.py    # 138 test hồi quy cho chuẩn hóa bảng mã
+│
+├── chay_ung_dung.bat                 # Double-click để chạy giao diện, không cần gõ lệnh
+└── vncorenlp_models/                 # Model VnCoreNLP (tải riêng, xem mục 3.3)
 ```
 
 ---
 
-## Hướng dẫn cài đặt & Chạy kiểm thử
+## 3. Cài đặt
 
-### 1. Chuẩn bị môi trường
-
-Yêu cầu: Python 3.10+, Java JDK (phục vụ VnCoreNLP).
+### 3.1. Môi trường ảo
 
 ```powershell
-# Tạo và kích hoạt môi trường ảo
 python -m venv venv
 .\venv\Scripts\Activate.ps1
+```
 
-# Cài đặt các thư viện phụ thuộc
+Nếu PowerShell chặn kích hoạt:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+.\venv\Scripts\Activate.ps1
+```
+
+### 3.2. Dependencies
+
+```powershell
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Kiểm tra Java JDK đã cài đúng và biến môi trường `JAVA_HOME` đã trỏ đúng chưa (VnCoreNLP chạy trên JVM nên nếu thiếu bước này, Trạm 2 sẽ báo lỗi khi khởi tạo `py_vncorenlp.VnCoreNLP`):
+### 3.3. Model VnCoreNLP (bắt buộc, tải riêng — không có trong repo)
 
-```powershell
-java -version
-```
-
-### 1.5. Tải model VnCoreNLP (bắt buộc trước khi chạy Trạm 2 trở đi)
-
-Thư mục `vncorenlp_models/` **không được đính kèm trong repo** (do dung lượng lớn, đã liệt kê trong `.gitignore`) và cần được tải về máy trước khi chạy bất kỳ script nào liên quan đến tách từ tiếng Việt. Chạy đoạn Python sau **một lần duy nhất**, ngay tại thư mục gốc dự án, sau khi đã kích hoạt venv và cài `requirements.txt`:
+> **Quan trọng:** `save_dir` bắt buộc phải là đường dẫn **tuyệt đối**. Đường dẫn tương đối gây lỗi JVM khó hiểu (`java.lang.NoClassDefFoundError: vn/pipeline/VnCoreNLP`) — đã xác nhận thực tế nhiều lần trong quá trình phát triển.
 
 ```powershell
 python -c "import py_vncorenlp, os; py_vncorenlp.download_model(save_dir=os.path.abspath('vncorenlp_models'))"
 ```
 
-Lệnh này sẽ tự tạo thư mục `vncorenlp_models/` và tải về đầy đủ file `.jar` cùng các model cần thiết (wordsegmenter, pos, ner, parse).
-
-**Lưu ý riêng cho Windows:** `py_vncorenlp.download_model()` đôi khi bị lỗi thiếu file `vi-vocab` trong quá trình tải. Nếu sau khi chạy lệnh trên mà thư mục `vncorenlp_models\models\wordsegmenter\` không có file `vi-vocab`, hãy mở PowerShell tại thư mục gốc dự án và chạy tiếp:
+Nếu thiếu file `vi-vocab` sau khi tải (lỗi tải model đôi khi gặp trên Windows):
 
 ```powershell
-# 1. Tạo thư mục đích (cờ -Force giúp không bị lỗi nếu thư mục đã tồn tại)
 New-Item -ItemType Directory -Path "vncorenlp_models\models\wordsegmenter" -Force
-
-# 2. Tải file vi-vocab về đúng vị trí
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/vi-vocab" -OutFile "vncorenlp_models\models\wordsegmenter\vi-vocab"
 ```
 
-**Kiểm tra đã tải đúng chưa:**
+Kiểm tra đã cài đúng:
 
 ```powershell
 python -c "import py_vncorenlp, os; s = py_vncorenlp.VnCoreNLP(save_dir=os.path.abspath('vncorenlp_models'), annotators=['wseg']); print(s.word_segment('Việt Nam là một quốc gia Đông Nam Á'))"
 ```
 
-Nếu lệnh chạy không lỗi và in ra kết quả tách từ, model đã sẵn sàng để tiếp tục các bước bên dưới.
+### 3.4. Gemini API key
 
-### 1.6. Cấu hình biến môi trường (`.env`)
+Tạo file `.env` ở thư mục gốc:
 
-Các script gọi Gemini API (Trạm 4, baseline long-context Tuần 1 và Tuần 5) cần một file `.env` ở thư mục gốc dự án (file này **không** commit lên git):
-
-```powershell
-# Tạo file .env ở thư mục gốc, nội dung như sau:
-GEMINI_API_KEY=dán_API_key_của_bạn_vào_đây
+```
+GEMINI_API_KEY=dán_API_key_của_bạn
 ```
 
-Lấy API key miễn phí tại [Google AI Studio](https://aistudio.google.com/app/apikey). Nếu chưa tạo `.env` hoặc key còn để mặc định, các script sẽ báo lỗi `❌ Chưa có GEMINI_API_KEY hợp lệ trong .env.` và dừng ngay từ đầu thay vì chạy lỗi giữa chừng.
-
-**Lưu ý phân biệt tên file:** `script/pilot_tuan1/test_longcontext_baseline*.py` là bản pilot sơ bộ Tuần 1 (chạy tay 1 câu). Bản Baseline Long-Context **chính thức** dùng cho báo cáo (chạy đủ dev set, đã sửa lỗi encoding + regex trích trang) là `script/pilot_tuan5/run_longcontext_baseline.py` — dùng đúng file này khi cần tái tạo số liệu Tuần 5.
-
-### 2-4. Danh mục Script Tuần 1-4
-
-Xem chi tiết lệnh chạy Trạm 1 (Tuần 2), Trạm 2 (Tuần 3), Trạm 3-4 cơ bản (Tuần 4 — dev set, threshold sweep, Gemini QA 2 kịch bản) ở các phiên bản trước của tài liệu này, không đổi. Riêng Tuần 4 bổ sung thêm 2 công cụ chẩn đoán/khắc phục lỗi sau khi có góp ý của Thầy:
-
-#### Chẩn đoán nguyên nhân gốc (Oracle-Context Test)
-
-Xác định 1 câu trả lời sai là do retrieval/chunking hay do model, bằng cách đưa thẳng đúng trang có đáp án vào (bỏ qua tìm kiếm tự động):
-
-```powershell
-python script/pilot_tuan4/oracle_context_test.py --dev-questions data/eval_sets/dev_questions_normalized.json --corpus-dir data/corpus --output results/tuan4_pilot/oracle_context_results.csv
-```
-
-#### Kiểm chứng phương án khắc phục (tăng chunk + gửi ảnh trang biểu đồ)
-
-```powershell
-python script/pilot_tuan4/run_fixes_verification.py --output results/tuan4_pilot/fixes_verification_v2.csv
-```
-
-**Tham số đã khóa cuối cùng sau kiểm chứng:** `MAX_TOKENS_PER_CHUNK=320` (trong `chunker.py`), `k=15` (mặc định `run_dev_qa.py`).
-
-### 5. Danh mục Script và Lệnh chạy kiểm thử Tuần 5
-
-Tuần 5 khóa toàn bộ tham số hệ thống, bổ sung Baseline Long-Context, sửa 2 giới hạn tồn đọng của `qa_generator.py`, soạn Test Set độc lập và kết nối luồng end-to-end.
-
-#### a) Xem lại toàn bộ tham số đã khóa
-
-```powershell
-python config.py
-```
-
-#### b) Chạy Baseline Long-Context (cấu hình đối chứng thứ 3)
-
-```powershell
-python script/pilot_tuan5/run_longcontext_baseline.py --limit 3
-# Sau khi xác nhận ổn, chạy full 34 câu:
-python script/pilot_tuan5/run_longcontext_baseline.py --limit 0 --sleep 5.0 --out results/tuan5_pilot/dev_qa_results_longcontext.csv
-```
-
-#### c) Chạy lại QA (page_aware) với qa_generator.py đã sửa (gửi ảnh trang biểu đồ + giảm over-refusal)
-
-```powershell
-python script/pilot_tuan5/run_dev_qa_v2.py --limit 5
-# Sau khi xác nhận ổn, chạy full:
-python script/pilot_tuan5/run_dev_qa_v2.py --limit 0 --out results/tuan5_pilot/dev_qa_results_v2_page_aware.csv
-```
-
-Script tự động in cảnh báo nếu phát hiện false acceptance tăng lên khỏi 0/11 (thành tích quan trọng nhất cần giữ vững từ Tuần 4).
-
-#### d) Chấm điểm answer_correctness_manual bằng Gemini (có kiểm chứng chéo)
-
-```powershell
-python script/pilot_tuan5/grade_answers_with_gemini.py --results results/tuan5_pilot/dev_qa_results_v2_page_aware.csv --out results/tuan5_pilot/dev_qa_results_v2_page_aware_graded.csv
-```
-
-**Lưu ý quan trọng:** đây là chấm tự động, cần đọc lướt `answer_correctness_reason` và soát lại bằng mắt các câu chấm "sai"/"một phần" trước khi dùng cho báo cáo chính thức — bằng chứng gốc dùng để chấm được mở rộng thêm 1 trang mỗi bên so với `expected_page` (tránh lỗi thiếu trang bằng chứng đã từng gặp ở `dev_10`, `dev_19`).
-
-#### e) Chạy demo end-to-end (CLI)
-
-```powershell
-python script/app_cli.py --pdf data/corpus/normal_hienphap_33tr.pdf --question "Nhiệm kỳ Quốc hội là bao nhiêu năm?"
-```
-
-Tham số `tau`, `k`, chiến lược chunking đã khóa cứng trong code, có thể override để debug nhưng không nên đổi khi demo nghiệm thu.
-
-**Lưu ý chung Tuần 4-5:** các lệnh gọi Gemini API thật (mục c/d ở Tuần 4, mục b/c/d ở Tuần 5) cần `GEMINI_API_KEY` hợp lệ trong `.env` và có thể phát sinh chi phí/giới hạn quota theo tier tài khoản đang dùng — luôn dry-run (`--limit` nhỏ) trước khi chạy full.
+Lấy key miễn phí tại [Google AI Studio](https://aistudio.google.com/app/apikey). Không commit `.env` lên Git.
 
 ---
 
-## Trạng thái tiến độ
+## 4. Chạy ứng dụng — Hướng dẫn cho người dùng cuối (không cần biết code)
 
-* [x] **Tuần 1:** Chốt câu hỏi nghiên cứu, thiết lập Corpus 9 file, đo thực nghiệm giới hạn an toàn 60 trang / 20 MB.
-* [x] **Tuần 2:** Hoàn thiện Trạm 1 (PDF Ingestion, Scan Detector, Text Normalizer đạt F1 = 1.000, CER = 0.003, FCR = 0.000 trên 67 mẫu benchmark độc lập và 166 trang corpus sạch; 138/138 pytest passed), đo thời gian tách từ (0.0154s/trang), hoàn thành 10 câu dev set.
-* [x] **Tuần 3:** Hoàn thiện Trạm 2 (page-aware chunking với bridge chunk, fixed-size baseline, embedding `vietnamese-bi-encoder`, FAISS `IndexFlatIP`); chạy thành công trên 7/7 file corpus hợp lệ; demo truy hồi end-to-end top-3 đúng chủ đề và đúng số trang.
-* [x] **Tuần 4:** Hoàn thiện Trạm 3 (Hybrid Search BM25+Dense qua RRF) và Trạm 4 cơ bản; mở rộng dev set lên 34 câu; khóa Kịch bản B (tau=0.38 dùng chung). **Bổ sung sau góp ý của Thầy:** Oracle-Context Test xác nhận 8/8 câu nghi vấn là lỗi retrieval/chunking (không phải lỗi model/dev set); thử tăng k=5 thất bại, chốt chính thức **k=15 + chunk=320** — cải thiện rõ, không đánh đổi false acceptance (giữ 0/11).
-* [x] **Tuần 5:** Khóa toàn bộ tham số hệ thống vào `config.py`; hoàn thiện Baseline Long-Context (cấu hình đối chứng thứ 3, đúng hoàn toàn 95.7% nhưng citation accuracy chỉ 82.6%, tốn ~9 lần token so với page_aware); tích hợp gửi ảnh trang biểu đồ + giảm model over-refusal vào `qa_generator.py` chính thức (model_refusal 2/23 → 0/23, false acceptance giữ 0/11); soạn Test Set độc lập 25 câu (`test_questions.json`); kết nối luồng end-to-end (`app_cli.py`), đã chạy thử thật thành công. **Quyết định khóa kiến trúc: giữ `page_aware`** (citation accuracy ~100%, chi phí thấp hơn nhiều so với long-context).
-* [ ] **Tuần 6:** Xây giao diện tối thiểu (MVP) bọc quanh pipeline hiện có, kiểm thử trên toàn bộ 9 file corpus, chuẩn bị khóa cứng hệ thống trước khi chạy Test Set chính thức ở Tuần 7.
+### Cách 1 — Double-click (đơn giản nhất, dùng khi demo/chấm điểm)
+
+Double-click file **`chay_ung_dung.bat`** ở thư mục gốc. Cửa sổ terminal tự mở, tự kích hoạt môi trường, tự chạy Streamlit, trình duyệt tự mở giao diện.
+
+### Cách 2 — Dòng lệnh (khi cần thấy log/debug)
+
+```powershell
+python -m streamlit run script/app_ui.py --server.fileWatcherType none
+```
+
+Giới hạn khi sử dụng: PDF có text layer, ≤ 20 MB, ≤ 60 trang, 1 tài liệu/phiên làm việc. Giao diện tự động cảnh báo nếu phát hiện trang scan hoặc trang mất dấu tiếng Việt trong file vừa upload.
+
+### Demo CLI nhanh (không cần mở giao diện)
+
+```powershell
+python script/app_cli.py --pdf data/corpus/normal_hienphap_33tr.pdf --question "Nhiệm kỳ Quốc hội là bao nhiêu năm?" --vncorenlp_dir "$(Resolve-Path vncorenlp_models)"
+```
+
+---
+
+## 5. Tái tạo đánh giá chính thức (Test Set 50 câu)
+
+> Tất cả lệnh dưới đây **bắt buộc** truyền `--vncorenlp_dir` đường dẫn tuyệt đối — thiếu tham số này sẽ gặp lại lỗi JVM ở mục 3.3.
+
+```powershell
+$vncorenlp = (Resolve-Path vncorenlp_models).Path
+```
+
+**Chạy `page_aware`:**
+
+```powershell
+python script/pilot_tuan6/run_test_qa.py --strategy page_aware --test-set data/eval_sets/test_questions.json --vncorenlp_dir $vncorenlp --limit 0 --sleep 5.0 --out results/tuan6_pilot/test_qa_results_page_aware.csv
+```
+
+**Chạy `fixed_size`:**
+
+```powershell
+python script/pilot_tuan6/run_test_qa.py --strategy fixed_size --test-set data/eval_sets/test_questions.json --vncorenlp_dir $vncorenlp --limit 0 --sleep 5.0 --out results/tuan6_pilot/test_qa_results_fixed_size.csv
+```
+
+**Chạy `longcontext`** (không qua retrieval, không cần `--vncorenlp_dir`):
+
+```powershell
+python script/pilot_tuan5/run_longcontext_baseline.py --dev-set data/eval_sets/test_questions.json --limit 0 --sleep 5.0 --out results/tuan6_pilot/test_qa_results_longcontext.csv
+```
+
+*Tham số `--sleep 5.0` giảm nguy cơ lỗi rate-limit 429 (model flash-lite giới hạn 15 request/phút). Nếu 1 lệnh bị ngắt giữa chừng, chạy lại đúng lệnh đó kèm `--resume` để tiếp tục từ chỗ dở dang, không cần chạy lại từ đầu.*
+
+**Chấm tay `answer_correctness`** (bắt buộc trước khi tổng hợp — dùng 3 nhãn `full`/`partial`/`wrong`):
+
+```powershell
+python script/pilot_tuan6/create_grading_template.py
+python script/pilot_tuan6/semi_auto_grade.py
+# Mở results/tuan6_pilot/grading_filled_auto.csv, đọc lại TỪNG dòng bằng mắt trước khi dùng
+python script/pilot_tuan6/apply_grading_to_results.py --template results/tuan6_pilot/grading_filled_auto.csv
+```
+
+**Tổng hợp bảng so sánh 3 cấu hình:**
+
+```powershell
+python script/pilot_tuan6/aggregate_results.py
+```
+
+Kết quả ghi vào `results/tuan6_pilot/bang_so_sanh_3_cau_hinh.csv`.
+
+---
+
+## 6. Kết quả đánh giá chính thức (Test Set 50 câu: 34 answerable gồm 4 bridge case, 16 unanswerable)
+
+| Chỉ số | page_aware (đề xuất) | fixed_size (baseline) | longcontext (baseline) |
+|---|---|---|---|
+| Hit@3 | **94,1%** | 88,2% | n/a |
+| Citation accuracy | **100,0%** | 90,0% | 79,4% |
+| False acceptance rate | 6,2% | 6,2% | **0,0%** |
+| False refusal rate | 2,9% | 11,8% | **0,0%** |
+| Answer correctness (full/partial/wrong) | 82,4% / 14,7% / 2,9% | 74,2% / 25,8% / 0,0% | 88,2% / 11,8% / 0,0% |
+| Latency p50 | 1,78s | **1,40s** | 1,29s |
+| Token trung bình | 4.197 | **2.711** | 41.417 |
+| Bridge-case Hit@3 | **100% (4/4)** | 100% (4/4) | n/a |
+
+Page-aware cải thiện 5,9 điểm % Hit@3 và 10 điểm % citation accuracy so với fixed-size; giữ citation accuracy cao hơn 20,6 điểm % so với long-context trong khi chỉ tốn ~10% lượng token. Chi tiết đầy đủ và error analysis: `report/tuan_7/BaoCao_ChatWithYourPDF_Tuan07_VoThanhPhuoc.md`.
+
+---
+
+## 7. Trạng thái tiến độ
+
+- [x] Tuần 1 — Câu hỏi nghiên cứu, corpus 9 file, giới hạn vận hành (thực nghiệm)
+- [x] Tuần 2 — Trạm 1: ingestion, scan detection, chuẩn hóa bảng mã (F1=1.000)
+- [x] Tuần 3 — Trạm 2: page-aware chunking, bridge chunk, FAISS
+- [x] Tuần 4 — Trạm 3-4, oracle-context test, khóa k=15+chunk=320
+- [x] Tuần 5 — Hybrid Search, long-context baseline, khóa toàn bộ tham số
+- [x] Tuần 6 — Giao diện Streamlit, khóa cứng hệ thống, kiểm thử 9 file corpus
+- [x] Tuần 7 — Đánh giá chính thức Test Set 50 câu, error analysis, xác minh lịch sử khóa
+- [x] Tuần 8 — Báo cáo tổng kết, README, cảnh báo mất dấu trên giao diện
+
+---
+
+## 8. Giới hạn kỹ thuật đã biết
+
+| Giới hạn | Trạng thái |
+|---|---|
+| File VNI — một số chuyển đổi còn lỗi có quy luật | Đã xác nhận, ghi nhận, không sửa trong bản khóa hiện tại |
+| File mixed-scan | Đã đóng — xác nhận hoạt động đúng thiết kế |
+| Lỗi rớt dấu thanh trong text layer PDF (file Lịch sử Đảng) | Đã xác nhận nguyên nhân (đối chứng độc lập 2 công cụ đọc PDF); đã thử OCR nhưng chưa triệt để |
+| File mất dấu tiếng Việt hoàn toàn | Gây fail retrieval; giao diện đã cảnh báo, chưa có fallback tự động sửa |
+| PDF lớn | Giới hạn an toàn 60 trang/file (dựa trên stress-test thực nghiệm Tuần 1) |
+| Bảng/biểu đồ phức tạp trong PDF | Có thể gây lỗi đọc nhầm số liệu liền kề; đã có cơ chế gửi ảnh trang hỗ trợ một phần |
+| Word/.docx | Ngoài phạm vi cam kết chính thức, chưa triển khai |
+
+Chi tiết đầy đủ: `report/tuan_7/` và `report/tuan_8/`.
