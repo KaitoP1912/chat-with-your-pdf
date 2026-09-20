@@ -285,3 +285,74 @@ commit nào sửa tham số lõi sau khi Test Set đã chạy — **checklist M�
 - Xem trang 2-3 file mixedscan để kết luận dứt điểm (xem Mục 7.4).
 - Văn bản mất dấu tiếng Việt — giới hạn đã biết, chưa khắc phục, chỉ ghi
   nhận, cần nêu rõ trong hồ sơ cuối kỳ.
+
+## Thay đổi sau khóa (Tuần 8)
+
+### a) Bối cảnh
+
+- Hệ thống đã được khóa cứng từ ngày 06/09/2026 theo nội dung Mục 1–Mục 7 của tài liệu này.
+- Test Set 50 câu chạy chính thức lần đầu trên cơ sở dữ liệu đã khóa vào ngày 12/09/2026 (kết quả lưu ở `results/tuan6_pilot/`).
+- Có 2 vấn đề cần sửa nhưng không đổi tham số lõi: 1) giao diện hiển thị dư chip nguồn trùng trang (phát hiện sau Tuần 7, trước lần chạy lại); 2) nhận diện từ chối sai ở `test_32` (phát hiện khi kiểm tra kết quả lần chạy lại).
+
+### b) Bảng thay đổi
+
+| File | Hàm / hằng số | Hành vi trước → sau |
+|---|---|---|
+| `source/qa/qa_generator.py` | `build_document_block()` | Trước: các đoạn được in dạng `[Đoạn 1 — trang ...]` và không gắn `chunk_id` rõ ràng trong khối prompt. Sau: đánh số đoạn theo `[1],[2],[3]...` kèm `chunk_id`; prompt yêu cầu Gemini trả JSON đúng định dạng `{"answer","used_sources"}`. |
+| `source/qa/qa_generator.py` | `_is_model_abstain_text()` | Trước: so khớp chính xác với chuỗi `"Không tìm thấy thông tin trong tài liệu."` và phân biệt hoa/thường. Sau: so khớp theo tiền tố, bỏ qua hoa/thường, vẫn nhận ra chuỗi từ chối dạng bắt đầu bằng `"không tìm thấy thông tin trong tài liệu"` và không cần khớp nguyên văn tuyệt đối. |
+| `script/app_ui.py` | `_format_citations()` | Trước: hiển thị mọi chip trích dẫn theo từng đoạn/citation, có thể lặp chip trang và có nhãn `[bridge]` thừa; không lọc theo `used_chunk_ids`. Sau: gộp chip theo số trang, ẩn nhãn `[bridge]`, chỉ hiển thị chunk nằm trong `used_chunk_ids` đã được Gemini trả về. |
+| `source/qa/qa_generator.py` | `generate_answer()` + `QAAnswer` | Trước: chỉ trả về `answer_text`, `is_abstained`, `citations`. Sau: thêm `used_chunk_ids` vào kết quả và lưu `chunk_id` trong từng citation để UI có thể lọc đúng chunk thực sự được Gemini dùng. |
+
+### c) Những thứ KHÔNG đổi (xác nhận bằng git diff)
+
+Những giá trị sau được xác nhận KHÔNG thay đổi sau khóa và không nằm trong sự thay đổi của Tuần 8:
+
+- `tau` (`TAU`) = `0.38`
+- `k` (`TOP_K_GENERATION`) = `15`
+- kích thước chunk (`CHUNK_MAX_TOKENS` / `FIXED_CHUNK_WORDS`)
+- `BRIDGE_WORDS_EACH_SIDE`
+- model generation: `gemini-3.5-flash-lite`
+- `GENERATION_TEMPERATURE` = `0.0`
+- `MODEL_ABSTAIN_TEXT` = `"Không tìm thấy thông tin trong tài liệu."`
+- `search()` / chunking logic / retrieval pipeline
+- bộ 50 câu hỏi Test Set và cơ sở dữ liệu `data/eval_sets/test_questions.json`
+
+### d) Lưu ý về prompt và JSON
+
+- Nội dung prompt ở Mục 2 phản ánh bản khóa ban đầu của hệ thống.
+- Định dạng đầu ra JSON là phần bổ sung sau khóa, được mô tả ở mục này.
+- Điểm mới là `build_qa_prompt()` yêu cầu Gemini trả về JSON thuần và chỉ liệt kê các đoạn dùng thực sự (`used_sources`), thay vì trả về plain text đơn giản như bản khóa cứng trước đó.
+- Đây là phần bổ sung để khắc phục lỗi UI và lỗi nhận diện từ chối, không phải thay đổi tham số hệ thống hay cấu trúc quy tắc trả lời cốt lõi đã khóa ban đầu.
+
+### e) Cách xử lý kết quả
+
+- Chạy lại 3 cấu hình trên cùng Test Set 50 câu: `page_aware`, `fixed_size`, `longcontext`.
+- Kết quả lần đầu vẫn giữ nguyên ở `results/tuan6_pilot/` làm dữ liệu lịch sử.
+- Kết quả lần chạy lại ở `results/tuan8/` là số liệu chính thức cho báo cáo Tuần 8.
+- Báo cáo cần có bảng đối chiếu hai lần chạy: lần đầu (`results/tuan6_pilot/`) và lần chạy lại (`results/tuan8/`).
+- Cột `is_abstained` trong CSV thô có thể theo logic cũ; các chỉ số từ chối được tính lại từ `answer_text` bằng `aggregate_results_tuan8.py`; CSV thô không bị sửa.
+
+### f) Lý do sửa
+
+- Lý do sửa không phải để tối ưu điểm số.
+- Lý do thực sự là: 
+  1) lỗi hiển thị nguồn trích dẫn bị dư chip trùng trang và thừa nhãn bridge;
+  2) lỗi nhận diện từ chối ở trường hợp `test_32` do quy tắc so khớp câu từ chối quá chặt.
+- Những thay đổi này được giới hạn ở tầng output/UI và parsing JSON, không thay đổi cấu hình cứng hay dữ liệu Test Set đã khóa.
+
+### g) Chấm điểm lại Tuần 8
+
+- Chấm `answer correctness` lần chạy lại bằng `semi_auto_grade_tuan8.py`, sau đó rà soát tay và điều chỉnh một số dòng.
+- Nhãn cuối cùng lưu trong `results/tuan8/grading_filled_auto_50cau.csv`.
+
+---
+
+**Ghi chú thời gian kiểm tra thực tế:**
+- `git diff -- source/qa/qa_generator.py script/app_ui.py` cho thấy thay đổi thực tế trong 2 file trên theo đúng nội dung Mục b).
+- LastWriteTime thực tế:
+  - `source/qa/qa_generator.py`: `2026-09-20 05:43:33`
+  - `script/app_ui.py`: `2026-09-20 03:21:27`
+  - `results/tuan6_pilot/test_qa_results_*.csv`: `2026-09-11 04:08:03` đến `2026-09-12 17:30:49`
+  - `results/tuan8/test_qa_results_*_50cau.csv`: `2026-09-20 04:52:51` đến `2026-09-20 05:53:46`
+
+**Kết luận:** phần thêm này phản ánh đúng lịch sử sửa sau khóa cứng của Tuần 8, không sửa đổi nội dung đã khóa trước đó.
