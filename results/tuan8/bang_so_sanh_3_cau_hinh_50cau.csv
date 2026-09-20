@@ -1,0 +1,4 @@
+config,n,n_answerable,n_unanswerable,n_errors,hit_at_3_rate,citation_accuracy,false_acceptance_rate,false_refusal_rate,answer_full_count,answer_full_pct,answer_partial_count,answer_partial_pct,answer_wrong_count,answer_wrong_pct,answer_refused_count,answer_refused_pct,n_graded,avg_latency_seconds,p50_latency_seconds,avg_total_tokens,bridge_count,bridge_hit3_rate,non_bridge_count
+page_aware,50,34,16,0,94.1%,96.9%,6.2%,5.9%,29,85.3%,3,8.8%,0,0.0%,2,5.9%,34,1.60,1.50,4546,4,100.0%,46
+fixed_size,50,34,16,0,88.2%,87.1%,6.2%,8.8%,28,82.4%,2,5.9%,1,2.9%,3,8.8%,34,1.60,1.40,3012,4,100.0%,46
+longcontext,50,34,16,0,,76.5%,0.0%,0.0%,33,97.1%,1,2.9%,0,0.0%,0,0.0%,34,1.46,1.42,41419,4,,46
