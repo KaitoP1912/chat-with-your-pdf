@@ -63,20 +63,37 @@ def _file_hash(file_bytes: bytes) -> str:
     return hashlib.sha256(file_bytes).hexdigest()[:16]
 
 
-def _format_citations(citations: list[dict]) -> str:
+def _format_citations(citations: list[dict], used_chunk_ids: list[str] | None = None) -> str:
+    """Render only citations that Gemini marked as actually used.
+
+    Chỉ giữ các chunk có chunk_id nằm trong used_chunk_ids; nếu không có danh sách
+    này thì fallback về toàn bộ citations để tránh làm vỡ các caller cũ.
+    """
     if not citations:
         return "(không có)"
-    labels = []
-    for c in citations:
+
+    allowed_ids = set(used_chunk_ids) if used_chunk_ids else None
+    filtered = [c for c in citations if allowed_ids is None or c.get("chunk_id") in allowed_ids]
+    if not filtered:
+        return "(không có)"
+
+    labels: list[str] = []
+    seen: set[str] = set()
+
+    for c in filtered:
         if c.get("page_number") is not None:
-            labels.append(f"trang {c['page_number']}" + (" [bridge]" if c.get("is_bridge") else ""))
+            page_label = f"trang {c['page_number']}"
+            if page_label not in seen:
+                labels.append(page_label)
+                seen.add(page_label)
         elif c.get("page_range"):
-            labels.append(f"trang {c['page_range']} [bridge liên trang]")
-    seen = []
-    for lb in labels:
-        if lb not in seen:
-            seen.append(lb)
-    return ", ".join(seen) if seen else "(không xác định được trang)"
+            page_range = str(c["page_range"]).strip()
+            page_label = f"trang {page_range}"
+            if page_label not in seen:
+                labels.append(page_label)
+                seen.add(page_label)
+
+    return ", ".join(labels) if labels else "(không xác định được trang)"
 
 
 # =====================================================================
@@ -441,7 +458,7 @@ def main() -> None:
                 citations_label = "(không có)"
             else:
                 st.write(answer.answer_text)
-                citations_label = _format_citations(answer.citations)
+                citations_label = _format_citations(answer.citations, answer.used_chunk_ids)
 
                 if not answer.is_abstained:
                     _render_sources(citations_label)

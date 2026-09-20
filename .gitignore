@@ -11,3 +11,4 @@ results/raw_outputs/
 *.log
 vncorenlp_models/
 data/corpus/normal_vinamilkbaocao2024_96tr.pdf
+results/debug_retrieval/
