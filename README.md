@@ -49,7 +49,12 @@ chat-with-your-pdf/
 ├── config.py                    # Tham số đã khóa
 ├── SYSTEM_LOCK.md                # Khóa cứng hệ thống (Tuần 6), xác minh Tuần 7
 ├── requirements.txt
-├── .env                          # GEMINI_API_KEY (tự tạo, KHÔNG commit)
+├── .env.example                  # Mẫu cấu hình, copy thành .env rồi điền API key
+├── .env                          # GEMINI_API_KEY (tự tạo, KHÔNG commit, không nằm trong bản nộp)
+├── .gitignore
+├── .github/                      # Cấu hình CI/CD
+├── .streamlit/                   # config.toml: giới hạn upload 20 MB
+├── docs/                         # Tài liệu bổ sung
 │
 ├── data/
 │   ├── corpus/                   # 9 file PDF/docx gốc, khóa từ Tuần 1
@@ -103,6 +108,12 @@ chat-with-your-pdf/
 > $env:PYTHONIOENCODING = "utf-8"
 > ```
 
+### Yêu cầu trước khi cài
+
+- **Python 3.10** (dự án được phát triển và kiểm thử trên Python 3.10.11; kiểm tra bằng `python --version`).
+- **Java Runtime Environment 1.8 trở lên** (dùng cho VnCoreNLP, xem mục 3.3).
+- **Kết nối Internet ở lần chạy đầu tiên:** cần để `pip install`, tải model VnCoreNLP và để hệ thống tự tải model embedding `bkai-foundation-models/vietnamese-bi-encoder` từ HuggingFace. Từ lần chạy sau, model embedding được lấy từ cache. Ngoài ra ứng dụng luôn cần Internet để gọi Gemini API.
+
 ### 3.1. Môi trường ảo
 
 ```powershell
@@ -149,7 +160,13 @@ python -c "import py_vncorenlp, os; s = py_vncorenlp.VnCoreNLP(save_dir=os.path.
 
 ### 3.4. Gemini API key
 
-Tạo file `.env` ở thư mục gốc:
+Copy file mẫu `.env.example` thành `.env` ở thư mục gốc rồi điền API key:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Mở `.env` và sửa thành:
 
 ```
 GEMINI_API_KEY=dán_API_key_của_bạn
@@ -160,6 +177,8 @@ Lấy key miễn phí tại [Google AI Studio](https://aistudio.google.com/app/a
 ---
 
 ## 4. Chạy ứng dụng — Hướng dẫn cho người dùng cuối (không cần biết code)
+
+> **Lưu ý:** cần hoàn thành **mục 3** (tạo môi trường ảo, cài thư viện, tải VnCoreNLP, tạo `.env`) trước khi chạy ứng dụng lần đầu. Bản nộp không kèm thư mục `venv/`.
 
 ### Cách 1 — Double-click (đơn giản nhất, dùng khi demo/chấm điểm)
 
@@ -177,6 +196,12 @@ Giới hạn khi sử dụng: PDF có text layer, ≤ 20 MB, ≤ 60 trang, 1 tà
 
 ```powershell
 python script/app_cli.py --pdf data/corpus/normal_hienphap_33tr.pdf --question "Nhiệm kỳ Quốc hội là bao nhiêu năm?" --vncorenlp_dir "$(Resolve-Path vncorenlp_models)"
+```
+
+### Chạy test
+
+```powershell
+python -m pytest tests/
 ```
 
 ---
