@@ -5,7 +5,7 @@
 
 **Sinh viên thực hiện:** Võ Thành Phước — MSSV: 079205022977
 **Giảng viên hướng dẫn:** ThS. Nguyễn Thanh Tiến
-**Thời gian thực hiện:** Tuần 1 – Tuần 8
+**Thời gian thực hiện:** Tuần 1 – Tuần 8 (bản cập nhật hoàn thiện hồ sơ: 23/9/2026)
 **Mã nguồn:** <https://github.com/KaitoP1912/chat-with-your-pdf>
 
 ---
@@ -91,7 +91,21 @@ Ghi chú: bảng chính là lần chạy lại 20/9; Hit@3 và false acceptance 
 
 ### Trả lời câu hỏi nghiên cứu trung tâm
 
-Page-aware chunking **cải thiện Hit@3 khoảng 5,9 điểm phần trăm** (94,1% so với 88,2%) và **cải thiện citation accuracy khoảng 9,8 điểm phần trăm** (96,9% so với 87,1%) so với fixed-size chunking, trên bộ Test Set 50 câu độc lập. So với việc không dùng truy hồi (long-context), page-aware giữ được citation accuracy cao hơn hẳn (96,9% so với 76,5%) trong khi chỉ tốn khoảng 10% lượng token — đánh đổi hợp lý cho triển khai thực tế.
+Page-aware chunking **cải thiện Hit@3 khoảng 5,9 điểm phần trăm** (94,1% so với 88,2%) và **cải thiện citation accuracy khoảng 9,8 điểm phần trăm** (96,9% so với 87,1%) so với fixed-size chunking, trên bộ Test Set 50 câu độc lập. So với việc không dùng truy hồi (long-context), page-aware giữ được citation accuracy cao hơn **20,4 điểm phần trăm** (96,9% so với 76,5%) trong khi chỉ tốn khoảng 11% lượng token — đánh đổi hợp lý cho triển khai thực tế. Long-context vẫn có answer correctness full cao hơn (97,1% so với 85,3%).
+
+**Chú thích 2 (định nghĩa citation accuracy):** citation accuracy được tính theo kiểu Hit-style — một câu được tính citation đúng nếu trong danh sách citation trả về có ít nhất một trang trùng đáp án, không yêu cầu mọi citation hiển thị đều đúng. Do đó con số 96,9% không có nghĩa "gần như mọi trích dẫn đều đúng tuyệt đối".
+
+---
+
+## 5b. Kiểm tra ổn định giữa hai lần chạy (mức từng câu)
+
+Đối chiếu trực tiếp từng câu giữa kết quả Tuần 6 và Tuần 8 trên cả 3 cấu hình (150 lượt = 50 câu × 3 cấu hình). Chỉ **5/150 lượt (~3,3%)** thực sự đổi nhãn chấm điểm, phần lớn có lý do rõ ràng (xem mục 6, `test_10`, `test_34`).
+
+Phát hiện thêm 1 lỗi hiếm: **`test_42`** (cấu hình `fixed_size`) — Gemini bị cắt ngang câu trả lời dài trước khi hoàn tất JSON, khiến cơ chế dự phòng hiển thị lẫn markdown. Tần suất 1/150 lượt; nguyên nhân đã ghi nhận nhưng chưa sửa vì nằm ngoài phạm vi khóa cứng hệ thống.
+
+## 5c. Đo hiệu năng thực tế
+
+Đo thời gian từ lúc tải tài liệu đến lúc sẵn sàng trả lời trên 4 tài liệu kích thước khác nhau, tách riêng chi phí tải mô hình lần đầu (**117s**) khỏi chi phí xử lý tài liệu thông thường (**63–258s** tùy kích thước). Đây là số liệu bổ sung về trải nghiệm vận hành thực tế, không dùng để so sánh khoa học giữa 3 cấu hình, không ảnh hưởng tới kết luận nghiên cứu.
 
 ---
 
@@ -120,7 +134,7 @@ Page-aware chunking **cải thiện Hit@3 khoảng 5,9 điểm phần trăm** (9
 
 Kết quả đánh giá chính thức trên 50 câu độc lập cho thấy page-aware chunking cải thiện rõ rệt cả độ chính xác truy hồi lẫn độ chính xác trích dẫn so với fixed-size chunking, trả lời được câu hỏi nghiên cứu trung tâm của đề tài với độ tin cậy cao hơn so với đánh giá sơ bộ 25 câu.
 
-Toàn bộ quy trình thực nghiệm tuân thủ nghiêm ngặt nguyên tắc tách biệt dev/test: tham số được khóa dựa trên dev set trước khi quan sát test set, có bằng chứng thời gian cụ thể xác nhận trình tự này, và các rủi ro phương pháp luận phát sinh trong quá trình thực hiện (rò rỉ dữ liệu khi mở rộng test set, lỗi chấm điểm tự động) đều được phát hiện và khắc phục minh bạch trước khi công bố kết quả chính thức; ngoại trừ hai chỉnh sửa về hiển thị citation và nhận diện từ chối được thực hiện sau lần chạy đầu (nêu rõ ở `SYSTEM_LOCK.md` và mục 4).
+Toàn bộ quy trình thực nghiệm tuân thủ nghiêm ngặt nguyên tắc tách biệt dev/test: tham số được khóa dựa trên dev set trước khi quan sát test set, có bằng chứng thời gian cụ thể xác nhận trình tự này, và các rủi ro phương pháp luận phát sinh trong quá trình thực hiện (rò rỉ dữ liệu khi mở rộng test set, lỗi chấm điểm tự động) đều được phát hiện và khắc phục minh bạch trước khi công bố kết quả chính thức; ngoại trừ hai chỉnh sửa về hiển thị citation và nhận diện từ chối được thực hiện sau lần chạy đầu (nêu rõ ở `SYSTEM_LOCK.md` và mục 4). Trong giai đoạn hoàn thiện hồ sơ (21–23/9), báo cáo được bổ sung làm rõ định nghĩa citation accuracy (mục 5, chú thích 2), kiểm tra ổn định kết quả ở mức từng câu (mục 5b) và số liệu hiệu năng thực tế (mục 5c); các bổ sung này chỉ làm rõ và minh bạch hóa, không đổi bất kỳ tham số đã khóa nào và không đổi kết luận nghiên cứu.
 
 ---
 

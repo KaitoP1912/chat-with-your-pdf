@@ -1,0 +1,510 @@
+======================================================================
+CAU HINH: page_aware
+  cu : results\tuan6_pilot\test_qa_results_page_aware.csv  (ton tai: True)
+  moi: results\tuan8\test_qa_results_page_aware_50cau.csv  (ton tai: True)
+  So cau chung ca 2 file: 50
+  [test_01] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên Điều 21 trong tài liệu, mọi người có các quyền sau:
+
+1. **Liên quan đến đời sống riêng tư, 
+      moi: answer_text = Theo Điều 21 của Hiến pháp, mọi người có các quyền sau liên quan đến đời sống riêng tư, bí mật cá nh
+      cu : citations = [{"page_number": 7, "page_range": null, "is_bridge": false}, {"page_number": null, "page_range": "6-
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_p7_c0", "page_number": 7, "page_range": null, "is_bridge": f
+  [test_02] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu:
+- Điều 33: Mọi người có quyền tự do kinh doanh trong những ngành nghề mà pháp luậ
+      moi: answer_text = Theo Điều 33 và Điều 34 của tài liệu, mọi người có quyền tự do kinh doanh trong những ngành nghề mà 
+      cu : citations = [{"page_number": 9, "page_range": null, "is_bridge": false}, {"page_number": 9, "page_range": null, 
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_p9_c0", "page_number": 9, "page_range": null, "is_bridge": f
+  [test_03] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, tại Điều 61, Nhà nước có các ưu tiên và chính sách sau:
+- Ưu tiên phát triển giáo
+      moi: answer_text = Theo Điều 61, Nhà nước có các ưu tiên và chính sách sau:
+- Ưu tiên phát triển giáo dục ở miền núi, h
+      cu : citations = [{"page_number": null, "page_range": "13-14", "is_bridge": true}, {"page_number": 13, "page_range": 
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_bridge_13-14", "page_number": null, "page_range": "13-14", "
+  [test_04] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu (Điều 85):
+
+- **Trong trường hợp thông thường:** Luật, nghị quyết của Quốc hội phả
+      moi: answer_text = Theo Điều 85, luật và nghị quyết của Quốc hội trong trường hợp thông thường phải được quá nửa tổng s
+      cu : citations = [{"page_number": 21, "page_range": null, "is_bridge": true}, {"page_number": 21, "page_range": null,
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_p21_intrabridge0", "page_number": 21, "page_range": null, "i
+  [test_05] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Theo Điều 117, Hội đồng bầu cử quốc gia có các nhiệm vụ và cơ cấu thành phần như sau:
+
+- **Nhiệm vụ:
+      moi: answer_text = Theo Điều 117, Hội đồng bầu cử quốc gia là cơ quan do Quốc hội thành lập, có nhiệm vụ tổ chức bầu cử
+      cu : citations = [{"page_number": 30, "page_range": null, "is_bridge": true}, {"page_number": null, "page_range": "30
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_p30_intrabridge1", "page_number": 30, "page_range": null, "i
+  [test_09] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, tính đến cuối năm 2014, hệ thống đối tác phân phối (Kênh General Trade – GT) của 
+      moi: answer_text = Tính đến cuối năm 2014, đối tác phân phối của Vinamilk là 268 nhà phân phối và hơn 215.000 điểm bán 
+      cu : citations = [{"page_number": 6, "page_range": null, "is_bridge": true}, {"page_number": 6, "page_range": null, "
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_p6_c1", "page_number": 6, "page_range": null, "is_
+  [test_10] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, các đơn vị trực thuộc của Vinamilk gồm:
+- 3 chi nhánh
+- 12 nhà máy
+- 2 kho vận
+
+T
+      moi: answer_text = Tính đến năm 2014, các đơn vị trực thuộc của Vinamilk gồm 3 chi nhánh, 12 nhà máy và 2 kho vận.
+      cu : citations = [{"page_number": null, "page_range": "7-8", "is_bridge": true}, {"page_number": 41, "page_range": nu
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_bridge_7-8", "page_number": null, "page_range": "7
+  [test_11] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, đến cuối năm 2014, Vinamilk có 6 công ty con và 2 công ty liên kết.
+      moi: answer_text = Đến cuối năm 2014, Vinamilk có 6 công ty con và 2 công ty liên kết.
+      cu : citations = [{"page_number": 9, "page_range": null, "is_bridge": true}, {"page_number": 9, "page_range": null, "
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_p9_intrabridge0", "page_number": 9, "page_range": 
+  [test_12] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, tại Việt Nam, hệ thống sản xuất của Vinamilk năm 2014 đang duy trì với **13 nhà m
+      moi: answer_text = Tại Việt Nam, hệ thống sản xuất của Vinamilk năm 2014 đang duy trì với 13 nhà máy và 5 trang trại.
+      cu : citations = [{"page_number": 20, "page_range": null, "is_bridge": false}, {"page_number": 33, "page_range": null
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_p20_c0", "page_number": 20, "page_range": null, "i
+  [test_13] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu (Đoạn 5), tổng sản lượng sản xuất năm 2014 của Vinamilk là **843.557** tấn, và cườ
+      moi: answer_text = Theo báo cáo, tổng sản lượng sản xuất năm 2014 của Vinamilk là 843.557 tấn, và cường độ sử dụng điện
+      cu : citations = [{"page_number": null, "page_range": "26-27", "is_bridge": true}, {"page_number": 26, "page_range": 
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_p26_c0", "page_number": 26, "page_range": null, "i
+  [test_14] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu:
+- Số lao động bình quân của Vinamilk và các công ty con năm 2014 là **5.738** ngư
+      moi: answer_text = Số lao động bình quân của Vinamilk và các công ty con năm 2014 là 5.738 người, và tỷ lệ nhân viên đư
+      cu : citations = [{"page_number": 36, "page_range": null, "is_bridge": false}, {"page_number": null, "page_range": "3
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_p36_c0", "page_number": 36, "page_range": null, "i
+  [test_19] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, thắng lợi của Cách mạng Tháng Tám năm 1945 đã lật đổ:
+- Ách thống trị của thực dâ
+      moi: answer_text = Thắng lợi của Cách mạng Tháng Tám năm 1945 đã lật đổ ách thống trị của thực dân Pháp trong 87 năm và
+      cu : citations = [{"page_number": 27, "page_range": null, "is_bridge": false}, {"page_number": null, "page_range": "2
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_p27_c0", "page_number": 27, "page_range": null, "is_b
+  [test_20] KHAC O CAC COT: answer_text, citations, citation_correct
+      cu : answer_text = Dựa trên tài liệu, Hội nghị Trung ương 6 của Đảng (tháng 11/1939) đã chủ trương thành lập **Mặt trận
+      moi: answer_text = Hội nghị Trung ương 6 của Đảng (tháng 11/1939) đã chủ trương thành lập Mặt trận dân tộc thống nhất p
+      cu : citations = [{"page_number": 22, "page_range": null, "is_bridge": false}, {"page_number": 22, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_p22_c1", "page_number": 22, "page_range": null, "is_b
+      cu : citation_correct = True
+      moi: citation_correct = False
+  [test_21] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu:
+
+- Ngày 21-7-1954, Hội nghị Giơnevơ đã thông qua Bản Tuyên bố cuối cùng về vấn đề
+      moi: answer_text = Ngày 21-7-1954, Hội nghị Giơnevơ đã thông qua Bản Tuyên bố cuối cùng về vấn đề lập lại hòa bình ở Đô
+      cu : citations = [{"page_number": 41, "page_range": null, "is_bridge": false}, {"page_number": 41, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_p41_c0", "page_number": 41, "page_range": null, "is_b
+  [test_22] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, đến tháng 7-1956, cải cách ruộng đất căn bản hoàn thành ở đồng bằng, trung du và 
+      moi: answer_text = Đến tháng 7-1956, cải cách ruộng đất ở miền Bắc đã căn bản hoàn thành ở đồng bằng, trung du và miền 
+      cu : citations = [{"page_number": 44, "page_range": null, "is_bridge": false}, {"page_number": 44, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_p44_c1", "page_number": 44, "page_range": null, "is_b
+  [test_23] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, qua hai lần chống chiến tranh phá hoại của đế quốc Mỹ, quân dân miền Bắc đã bắn r
+      moi: answer_text = Qua hai lần chống chiến tranh phá hoại của đế quốc Mỹ, quân dân miền Bắc đã bắn rơi 4.181 máy bay (t
+      cu : citations = [{"page_number": 58, "page_range": null, "is_bridge": false}, {"page_number": 55, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_p58_c1", "page_number": 58, "page_range": null, "is_b
+  [test_25] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, trong 12 ngày đêm (từ 18 đến 30-12-1972) đánh trả cuộc tập kích chiến lược bằng m
+      moi: answer_text = Dựa vào tài liệu, trong 12 ngày đêm cuối năm 1972 đánh trả cuộc tập kích chiến lược bằng máy bay B.5
+      cu : citations = [{"page_number": 55, "page_range": null, "is_bridge": false}, {"page_number": 55, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_p55_c2", "page_number": 55, "page_range": null, "is_b
+  [test_26] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Theo Điều 44, công dân có nghĩa vụ trung thành với Tổ quốc, và phản bội Tổ quốc là tội nặng nhất.
+      moi: answer_text = Theo Điều 44 của Hiến pháp, công dân có nghĩa vụ trung thành với Tổ quốc. Phản bội Tổ quốc là tội nặ
+      cu : citations = [{"page_number": 10, "page_range": null, "is_bridge": true}, {"page_number": null, "page_range": "10
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_p10_intrabridge0", "page_number": 10, "page_range": null, "i
+  [test_27] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, tài sản hợp pháp của cá nhân, tổ chức đầu tư, sản xuất, kinh doanh được pháp luật
+      moi: answer_text = Tài sản hợp pháp của cá nhân, tổ chức đầu tư, sản xuất, kinh doanh được pháp luật bảo hộ và không bị
+      cu : citations = [{"page_number": 11, "page_range": null, "is_bridge": false}, {"page_number": null, "page_range": "1
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_p11_c1", "page_number": 11, "page_range": null, "is_bridge":
+  [test_28] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên các đoạn trích của tài liệu, sau khi được bầu, những chức danh lãnh đạo cấp cao phải tuyên 
+      moi: answer_text = Sau khi được Quốc hội bầu, những chức danh lãnh đạo cấp cao phải tuyên thệ trung thành với Tổ quốc, 
+      cu : citations = [{"page_number": 16, "page_range": null, "is_bridge": true}, {"page_number": 16, "page_range": null,
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_p16_intrabridge0", "page_number": 16, "page_range": null, "i
+  [test_29] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, việc bắt, giam, giữ, khởi tố đại biểu Quốc hội phải có sự đồng ý của Quốc hội hoặ
+      moi: answer_text = Theo Hiến pháp, không được bắt, giam, giữ, khởi tố đại biểu Quốc hội nếu không có sự đồng ý của Quốc
+      cu : citations = [{"page_number": 20, "page_range": null, "is_bridge": true}, {"page_number": null, "page_range": "8-
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_p20_intrabridge0", "page_number": 20, "page_range": null, "i
+  [test_30] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, Thủ tướng Chính phủ có thẩm quyền đối với các văn bản trái với Hiến pháp, luật và
+      moi: answer_text = Thủ tướng Chính phủ có thẩm quyền:
+- Đình chỉ việc thi hành hoặc bãi bỏ văn bản của Bộ trưởng, Thủ t
+      cu : citations = [{"page_number": null, "page_range": "25-26", "is_bridge": true}, {"page_number": 25, "page_range": 
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_bridge_25-26", "page_number": null, "page_range": "25-26", "
+  [test_31] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, Tòa án nhân dân có nhiệm vụ:
+- Bảo vệ công lý
+- Bảo vệ quyền con người, quyền côn
+      moi: answer_text = Theo Hiến pháp, Tòa án nhân dân có nhiệm vụ bảo vệ công lý, bảo vệ quyền con người, quyền công dân, 
+      cu : citations = [{"page_number": 26, "page_range": null, "is_bridge": false}, {"page_number": null, "page_range": "2
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_p26_c1", "page_number": 26, "page_range": null, "is_bridge":
+  [test_32] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên đoạn trích, khảo sát "Nơi làm việc tốt nhất Việt Nam" do mạng cộng đồng nghề nghiệp cấp nhâ
+      moi: answer_text = Khảo sát 'Nơi làm việc tốt nhất Việt Nam' do mạng cộng đồng nghề nghiệp cấp nhân sự kế thừa đối với 
+      cu : citations = [{"page_number": 35, "page_range": null, "is_bridge": true}, {"page_number": 40, "page_range": null,
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_p35_intrabridge2", "page_number": 35, "page_range"
+  [test_33] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, trong năm 2014, các bên liên quan (như người lao động hoặc các trường hợp muốn bả
+      moi: answer_text = Năm 2014, các bên liên quan hoặc người lao động muốn phản ánh thông tin nhạy cảm, nghiêm trọng hoặc 
+      cu : citations = [{"page_number": 39, "page_range": null, "is_bridge": true}, {"page_number": 14, "page_range": null,
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_p39_intrabridge1", "page_number": 39, "page_range"
+  [test_34] KHAC O CAC COT: is_abstained, answer_text, citations, citation_correct
+      cu : is_abstained = False
+      moi: is_abstained = True
+      cu : answer_text = Dựa trên đoạn trích, có thể suy ra Báo cáo Phát triển bền vững năm 2014 của Vinamilk đề cập đến các 
+      moi: answer_text = Không tìm thấy thông tin trong tài liệu.
+      cu : citations = [{"page_number": 42, "page_range": null, "is_bridge": false}, {"page_number": 3, "page_range": null,
+      moi: citations = []
+      cu : citation_correct = True
+      moi: citation_correct = 
+  [test_35] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, chương trình “Cùng Vinamilk tích lũy điểm, vui xuân đón Tết” đã hỗ trợ tổng cộng 
+      moi: answer_text = Chương trình "Cùng Vinamilk tích lũy điểm, vui xuân đón Tết" đã hỗ trợ tổng cộng hơn 45,7 tỷ đồng ch
+      cu : citations = [{"page_number": 34, "page_range": null, "is_bridge": false}, {"page_number": 34, "page_range": null
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_p34_c1", "page_number": 34, "page_range": null, "i
+  [test_36] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên đoạn trích, Hội nghị Ban Chấp hành Trung ương Đảng họp từ ngày 14 đến ngày 31/10/1930 tại H
+      moi: answer_text = Hội nghị Ban Chấp hành Trung ương Đảng họp từ ngày 14 đến ngày 31/10/1930 tại Hương Cảng đã quyết đị
+      cu : citations = [{"page_number": 14, "page_range": null, "is_bridge": true}, {"page_number": 17, "page_range": null,
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_p17_c2", "page_number": 17, "page_range": null, "is_b
+  [test_37] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, tháng 6 năm 1925, Nguyễn Ái Quốc đã thành lập Hội Việt Nam Cách mạng Thanh niên t
+      moi: answer_text = Tháng 6 năm 1925, Nguyễn Ái Quốc đã thành lập Hội Việt Nam Cách mạng Thanh niên tại Quảng Châu (đây 
+      cu : citations = [{"page_number": null, "page_range": "12-13", "is_bridge": true}, {"page_number": 13, "page_range": 
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_bridge_12-13", "page_number": null, "page_range": "12
+  [test_38] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, bản dự thảo Đường lối cách mạng miền Nam tháng 8-1956 do Lê Duẩn soạn thảo (dư th
+      moi: answer_text = Bản dự thảo Đường lối cách mạng miền Nam tháng 8-1956 do Lê Duẩn soạn thảo. Bản dự thảo đã nêu rõ qu
+      cu : citations = [{"page_number": 46, "page_range": null, "is_bridge": false}, {"page_number": 28, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_p46_c0", "page_number": 46, "page_range": null, "is_b
+  [test_39] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, Chiến dịch Hồ Chí Minh giải phóng Sài Gòn - Gia Định bắt đầu từ ngày **26-4-1975*
+      moi: answer_text = Chiến dịch Hồ Chí Minh giải phóng Sài Gòn - Gia Định bắt đầu từ ngày 26-4-1975. Vào lúc 11 giờ 30 ph
+      cu : citations = [{"page_number": 57, "page_range": null, "is_bridge": false}, {"page_number": 57, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_p57_c2", "page_number": 57, "page_range": null, "is_b
+  [test_40] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên đoạn trích:
+- Khi Quốc hội không thể họp, Ủy ban thường vụ Quốc hội có quyền quyết định việ
+      moi: answer_text = Theo tài liệu, khi Quốc hội không thể họp, Ủy ban thường vụ Quốc hội có quyền quyết định việc tuyên 
+      cu : citations = [{"page_number": 23, "page_range": null, "is_bridge": false}, {"page_number": 18, "page_range": null
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_p18_c1", "page_number": 18, "page_range": null, "is_bridge":
+  [test_41] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu:
+
+- **Kết quả tổng thể chương trình thay thế nguồn năng lượng (dầu FO) bằng CNG và
+      moi: answer_text = Trong năm 2014, chương trình chuyển đổi sang sử dụng nguồn năng lượng mới (CNG và Biomass) đã đạt kế
+      cu : citations = [{"page_number": null, "page_range": "21-22", "is_bridge": true}, {"page_number": 21, "page_range": 
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_bridge_21-22", "page_number": null, "page_range": 
+  [test_42] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, Hội nghị lần thứ 11 (3-1965) và Hội nghị lần thứ 12 (12-1965) của Ban Chấp hành T
+      moi: answer_text = Hội nghị lần thứ 11 (3-1965) và Hội nghị lần thứ 12 (12-1965) của Ban Chấp hành Trung ương Đảng đã h
+      cu : citations = [{"page_number": 50, "page_range": null, "is_bridge": false}, {"page_number": 51, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_p50_c1", "page_number": 50, "page_range": null, "is_b
+  -> TONG SO CAU CO KHAC BIET: 34 / 50
+
+======================================================================
+CAU HINH: fixed_size
+  cu : results\tuan6_pilot\test_qa_results_fixed_size.csv  (ton tai: True)
+  moi: results\tuan8\test_qa_results_fixed_size_50cau.csv  (ton tai: True)
+  So cau chung ca 2 file: 50
+  [test_01] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Theo Điều 21, mọi người có các quyền sau:
+1. Quyền bất khả xâm phạm về đời sống riêng tư, bí mật cá 
+      moi: answer_text = Theo Điều 21 của tài liệu, mọi người có các quyền sau:
+- Có quyền bất khả xâm phạm về đời sống riêng
+      cu : citations = [{"page_number": 7, "page_range": null, "is_bridge": false}, {"page_number": 7, "page_range": null, 
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c19", "page_number": 7, "page_range": null, "is_bridge
+  [test_02] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu:
+- **Điều 33:** Mọi người có quyền tự do kinh doanh trong những ngành nghề mà pháp
+      moi: answer_text = Theo Điều 33, mọi người có quyền tự do kinh doanh trong những ngành nghề mà pháp luật không cấm. The
+      cu : citations = [{"page_number": 9, "page_range": null, "is_bridge": false}, {"page_number": 9, "page_range": null, 
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c25", "page_number": 9, "page_range": null, "is_bridge
+  [test_03] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Theo Điều 61, Nhà nước có các ưu tiên và chính sách đối với các vùng và đối tượng này như sau:
+- Nhà
+      moi: answer_text = Theo Điều 61, Nhà nước ưu tiên phát triển giáo dục ở miền núi, hải đảo, vùng đồng bào dân tộc thiểu 
+      cu : citations = [{"page_number": 13, "page_range": null, "is_bridge": false}, {"page_number": 13, "page_range": null
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c37", "page_number": 13, "page_range": null, "is_bridg
+  [test_04] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Theo Điều 85:
+- Trong trường hợp thông thường: Luật, nghị quyết của Quốc hội phải được **quá nửa tổn
+      moi: answer_text = Theo Điều 85, luật và nghị quyết của Quốc hội phải được quá nửa tổng số đại biểu Quốc hội biểu quyết
+      cu : citations = [{"page_number": 21, "page_range": null, "is_bridge": false}, {"page_number": 21, "page_range": null
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c62", "page_number": 21, "page_range": null, "is_bridg
+  [test_05] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, tại Điều 117:
+- **Nhiệm vụ của Hội đồng bầu cử quốc gia:** Tổ chức bầu cử đại biể
+      moi: answer_text = Theo Điều 117, Hội đồng bầu cử quốc gia có nhiệm vụ tổ chức bầu cử đại biểu Quốc hội; chỉ đạo và hướ
+      cu : citations = [{"page_number": 30, "page_range": null, "is_bridge": false}, {"page_number": 30, "page_range": null
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c94", "page_number": 30, "page_range": null, "is_bridg
+  [test_09] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, tính đến cuối năm 2014, Vinamilk có **268 nhà phân phối** và hơn **215.000 điểm b
+      moi: answer_text = Tính đến cuối năm 2014, hệ thống phân phối của Vinamilk có 268 nhà phân phối và hơn 215.000 điểm bán
+      cu : citations = [{"page_number": 6, "page_range": null, "is_bridge": false}, {"page_number": 6, "page_range": null, 
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_fixed_c16", "page_number": 6, "page_range": null, 
+  [test_10] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên đoạn trích, tài liệu nêu tổng số lượng là **13 nhà máy** (như đề cập ở Đoạn 7) và **01 Phòn
+      moi: answer_text = Tính đến năm 2014, tài liệu ghi nhận Vinamilk có 13 nhà máy và 5 trang trại (trong báo cáo, số lượng
+      cu : citations = [{"page_number": 6, "page_range": null, "is_bridge": false}, {"page_number": 41, "page_range": null,
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_fixed_c22", "page_number": 9, "page_range": null, 
+  [test_11] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên đoạn 1 của tài liệu, đến cuối năm 2014, Vinamilk có 6 công ty con và 2 công ty liên kết.
+      moi: answer_text = Đến cuối năm 2014, Vinamilk có 6 công ty con và 2 công ty liên kết.
+      cu : citations = [{"page_number": 9, "page_range": null, "is_bridge": false}, {"page_number": 6, "page_range": null, 
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_fixed_c23", "page_number": 9, "page_range": null, 
+  [test_12] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, năm 2014 Vinamilk có tổng cộng 13 nhà máy và 5 trang trại (theo Đoạn 1) hoặc có 7
+      moi: answer_text = Tại Việt Nam, hệ thống sản xuất của Vinamilk năm 2014 được tổng hợp chung là 13 nhà máy và 5 trang t
+      cu : citations = [{"page_number": 17, "page_range": null, "is_bridge": false}, {"page_number": 20, "page_range": null
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_fixed_c49", "page_number": 17, "page_range": null,
+  [test_13] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, tổng sản lượng sản xuất năm 2014 của Vinamilk là 843.557 tấn (theo bảng năng lượn
+      moi: answer_text = Theo báo cáo, tổng sản lượng sản xuất năm 2014 của Vinamilk là 843.557 tấn, và cường độ sử dụng điện
+      cu : citations = [{"page_number": 26, "page_range": null, "is_bridge": false}, {"page_number": 26, "page_range": null
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_fixed_c73", "page_number": 26, "page_range": null,
+  [test_14] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu:
+- Số lao động bình quân của Vinamilk và các công ty con năm 2014 là 5.738 người.
+
+      moi: answer_text = Số lao động bình quân của Vinamilk và các công ty con năm 2014 là 5.738 người, và tỷ lệ nhân viên đư
+      cu : citations = [{"page_number": 36, "page_range": null, "is_bridge": false}, {"page_number": 36, "page_range": null
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_fixed_c106", "page_number": 37, "page_range": null
+  [test_19] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, thắng lợi của Cách mạng Tháng Tám đã lật đổ ách thống trị của thực dân Pháp trong
+      moi: answer_text = Thắng lợi của Cách mạng Tháng Tám đã lật đổ ách thống trị của thực dân Pháp kéo dài trong 87 năm và 
+      cu : citations = [{"page_number": 27, "page_range": null, "is_bridge": false}, {"page_number": 26, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_fixed_c102", "page_number": 27, "page_range": null, "
+  [test_20] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, tại Hội nghị Trung ương 6 (tháng 11/1939), Đảng đã chủ trương:
+- Thành lập Mặt tr
+      moi: answer_text = Tại Hội nghị Trung ương 6 (tháng 11/1939), Đảng chủ trương thành lập Mặt trận dân tộc thống nhất phả
+      cu : citations = [{"page_number": 22, "page_range": null, "is_bridge": false}, {"page_number": 22, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_fixed_c80", "page_number": 22, "page_range": null, "i
+  [test_21] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu:
+
+- Ngày thông qua Bản Tuyên bố cuối cùng về vấn đề lập lại hòa bình ở Đông Dương 
+      moi: answer_text = Hội nghị Giơnevơ đã thông qua Bản Tuyên bố cuối cùng về vấn đề lập lại hòa bình ở Đông Dương vào ngà
+      cu : citations = [{"page_number": 41, "page_range": null, "is_bridge": false}, {"page_number": 41, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_fixed_c164", "page_number": 41, "page_range": null, "
+  [test_22] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu (Đoạn 1), đến tháng 7-1956, cải cách ruộng đất đã căn bản hoàn thành ở đồng bằng, 
+      moi: answer_text = Đến tháng 7-1956, cải cách ruộng đất đã căn bản hoàn thành ở đồng bằng, trung du và miền núi, xóa bỏ
+      cu : citations = [{"page_number": 44, "page_range": null, "is_bridge": false}, {"page_number": 58, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_fixed_c179", "page_number": 44, "page_range": null, "
+  [test_23] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên đoạn trích, qua hai lần chống chiến tranh phá hoại, quân dân miền Bắc đã bắn rơi 4.181 máy 
+      moi: answer_text = Qua hai lần chống chiến tranh phá hoại, quân dân miền Bắc đã bắn rơi 4.181 máy bay (trong đó có nhiề
+      cu : citations = [{"page_number": 58, "page_range": null, "is_bridge": false}, {"page_number": 55, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_fixed_c247", "page_number": 58, "page_range": null, "
+  [test_25] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, trong 12 ngày đêm cuối năm 1972 (thuộc lần chống chiến tranh phá hoại), quân dân 
+      moi: answer_text = Tài liệu không nêu con số cụ thể về tổng số giặc lái Mỹ bị bắt sống trong cả hai lần chống chiến tra
+      cu : citations = [{"page_number": 55, "page_range": null, "is_bridge": false}, {"page_number": 58, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_fixed_c234", "page_number": 55, "page_range": null, "
+  [test_26] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Theo Điều 44, công dân có nghĩa vụ trung thành với Tổ quốc và phản bội Tổ quốc là tội nặng nhất.
+      moi: answer_text = Theo Điều 44, công dân có nghĩa vụ trung thành với Tổ quốc, và tội phản bội Tổ quốc là tội nặng nhất
+      cu : citations = [{"page_number": 10, "page_range": null, "is_bridge": false}, {"page_number": 4, "page_range": null,
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c28", "page_number": 10, "page_range": null, "is_bridg
+  [test_27] KHAC O CAC COT: is_abstained, answer_text, citations, citation_correct
+      cu : is_abstained = True
+      moi: is_abstained = False
+      cu : answer_text = Không tìm thấy thông tin trong tài liệu.
+      moi: answer_text = Tài sản hợp pháp của cá nhân, tổ chức đầu tư, sản xuất, kinh doanh được pháp luật bảo hộ và không bị
+      cu : citations = []
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c31", "page_number": 11, "page_range": null, "is_bridg
+      cu : citation_correct = 
+      moi: citation_correct = True
+  [test_28] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên đoạn trích, các chức danh lãnh đạo cấp cao phải tuyên thệ trung thành với Tổ quốc, Nhân dân
+      moi: answer_text = Sau khi được bầu, các chức danh phải tuyên thệ trung thành với Tổ quốc, Nhân dân và Hiến pháp bao gồ
+      cu : citations = [{"page_number": 16, "page_range": null, "is_bridge": false}, {"page_number": 3, "page_range": null,
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c46", "page_number": 16, "page_range": null, "is_bridg
+  [test_29] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Theo tài liệu, việc bắt, giam, giữ, khởi tố đại biểu Quốc hội phải có sự đồng ý của Quốc hội hoặc tr
+      moi: answer_text = Theo tài liệu, không được bắt, giam, giữ, khởi tố đại biểu Quốc hội nếu không có sự đồng ý của Quốc 
+      cu : citations = [{"page_number": 20, "page_range": null, "is_bridge": false}, {"page_number": 8, "page_range": null,
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c59", "page_number": 20, "page_range": null, "is_bridg
+  [test_30] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu (Đoạn 1 và Đoạn 6), Thủ tướng Chính phủ có thẩm quyền đối với các văn bản của cơ q
+      moi: answer_text = Thủ tướng Chính phủ có thẩm quyền đình chỉ việc thi hành hoặc bãi bỏ văn bản của Bộ trưởng, Thủ trưở
+      cu : citations = [{"page_number": 25, "page_range": null, "is_bridge": false}, {"page_number": 18, "page_range": null
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c78", "page_number": 25, "page_range": null, "is_bridg
+  [test_31] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, Tòa án nhân dân có nhiệm vụ bảo vệ công lý, bảo vệ quyền con người, quyền công dâ
+      moi: answer_text = Tòa án nhân dân có nhiệm vụ bảo vệ công lý, bảo vệ quyền con người, quyền công dân, bảo vệ chế độ xã
+      cu : citations = [{"page_number": 26, "page_range": null, "is_bridge": false}, {"page_number": 27, "page_range": null
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c81", "page_number": 26, "page_range": null, "is_bridg
+  [test_32] KHAC O CAC COT: answer_text
+      cu : answer_text = Không tìm thấy thông tin trong tài liệu.
+      moi: answer_text = Không tìm thấy thông tin trong tài liệu về đơn vị phối hợp triển khai và phương thức thực hiện của k
+  [test_33] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên đoạn trích, các bên liên quan có thể phản ánh thông tin nhạy cảm hoặc cần bảo mật tới bộ ph
+      moi: answer_text = Năm 2014, các bên liên quan hoặc người lao động có thể phản ánh thông tin nhạy cảm hoặc cần bảo mật 
+      cu : citations = [{"page_number": 14, "page_range": null, "is_bridge": false}, {"page_number": 39, "page_range": null
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_fixed_c34", "page_number": 14, "page_range": null,
+  [test_35] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên đoạn trích, chương trình “Cùng Vinamilk tích lũy điểm, vui xuân đón Tết” đã hỗ trợ tổng cộn
+      moi: answer_text = Chương trình "Cùng Vinamilk tích lũy điểm, vui xuân đón Tết" đã hỗ trợ tổng cộng hơn 45,7 tỷ đồng ch
+      cu : citations = [{"page_number": 34, "page_range": null, "is_bridge": false}, {"page_number": 34, "page_range": null
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_fixed_c95", "page_number": 34, "page_range": null,
+  [test_36] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, Hội nghị Ban Chấp hành Trung ương lần thứ nhất họp từ ngày 14 đến ngày 31/10/1930
+      moi: answer_text = Hội nghị Ban Chấp hành Trung ương Đảng lần thứ nhất họp từ ngày 14 đến ngày 31/10/1930 tại Hương Cản
+      cu : citations = [{"page_number": 17, "page_range": null, "is_bridge": false}, {"page_number": 14, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_fixed_c56", "page_number": 17, "page_range": null, "i
+  [test_37] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên đoạn trích, tháng 6 năm 1925, Nguyễn Ái Quốc đã thành lập Hội Việt Nam Cách mạng Thanh niên
+      moi: answer_text = Tháng 6 năm 1925, Nguyễn Ái Quốc đã thành lập Hội Việt Nam Cách mạng Thanh niên tại Quảng Châu (đây 
+      cu : citations = [{"page_number": 13, "page_range": null, "is_bridge": false}, {"page_number": 12, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_fixed_c34", "page_number": 13, "page_range": null, "i
+  [test_38] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên đoạn trích, bản dự thảo Đường lối cách mạng miền Nam tháng 8-1956 do Lê Duẩn dự thảo. Về co
+      moi: answer_text = Bản dự thảo Đường lối cách mạng miền Nam tháng 8-1956 do Lê Duẩn dự thảo. Bản dự thảo này nêu rõ chế
+      cu : citations = [{"page_number": 45, "page_range": null, "is_bridge": false}, {"page_number": 33, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_fixed_c187", "page_number": 45, "page_range": null, "
+  [test_39] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, Chiến dịch Hồ Chí Minh giải phóng Sài Gòn - Gia Định bắt đầu từ ngày **26-4-1975*
+      moi: answer_text = Chiến dịch Hồ Chí Minh giải phóng Sài Gòn - Gia Định bắt đầu từ ngày 26-4-1975 và kết thúc thắng lợi
+      cu : citations = [{"page_number": 57, "page_range": null, "is_bridge": false}, {"page_number": 57, "page_range": null
+      moi: citations = [{"chunk_id": "normal_lichsudang_C1&2_60tr.pdf_fixed_c244", "page_number": 57, "page_range": null, "
+  [test_40] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu:
+- Khi Quốc hội không thể họp được, Ủy ban thường vụ Quốc hội có quyền quyết định 
+      moi: answer_text = Theo tài liệu, khi Quốc hội không thể họp, Ủy ban thường vụ Quốc hội có quyền quyết định tình trạng 
+      cu : citations = [{"page_number": 23, "page_range": null, "is_bridge": false}, {"page_number": 18, "page_range": null
+      moi: citations = [{"chunk_id": "normal_hienphap_33tr.pdf_fixed_c69", "page_number": 23, "page_range": null, "is_bridg
+  [test_41] KHAC O CAC COT: answer_text, citations
+      cu : answer_text = Dựa trên tài liệu, kết quả tổng thể của chương trình thay thế nguồn năng lượng địa khai FO bằng CNG 
+      moi: answer_text = Trong năm 2014, chương trình thay thế nguồn năng lượng địa khai (FO) bằng nguồn năng lượng sạch (CNG
+      cu : citations = [{"page_number": 21, "page_range": null, "is_bridge": false}, {"page_number": 21, "page_range": null
+      moi: citations = [{"chunk_id": "normal_vinamilkbaocao2014_53tr.pdf_fixed_c59", "page_number": 21, "page_range": null,
+  [test_42] KHAC O CAC COT: answer_text, citations, citation_correct
+      cu : answer_text = Dựa trên tài liệu, quyết tâm chiến lược và mục tiêu chiến lược chống Mỹ cứu nước được xác định tại H
+      moi: answer_text = ```json
+{
+  "answer": "Hội nghị lần thứ 11 (3-1965) và Hội nghị lần thứ 12 (12-1965) của Ban Chấp hà
+      cu : citations = [{"page_number": 51, "page_range": null, "is_bridge": false}, {"page_number": 50, "page_range": null
+      moi: citations = []
+      cu : citation_correct = True
+      moi: citation_correct = False
+  -> TONG SO CAU CO KHAC BIET: 33 / 50
+
+======================================================================
+CAU HINH: longcontext
+  cu : results\tuan6_pilot\test_qa_results_longcontext.csv  (ton tai: True)
+  moi: results\tuan8\test_qa_results_longcontext_50cau.csv  (ton tai: True)
+  So cau chung ca 2 file: 50
+  [test_01] KHAC O CAC COT: answer_text
+      cu : answer_text = Theo Điều 21 của Hiến pháp, mọi người có các quyền sau liên quan đến đời sống riêng tư, bí mật cá nh
+      moi: answer_text = Theo Điều 21 của Hiến pháp, mọi người có các quyền sau đây liên quan đến đời sống riêng tư, bí mật c
+  [test_02] KHAC O CAC COT: answer_text
+      cu : answer_text = Theo Hiến pháp, các quyền của công dân về kinh doanh và an sinh xã hội được quy định như sau:
+
+- Mọi
+      moi: answer_text = Theo Điều 33 và Điều 34 của Hiến pháp, công dân có những quyền sau:
+
+- Mọi người có quyền tự do kinh
+  [test_03] KHAC O CAC COT: answer_text
+      cu : answer_text = Theo Điều 61 của Hiến pháp, Nhà nước có những ưu tiên đối với giáo dục như sau:
+
+- Nhà nước ưu tiên 
+      moi: answer_text = Theo Điều 61 của Hiến pháp, Nhà nước có những ưu tiên sau đối với giáo dục ở miền núi, hải đảo, vùng
+  [test_04] KHAC O CAC COT: answer_text
+      cu : answer_text = Theo Điều 85 của Hiến pháp, trong trường hợp thông thường, luật và nghị quyết của Quốc hội phải được
+      moi: answer_text = Theo Điều 85 của Hiến pháp, trong trường hợp thông thường, luật và nghị quyết của Quốc hội phải được
+  [test_05] KHAC O CAC COT: answer_text
+      cu : answer_text = Theo Điều 117 của Hiến pháp:
+- Hội đồng bầu cử quốc gia có nhiệm vụ tổ chức bầu cử đại biểu Quốc hội
+      moi: answer_text = Theo Điều 117 của Hiến pháp, Hội đồng bầu cử quốc gia có nhiệm vụ tổ chức bầu cử đại biểu Quốc hội; 
+  [test_10] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa trên tài liệu, tính đến năm 2014, các đơn vị trực thuộc của Vinamilk gồm:
+- 03 chi nhánh [Trang 
+      moi: answer_text = Dựa vào tài liệu, các đơn vị trực thuộc của Vinamilk gồm [Trang 8]:
+- 3 chi nhánh [Trang 8]
+- 12 nhà
+  [test_12] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa trên tài liệu, tại Việt Nam, hệ thống sản xuất của Vinamilk năm 2014 đang duy trì với **13 nhà m
+      moi: answer_text = Dựa trên tài liệu, tại Việt Nam, hệ thống sản xuất của Vinamilk năm 2014 đang duy trì với 13 nhà máy
+  [test_13] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa trên tài liệu, tổng sản lượng sản xuất năm 2014 của Vinamilk là **843.557** tấn [Trang 51]. Cườn
+      moi: answer_text = Dựa trên tài liệu, tổng sản lượng sản xuất năm 2014 của Vinamilk là **843.557** tấn [Trang 51].
+
+Cườ
+  [test_14] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa trên tài liệu, số lao động bình quân của Vinamilk và các công ty con năm 2014 là **5.738** người
+      moi: answer_text = Dựa trên tài liệu, số lao động bình quân của Vinamilk và các công ty con năm 2014 là 5.738 người, và
+  [test_18] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa vào tài liệu, Đội Việt Nam Tuyên truyền Giải phóng quân được thành lập vào ngày 22/12/1944 tại C
+      moi: answer_text = Dựa vào tài liệu, đội Việt Nam Tuyên truyền Giải phóng quân được thành lập vào ngày **22/12/1944** t
+  [test_20] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa vào tài liệu, Hội nghị Trung ương 6 Ban Chấp hành Trung ương Đảng (tháng 11/1939) đã chủ trương 
+      moi: answer_text = Dựa vào tài liệu, Hội nghị Trung ương 6 Ban Chấp hành Trung ương Đảng (tháng 11/1939) đã chủ trương:
+  [test_21] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa vào tài liệu:
+
+- Hội nghị Giơnevơ về Đông Dương đã thông qua Bản Tuyên bố cuối cùng vào **ngày 2
+      moi: answer_text = Dựa trên tài liệu [Trang 41], nội dung trả lời cho câu hỏi của bạn là:
+
+Hội nghị Giơnevơ về Đông Dươ
+  [test_22] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa vào tài liệu:
+
+Đến tháng 7-1956, cải cách ruộng đất đã căn bản hoàn thành ở đồng bằng, trung du 
+      moi: answer_text = Dựa vào tài liệu, đến tháng 7-1956, cải cách ruộng đất ở miền Bắc đã căn bản hoàn thành với kết quả 
+  [test_28] KHAC O CAC COT: answer_text
+      cu : answer_text = Sau khi được Quốc hội bầu, những chức danh lãnh đạo cấp cao phải tuyên thệ trung thành với Tổ quốc, 
+      moi: answer_text = Theo tài liệu, sau khi được bầu, những chức danh lãnh đạo cấp cao phải tuyên thệ trung thành với Tổ 
+  [test_31] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa trên tài liệu, Tòa án nhân dân có nhiệm vụ: bảo vệ công lý, bảo vệ quyền con người, quyền công d
+      moi: answer_text = Dựa trên tài liệu, nhiệm vụ của Tòa án nhân dân được xác định là:
+
+"bảo vệ công lý, bảo vệ quyền con
+  [test_32] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa trên tài liệu, khảo sát "Nơi làm việc tốt nhất Việt Nam" năm 2014 do mạng cộng đồng nghề nghiệp 
+      moi: answer_text = Dựa trên tài liệu, khảo sát "Nơi làm việc tốt nhất Việt Nam" năm 2014 do mạng cộng đồng nghề nghiệp 
+  [test_33] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa trên tài liệu, vào năm 2014, người lao động và các bên liên quan có thể liên hệ qua email của bộ
+      moi: answer_text = Dựa vào tài liệu, trong năm 2014, các bên liên quan (cụ thể là người lao động) muốn liên hệ trong cá
+  [test_34] KHAC O CAC COT: answer_text, citations, citation_correct
+      cu : answer_text = Dựa trên tài liệu, trách nhiệm của Vinamilk đối với người tiêu dùng được thể hiện qua 3 vấn đề:
+1. S
+      moi: answer_text = Dựa trên tài liệu, trách nhiệm của Vinamilk đối với người tiêu dùng được thể hiện qua 3 vấn đề trọng
+      cu : citations = [{"page_self_reported": 41}]
+      moi: citations = [{"page_self_reported": 81}]
+      cu : citation_correct = True
+      moi: citation_correct = False
+  [test_35] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa trên tài liệu, chương trình "Cùng Vinamilk tích lũy điểm, vui xuân đón Tết" đã hỗ trợ tổng cộng 
+      moi: answer_text = Dựa vào tài liệu, chương trình "Cùng Vinamilk tích lũy điểm, vui xuân đón Tết" đã hỗ trợ tổng cộng h
+  [test_36] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa vào tài liệu:
+
+Tại Hội nghị Ban Chấp hành Trung ương lần thứ nhất họp từ ngày 14 đến ngày 31/10/
+      moi: answer_text = Dựa vào tài liệu, Hội nghị Ban Chấp hành Trung ương lần thứ nhất họp từ ngày 14 đến ngày 31/10/1930 
+  [test_37] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa vào tài liệu, tháng 6 năm 1925, Nguyễn Ái Quốc đã thành lập Hội Việt Nam Cách mạng Thanh niên tạ
+      moi: answer_text = Dựa vào tài liệu, tháng 6 năm 1925, Nguyễn Ái Quốc đã thành lập Hội Việt Nam Cách mạng Thanh niên tạ
+  [test_38] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa vào tài liệu, bản dự thảo Đường lối cách mạng miền Nam tháng 8-1956 do **Lê Duẩn** soạn thảo và 
+      moi: answer_text = Dựa vào tài liệu, bản dự thảo Đường lối cách mạng miền Nam tháng 8-1956 do **Lê Duẩn** soạn thảo và 
+  [test_39] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa vào tài liệu, Chiến dịch Hồ Chí Minh giải phóng Sài Gòn - Gia Định bắt đầu từ **ngày 26-4-1975**
+      moi: answer_text = Dựa trên tài liệu, Chiến dịch Hồ Chí Minh giải phóng Sài Gòn - Gia Định bắt đầu từ ngày 26-4-1975 và
+  [test_40] KHAC O CAC COT: answer_text
+      cu : answer_text = Theo Hiến pháp, Ủy ban thường vụ Quốc hội có quyền quyết định việc tuyên bố tình trạng chiến tranh t
+      moi: answer_text = Theo Hiến pháp:
+
+- Ủy ban thường vụ Quốc hội có quyền quyết định việc tuyên bố tình trạng chiến tran
+  [test_41] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa trên tài liệu, kết quả tổng thể của chương trình thay thế nguồn năng lượng địa khai FO bằng CNG 
+      moi: answer_text = Dựa vào tài liệu, kết quả tổng thể của chương trình thay thế nguồn năng lượng địa khai FO bằng CNG v
+  [test_42] KHAC O CAC COT: answer_text
+      cu : answer_text = Dựa vào tài liệu, Hội nghị lần thứ 11 (3-1965) và Hội nghị lần thứ 12 (12-1965) của Ban Chấp hành Tr
+      moi: answer_text = Dựa trên tài liệu [Trang 50] của văn bản, quyết tâm chiến lược được Ban Chấp hành Trung ương Đảng đề
+  -> TONG SO CAU CO KHAC BIET: 26 / 50
