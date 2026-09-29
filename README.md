@@ -52,7 +52,6 @@ chat-with-your-pdf/
 ├── .env.example                  # Mẫu cấu hình, copy thành .env rồi điền API key
 ├── .env                          # GEMINI_API_KEY (tự tạo, KHÔNG commit, không nằm trong bản nộp)
 ├── .gitignore
-├── .github/                      # Cấu hình CI/CD
 ├── .streamlit/                   # config.toml: giới hạn upload 20 MB
 ├── docs/                         # Báo cáo học kỳ và slide (bản chốt)
 │
