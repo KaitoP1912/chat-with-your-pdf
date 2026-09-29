@@ -30,7 +30,7 @@ class CleanPage(TypedDict):
     encoding_decision: str
 
 
-def build_clean_pages(file_path: str) -> List[CleanPage]:
+def build_clean_pages(file_path: str, normalize_encoding: bool = True) -> List[CleanPage]:
     """Trả về list các trang đã có đủ (page_number, source_file, text sạch).
 
     Raise PDFLoadError nếu file vượt giới hạn/hỏng (đúng hành vi của Trạm 1).
@@ -39,7 +39,10 @@ def build_clean_pages(file_path: str) -> List[CleanPage]:
 
     clean_pages: List[CleanPage] = []
     for page in raw_pages:
-        result = normalize_page_text(page.raw_text)
+        result = normalize_page_text(
+            page.raw_text,
+            convert_legacy_encoding=normalize_encoding,
+        )
         clean_pages.append(
             CleanPage(
                 page_number=page.page_number,

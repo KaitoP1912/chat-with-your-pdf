@@ -437,7 +437,11 @@ class NormalizationResult:
     encoding_decision: str = "unknown"
 
 
-def normalize_page_text(raw_text: str, wordlist: Optional[Set[str]] = None) -> NormalizationResult:
+def normalize_page_text(
+    raw_text: str,
+    wordlist: Optional[Set[str]] = None,
+    convert_legacy_encoding: bool = True,
+) -> NormalizationResult:
     wordlist = wordlist or default_wordlist()
     had_escaped_newlines = "\\n" in raw_text and "\n" not in raw_text
     processing_raw_text = raw_text.replace("\\n", "\n") if had_escaped_newlines else raw_text
@@ -449,58 +453,66 @@ def normalize_page_text(raw_text: str, wordlist: Optional[Set[str]] = None) -> N
     scoring_base = _normalize_soft_hyphens(text_no_artifacts)
     scoring_base = unicodedata.normalize("NFC", scoring_base)
 
-    # 3. Tạo 3 phiên bản song song: original, as_tcvn3, as_vni
+    # 3. Tạo ứng viên nguyên bản, và chỉ thử bảng mã cũ khi được bật.
     original_candidate_raw = fix_missing_u_horn(scoring_base)
-    original_candidate, original_score = _score_candidate_text(text_no_artifacts, original_candidate_raw, wordlist)
+    if convert_legacy_encoding:
+        original_candidate, original_score = _score_candidate_text(text_no_artifacts, original_candidate_raw, wordlist)
 
-    tcvn_candidate_raw = convert_tcvn3_to_unicode(scoring_base)
-    tcvn_candidate_raw = fix_missing_u_horn(tcvn_candidate_raw)
-    tcvn_candidate, tcvn_score = _score_candidate_text(text_no_artifacts, tcvn_candidate_raw, wordlist)
+        tcvn_candidate_raw = convert_tcvn3_to_unicode(scoring_base)
+        tcvn_candidate_raw = fix_missing_u_horn(tcvn_candidate_raw)
+        tcvn_candidate, tcvn_score = _score_candidate_text(text_no_artifacts, tcvn_candidate_raw, wordlist)
 
-    vni_candidate_raw = convert_vni_to_unicode(scoring_base)
-    vni_candidate_raw = fix_missing_u_horn(vni_candidate_raw)
-    vni_candidate, vni_score = _score_candidate_text(text_no_artifacts, vni_candidate_raw, wordlist)
+        vni_candidate_raw = convert_vni_to_unicode(scoring_base)
+        vni_candidate_raw = fix_missing_u_horn(vni_candidate_raw)
+        vni_candidate, vni_score = _score_candidate_text(text_no_artifacts, vni_candidate_raw, wordlist)
 
-    candidates = [
-        ("original", original_candidate, original_score),
-        ("tcvn3", tcvn_candidate, tcvn_score),
-        ("vni", vni_candidate, vni_score),
-    ]
+        candidates = [
+            ("original", original_candidate, original_score),
+            ("tcvn3", tcvn_candidate, tcvn_score),
+            ("vni", vni_candidate, vni_score),
+        ]
 
-    candidates.sort(key=lambda c: c[2], reverse=True)
-    best_name, best_text, best_score = candidates[0]
-    second_score = candidates[1][2]
+        candidates.sort(key=lambda c: c[2], reverse=True)
+        best_name, best_text, best_score = candidates[0]
+        second_score = candidates[1][2]
 
-    encoding_warning = None
-    ambiguous = (best_score - second_score) < AMBIGUOUS_MARGIN
-    if ambiguous:
-        encoding_warning = f"Ứng viên đầu và thứ hai sát nhau (best={best_score:.2f}, 2nd={second_score:.2f})."
+        encoding_warning = None
+        ambiguous = (best_score - second_score) < AMBIGUOUS_MARGIN
+        if ambiguous:
+            encoding_warning = f"Ứng viên đầu và thứ hai sát nhau (best={best_score:.2f}, 2nd={second_score:.2f})."
 
-    # 4. Quyết định chọn bảng mã theo logic tối ưu
-    encoding_decision = "unknown"
-    detected_encoding: Optional[str] = None
+        # 4. Quyết định chọn bảng mã theo logic tối ưu
+        encoding_decision = "unknown"
+        detected_encoding: Optional[str] = None
 
-    if best_name != "original":
-        diff_with_original = best_score - original_score
-        if best_score >= CONFIDENCE_THRESHOLD and diff_with_original >= MIN_IMPROVEMENT and not ambiguous:
-            encoding_decision = best_name
-            detected_encoding = best_name
+        if best_name != "original":
+            diff_with_original = best_score - original_score
+            if best_score >= CONFIDENCE_THRESHOLD and diff_with_original >= MIN_IMPROVEMENT and not ambiguous:
+                encoding_decision = best_name
+                detected_encoding = best_name
+            else:
+                encoding_decision = "unknown"
         else:
-            encoding_decision = "unknown"
-    else:
-        if original_score >= CONFIDENCE_THRESHOLD:
-            encoding_decision = "original"
-            detected_encoding = None
-        else:
-            encoding_decision = "unknown"
+            if original_score >= CONFIDENCE_THRESHOLD:
+                encoding_decision = "original"
+                detected_encoding = None
+            else:
+                encoding_decision = "unknown"
 
-    # 5. Áp dụng chuyển đổi theo quyết định
-    if encoding_decision == "tcvn3":
-        candidate_text = tcvn_candidate
-    elif encoding_decision == "vni":
-        candidate_text = vni_candidate
+        # 5. Áp dụng chuyển đổi theo quyết định
+        if encoding_decision == "tcvn3":
+            candidate_text = tcvn_candidate
+        elif encoding_decision == "vni":
+            candidate_text = vni_candidate
+        else:
+            candidate_text = unicodedata.normalize("NFC", original_candidate_raw)
+        encoding_confidence = best_score
     else:
-        candidate_text = unicodedata.normalize("NFC", original_candidate_raw)
+        candidate_text = original_candidate_raw
+        encoding_decision = "disabled"
+        detected_encoding = None
+        encoding_confidence = 0.0
+        encoding_warning = None
 
     # 6. Sửa lỗi glyph 'ư' rớt độc lập (dấu cách hoặc dấu '-')
     final_text = fix_missing_u_horn(candidate_text)
@@ -513,7 +525,7 @@ def normalize_page_text(raw_text: str, wordlist: Optional[Set[str]] = None) -> N
     return NormalizationResult(
         normalized_text=final_text,
         detected_encoding=detected_encoding,
-        encoding_confidence=best_score,
+        encoding_confidence=encoding_confidence,
         encoding_warning=encoding_warning,
         likely_missing_diacritics=diac_result.likely_missing_diacritics,
         encoding_decision=encoding_decision,

@@ -140,6 +140,11 @@ def main() -> None:
     parser.add_argument("--tau", type=float, default=config.TAU,
                          help=f"Ngưỡng abstention (mặc định {config.TAU}, đã khóa).")
     parser.add_argument("--model", default=config.MODEL_NAME)
+    parser.add_argument(
+        "--no-legacy-encoding-normalization",
+        action="store_true",
+        help="Bỏ qua chuyển mã VNI/TCVN3; mặc định vẫn chuẩn hóa như trước.",
+    )
     parser.add_argument("--out", default=None)
     parser.add_argument("--limit", type=int, default=3,
                          help="Chỉ chạy N câu đầu (mặc định 3, dry-run). --limit 0 = chạy full.")
@@ -181,7 +186,10 @@ def main() -> None:
         pdf_path = corpus_dir / source_file
         print(f"[Dựng index] {source_file} ({args.strategy}) ...")
         try:
-            pages = build_clean_pages(str(pdf_path))
+            pages = build_clean_pages(
+                str(pdf_path),
+                normalize_encoding=not args.no_legacy_encoding_normalization,
+            )
             chunks = chunk_fn(pages)
             index = build_index(chunks, args.vncorenlp_dir)
             indexes[source_file] = index

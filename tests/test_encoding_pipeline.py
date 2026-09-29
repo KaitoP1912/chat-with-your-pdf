@@ -92,6 +92,19 @@ def test_missing_u_horn_and_vni_mojibake_regression():
     assert 'đường' in res_u_horn.normalized_text
 
 
+def test_disable_legacy_encoding_conversion_keeps_other_cleanup():
+    result = normalize_page_text(
+        'Trang 5\nTraàn Thanh Mẫn\nXe đ ợc đưa đón theo đ ờng quy định.',
+        convert_legacy_encoding=False,
+    )
+
+    assert 'Trang 5' not in result.normalized_text
+    assert 'Traàn Thanh Mẫn' in result.normalized_text
+    assert 'được' in result.normalized_text
+    assert 'đường' in result.normalized_text
+    assert result.encoding_decision == 'disabled'
+
+
 def test_tcvn3_dash_as_u_horn_isolated():
     """
     Kiểm tra thuật toán giải mã TCVN3 khôi phục đúng dấu '-' thay cho 'ư'.

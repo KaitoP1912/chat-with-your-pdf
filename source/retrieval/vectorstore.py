@@ -136,19 +136,37 @@ class ChunkIndex:
             )
         return hits
 
-    def search_hybrid(self, query_text: str, k: int = 3, rrf_k: int = 60) -> List[SearchHit]:
+    def search_hybrid(
+        self,
+        query_text: str,
+        k: int = 3,
+        rrf_k: int = 60,
+        use_dense: bool = True,
+        use_bm25: bool = True,
+    ) -> List[SearchHit]:
         """Hybrid search kết hợp Dense Vector và BM25 qua RRF."""
         if self._index.ntotal == 0:
             return []
 
         # 1. Dense search lấy thứ hạng
-        q_vec = embed_query(query_text, self._vncorenlp_dir)
-        dense_hits = self.search_dense(q_vec, k=len(self._metadatas))
+        if use_dense:
+            q_vec = embed_query(query_text, self._vncorenlp_dir)
+            dense_hits = self.search_dense(q_vec, k=len(self._metadatas))
+        else:
+            dense_hits = []
 
         # 2. BM25 search
-        q_tokens = segment_text(query_text, self._vncorenlp_dir).lower().split()
-        bm25_scores = self._bm25.get_scores(q_tokens) if self._bm25 else [0.0] * len(self._metadatas)
-        bm25_ranked_indices = sorted(range(len(bm25_scores)), key=lambda i: bm25_scores[i], reverse=True)
+        if use_bm25:
+            q_tokens = segment_text(query_text, self._vncorenlp_dir).lower().split()
+            bm25_scores = self._bm25.get_scores(q_tokens) if self._bm25 else [0.0] * len(self._metadatas)
+            bm25_ranked_indices = [
+                i for i, score in enumerate(bm25_scores)
+                if score > 0
+            ]
+            bm25_ranked_indices.sort(key=lambda i: bm25_scores[i], reverse=True)
+        else:
+            bm25_scores = [0.0] * len(self._metadatas)
+            bm25_ranked_indices = []
 
         # 3. Hợp nhất RRF
         rrf_scores: Dict[str, float] = {}
@@ -167,17 +185,18 @@ class ChunkIndex:
 
         hits: List[SearchHit] = []
         for cid in sorted_chunk_ids[:k]:
-            orig_hit = dense_map[cid]
             idx = next(i for i, m in enumerate(self._metadatas) if m["chunk_id"] == cid)
+            meta = self._metadatas[idx]
+            dense_hit = dense_map.get(cid)
             hits.append(
                 SearchHit(
-                    chunk_id=orig_hit.chunk_id,
-                    source_file=orig_hit.source_file,
-                    page_number=orig_hit.page_number,
-                    page_range=orig_hit.page_range,
-                    is_bridge=orig_hit.is_bridge,
-                    text=orig_hit.text,
-                    score=orig_hit.score,  # Giữ score cosine gốc phục vụ Dense Guardrail
+                    chunk_id=cid,
+                    source_file=meta["source_file"],
+                    page_number=meta.get("page_number"),
+                    page_range=meta.get("page_range"),
+                    is_bridge=meta.get("is_bridge", False),
+                    text=meta["text"],
+                    score=float(dense_hit.score) if dense_hit is not None else 0.0,
                     bm25_score=float(bm25_scores[idx]),
                     rrf_score=float(rrf_scores[cid]),
                 )

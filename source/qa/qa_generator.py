@@ -168,7 +168,7 @@ def filter_hits_by_threshold(hits: List[SearchHit], tau: float = DEFAULT_TAU) ->
 def build_document_block(chunks: List[SearchHit]) -> str:
     parts = []
     for i, chunk in enumerate(chunks, start=1):
-        page_label = chunk.page_range if chunk.is_bridge else str(chunk.page_number)
+        page_label = str(chunk.page_number) if chunk.page_number is not None else (chunk.page_range or "?")
         parts.append(
             f"[{i}] chunk_id={chunk.chunk_id} | trang={page_label}\n{chunk.text}"
         )

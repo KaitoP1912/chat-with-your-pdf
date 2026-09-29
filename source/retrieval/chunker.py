@@ -118,6 +118,7 @@ def _chunk_page_text(
 def chunk_by_page(
     pages: List[dict],
     token_counter: Optional[TokenCounter] = None,
+    include_bridge: bool = True,
 ) -> List[ChunkDict]:
     """Chia theo trang (chiến lược đề xuất) + sinh thêm bridge chunk ở mỗi ranh giới trang.
 
@@ -162,60 +163,62 @@ def chunk_by_page(
                 )
             )
 
-        # Bridge chunk nội bộ trang: tại mỗi ranh giới mảnh i / i+1 trong CÙNG 1 trang.
-        for i in range(len(piece_word_lists) - 1):
-            tail = piece_word_lists[i][-BRIDGE_WORDS_EACH_SIDE:]
-            head = piece_word_lists[i + 1][:BRIDGE_WORDS_EACH_SIDE]
+        if include_bridge:
+            # Bridge chunk nội bộ trang: tại mỗi ranh giới mảnh i / i+1 trong CÙNG 1 trang.
+            for i in range(len(piece_word_lists) - 1):
+                tail = piece_word_lists[i][-BRIDGE_WORDS_EACH_SIDE:]
+                head = piece_word_lists[i + 1][:BRIDGE_WORDS_EACH_SIDE]
 
+                if not tail or not head:
+                    continue
+
+                bridge_text = " ".join(tail + head)
+                chunks.append(
+                    ChunkDict(
+                        chunk_id=f"{source_file}_p{page['page_number']}_intrabridge{i}",
+                        source_file=source_file,
+                        # Cùng 1 trang thật -> page_number rõ ràng, KHÔNG dùng
+                        # page_range (page_range chỉ dành cho bridge trang-trang,
+                        # nơi 2 trang khác nhau thật sự).
+                        page_number=page["page_number"],
+                        page_range=None,
+                        text=bridge_text,
+                        token_count=token_counter(bridge_text),
+                        is_bridge=True,
+                    )
+                )
+
+    if include_bridge:
+        # --- Bridge chunk tại mỗi ranh giới trang N / N+1 ---
+        for i in range(len(pages) - 1):
+            page_n = pages[i]
+            page_n1 = pages[i + 1]
+            words_n = _split_words(page_n["text"])
+            words_n1 = _split_words(page_n1["text"])
+
+            tail = words_n[-BRIDGE_WORDS_EACH_SIDE:]
+            head = words_n1[:BRIDGE_WORDS_EACH_SIDE]
+
+            # Nếu 1 trong 2 phía rỗng (trang scan/trống, thường gặp ở file mixed-scan),
+            # bridge chunk sẽ chỉ chứa nội dung 1 phía -> trùng lặp y hệt chunk thường
+            # của trang đó, không có giá trị "nối 2 trang" -> bỏ qua, không sinh bridge rác.
             if not tail or not head:
                 continue
 
             bridge_text = " ".join(tail + head)
+
+            page_range = f"{page_n['page_number']}-{page_n1['page_number']}"
             chunks.append(
                 ChunkDict(
-                    chunk_id=f"{source_file}_p{page['page_number']}_intrabridge{i}",
+                    chunk_id=f"{source_file}_bridge_{page_range}",
                     source_file=source_file,
-                    # Cùng 1 trang thật -> page_number rõ ràng, KHÔNG dùng
-                    # page_range (page_range chỉ dành cho bridge trang-trang,
-                    # nơi 2 trang khác nhau thật sự).
-                    page_number=page["page_number"],
-                    page_range=None,
+                    page_number=None,
+                    page_range=page_range,
                     text=bridge_text,
                     token_count=token_counter(bridge_text),
                     is_bridge=True,
                 )
             )
-
-    # --- Bridge chunk tại mỗi ranh giới trang N / N+1 ---
-    for i in range(len(pages) - 1):
-        page_n = pages[i]
-        page_n1 = pages[i + 1]
-        words_n = _split_words(page_n["text"])
-        words_n1 = _split_words(page_n1["text"])
-
-        tail = words_n[-BRIDGE_WORDS_EACH_SIDE:]
-        head = words_n1[:BRIDGE_WORDS_EACH_SIDE]
-
-        # Nếu 1 trong 2 phía rỗng (trang scan/trống, thường gặp ở file mixed-scan),
-        # bridge chunk sẽ chỉ chứa nội dung 1 phía -> trùng lặp y hệt chunk thường
-        # của trang đó, không có giá trị "nối 2 trang" -> bỏ qua, không sinh bridge rác.
-        if not tail or not head:
-            continue
-
-        bridge_text = " ".join(tail + head)
-
-        page_range = f"{page_n['page_number']}-{page_n1['page_number']}"
-        chunks.append(
-            ChunkDict(
-                chunk_id=f"{source_file}_bridge_{page_range}",
-                source_file=source_file,
-                page_number=None,
-                page_range=page_range,
-                text=bridge_text,
-                token_count=token_counter(bridge_text),
-                is_bridge=True,
-            )
-        )
 
     return chunks
 
@@ -318,6 +321,113 @@ def chunk_fixed_size(
         if end >= n:
             break
         start = max(end - OVERLAP_WORDS, start + 1)
+
+    return chunks
+
+
+def chunk_fixed_size_fair(
+    pages: List[dict],
+    token_counter: Optional[TokenCounter] = None,
+    max_tokens: int = MAX_TOKENS_PER_CHUNK,
+) -> List[ChunkDict]:
+    """Biến thể CÔNG BẰNG của baseline fixed-size, dùng riêng cho ablation
+    (vấn đề #2 trong nhận xét thầy). KHÔNG thay thế chunk_fixed_size() gốc —
+    hàm gốc giữ nguyên, vẫn dùng cho Test Set 50 câu đã khóa.
+
+    Khác biệt so với chunk_fixed_size():
+      1. Chia theo max_tokens (mặc định 320, bằng page-aware) thay vì cố
+         định 170 TỪ.
+      2. Không gán 1 trang "đa số ký tự". Mỗi chunk ghi nhận TẬP TRANG nó
+         phủ tới, qua page_number (nếu chỉ 1 trang) hoặc page_range=
+         "min-max" (nếu phủ >=2 trang) — tái dùng đúng định dạng page_range
+         đã có sẵn cho bridge chunk, nên không cần sửa vectorstore.py.
+      3. Giới hạn đã biết: nếu 1 chunk phủ >=3 trang, hàm chỉ ghi trang đầu
+         và trang cuối (min-max), có thể bỏ sót trang giữa khi chấm. Hàm tự
+         in cảnh báo nếu việc này xảy ra, để không âm thầm bỏ qua.
+    """
+    token_counter = token_counter or default_token_counter()
+    chunks: List[ChunkDict] = []
+    if not pages:
+        return chunks
+    source_file = pages[0]["source_file"]
+
+    full_text_parts: List[str] = []
+    page_char_ranges: List[tuple] = []
+    cursor = 0
+    for page in pages:
+        text = page["text"]
+        start = cursor
+        full_text_parts.append(text)
+        cursor += len(text) + 1
+        end = cursor - 1
+        page_char_ranges.append((page["page_number"], start, end))
+    full_text = " ".join(full_text_parts)
+    all_words = full_text.split()
+
+    word_char_starts: List[int] = []
+    pos = 0
+    for w in all_words:
+        idx = full_text.find(w, pos)
+        word_char_starts.append(idx)
+        pos = idx + len(w)
+
+    def _pages_covered(word_start_idx: int, word_end_idx: int) -> List[int]:
+        chunk_words = all_words[word_start_idx:word_end_idx]
+        chunk_text = " ".join(chunk_words)
+        char_start = word_char_starts[word_start_idx]
+        char_end = char_start + len(chunk_text)
+        covered = []
+        for page_number, p_start, p_end in page_char_ranges:
+            if max(char_start, p_start) < min(char_end, p_end):
+                covered.append(page_number)
+        return covered or [page_char_ranges[-1][0]]
+
+    n = len(all_words)
+    start = 0
+    idx = 0
+    n_over_2_pages = 0
+    while start < n:
+        end = start
+        while end < n:
+            candidate = " ".join(all_words[start:end + 1])
+            if token_counter(candidate) > max_tokens:
+                break
+            end += 1
+        if end == start:
+            end = start + 1
+
+        piece_text = " ".join(all_words[start:end])
+        covered_pages = _pages_covered(start, end)
+
+        if len(covered_pages) == 1:
+            page_number = covered_pages[0]
+            page_range = None
+        else:
+            page_number = None
+            page_range = f"{covered_pages[0]}-{covered_pages[-1]}"
+            if len(covered_pages) > 2:
+                n_over_2_pages += 1
+
+        chunks.append(
+            ChunkDict(
+                chunk_id=f"{source_file}_fixedfair_c{idx}",
+                source_file=source_file,
+                page_number=page_number,
+                page_range=page_range,
+                text=piece_text,
+                token_count=token_counter(piece_text),
+                is_bridge=False,
+            )
+        )
+        idx += 1
+
+        if end >= n:
+            break
+        start = max(end - OVERLAP_WORDS, start + 1)
+
+    if n_over_2_pages > 0:
+        print(f"[CẢNH BÁO chunk_fixed_size_fair] {n_over_2_pages}/{len(chunks)} chunk "
+              f"phủ >=3 trang, chỉ ghi trang đầu/cuối (min-max).")
 
     return chunks
 
