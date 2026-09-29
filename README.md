@@ -4,7 +4,7 @@
 
 - **Sinh viên thực hiện:** Võ Thành Phước — MSSV: 079205022977
 - **Giảng viên hướng dẫn:** ThS. Nguyễn Thanh Tiến
-- **Thời gian thực hiện:** Tuần 1 – Tuần 8
+- **Thời gian thực hiện:** Tuần 1 – Tuần 8, kèm các thực nghiệm bổ sung sau Tuần 8 (mục 5c, 5d)
 - **Mã nguồn:** <https://github.com/KaitoP1912/chat-with-your-pdf>
 
 Đề tài tập trung trả lời câu hỏi nghiên cứu: *chunking theo ranh giới trang có cải thiện độ chính xác trích dẫn số trang so với (a) chunking cố định không theo trang, và (b) không dùng truy hồi (đưa nguyên văn bản vào ngữ cảnh dài của Gemini) hay không?*
@@ -54,12 +54,13 @@ chat-with-your-pdf/
 ├── .gitignore
 ├── .github/                      # Cấu hình CI/CD
 ├── .streamlit/                   # config.toml: giới hạn upload 20 MB
-├── docs/                         # Tài liệu bổ sung
+├── docs/                         # Báo cáo học kỳ và slide (bản chốt)
 │
 ├── data/
-│   ├── corpus/                   # 9 file PDF/docx gốc, khóa từ Tuần 1
+│   ├── corpus/                   # Corpus 9 file khóa từ Tuần 1; repo công khai chứa 8/9 file (xem mục 2b)
 │   ├── eval_sets/                 # dev_questions_normalized.json (34 câu)
 │   │                              # test_questions.json (50 câu, chính thức)
+│   │                              # edge_case_questions.json (câu hỏi kiểm thử edge case, dùng ở results/trai_nghiem_thuc_te/)
 │   └── held_out/                  # Dữ liệu thử nghiệm khắc phục lỗi, KHÔNG dùng đánh giá chính thức
 │
 ├── source/
@@ -80,10 +81,16 @@ chat-with-your-pdf/
 │   └── pilot_tuan8/
 │       ├── create_grading_template_tuan8.py
 │       ├── semi_auto_grade_tuan8.py
-│       └── aggregate_results_tuan8.py
+│       ├── aggregate_results_tuan8.py
+│       ├── do_hieu_nang_thuc_te.py     # Đo thời gian ingestion + index (page_aware), không gọi Gemini
+│       └── do_hieu_nang_longcontext.py # Đo thời gian xử lý PDF của long-context, không gọi Gemini
 │
 ├── results/
-│   └── tuan1_pilot/ … tuan8/      # CSV kết quả, bảng tổng hợp từng tuần, bảng chính thức Tuần 8
+│   ├── tuan1_pilot/ … tuan8/      # CSV kết quả, bảng tổng hợp từng tuần, bảng chính thức Tuần 8
+│   ├── tuan_bo_sung/              # Thực nghiệm bổ sung (ablation, chạy lặp, Wilson/McNemar)
+│   ├── archive_25cau/             # Backup lần chạy 25 câu
+│   ├── trai_nghiem_thuc_te/       # Edge case, đo thời gian xử lý, đối chiếu tau trên Dev set
+│   └── tuan9_tau_sweep/           # Điểm truy hồi top-15 (retrieval-only) của Test Set để đối chiếu tau
 │
 ├── report/
 │   └── tuan_1/ … tuan_8/            # Báo cáo tiến độ theo tuần
@@ -95,6 +102,13 @@ chat-with-your-pdf/
 ├── chay_ung_dung.bat                 # Double-click để chạy giao diện, không cần gõ lệnh
 └── vncorenlp_models/                 # Model VnCoreNLP (tải riêng, xem mục 3.3)
 ```
+
+
+### 2b. Nguồn và phân phối corpus
+
+- **Vinamilk 2014** (`normal_vinamilkbaocao2014_53tr.pdf`): báo cáo Vinamilk năm 2014 lấy từ trang quan hệ nhà đầu tư của Vinamilk, <https://www.vinamilk.com.vn/investor/reports/sustainability>. File được giữ trong repo kèm nguồn này.
+- **Giáo trình Lịch sử Đảng** (`data/corpus/normal_lichsudang_C1&2_60tr.pdf` và bản `data/corpus/tests/normal_lichsudang_114tr.pdf`): **không còn đính kèm trong phiên bản hiện tại của repo** vì chưa xác định được nguồn phát hành và điều kiện sử dụng. Các kết quả trên tài liệu này vẫn được báo cáo trong báo cáo học kỳ, nhưng muốn chạy lại các câu hỏi liên quan (ví dụ câu về Hội nghị Giơnevơ, Chiến dịch Hồ Chí Minh) cần xin file riêng từ tác giả và đặt vào đúng đường dẫn và tên file nêu trên.
+- **Các văn bản luật, nghị định, quy chuẩn kỹ thuật** (Hiến pháp và các file QH/NĐ/QCVN): là văn bản quy phạm pháp luật, không thuộc đối tượng bảo hộ quyền tác giả theo Điều 15 Luật Sở hữu trí tuệ Việt Nam (đây là trích quy định, không phải ý kiến pháp lý).
 
 ---
 
@@ -269,6 +283,45 @@ python script/pilot_tuan8/aggregate_results_tuan8.py
 
 `aggregate_results_tuan8.py` chỉ đọc CSV đã có và tính lại thống kê; nó không gọi API.
 
+### 5c. Thực nghiệm bổ sung (sau Tuần 8)
+
+Dùng biến `$vncorenlp` như mục 5.
+
+**Chạy lặp (vòng N = 1, 2, 3):**
+
+```powershell
+python script/tuan_bo_sung/run_test_qa_post_bm25_fix.py --strategy page_aware --vncorenlp_dir $vncorenlp --limit 0 --out results/tuan_bo_sung/repeat_runs/page_aware_runN.csv
+```
+
+(Tương tự với `--strategy fixed_size`.)
+
+```powershell
+python script/pilot_tuan5/run_longcontext_baseline.py --dev-set data/eval_sets/test_questions.json --limit 0 --sleep 15 --out results/tuan_bo_sung/repeat_runs/longcontext_runN.csv
+```
+
+Tổng hợp: `python script/tuan_bo_sung/aggregate_repeat_runs.py --dir results/tuan_bo_sung/repeat_runs`
+
+Wilson/McNemar (không gọi API): `python script/tuan_bo_sung/compute_ci_mcnemar.py --dir results/tuan8 --suffix _50cau.csv`
+
+Lưu ý 1: runner mới ghi CSV dần và có timeout 90 giây; nếu đứt thì chạy lại kèm `--resume`.
+
+Lưu ý 2: `script/pilot_tuan8/aggregate_results_tuan8.py`, hàm `compute_recomputed_is_abstained`, chỉ khớp tiền tố "không tìm thấy thông tin trong tài liệu", nên nếu chạy lại FAR sẽ ra 6/16 và 7/16 thay vì 1/16; các script mới đọc cột `is_abstained` gốc.
+
+
+### 5d. Các script thực nghiệm bổ sung khác
+
+Các script dưới đây đã có trong repo. Xem tham số bằng `--help` của từng script; README này không liệt kê lại tham số để tránh lệch với mã nguồn.
+
+| Script | Mục đích | Kết quả ghi vào |
+|---|---|---|
+| `script/tuan_bo_sung/run_ablation_hybrid.py` | Ablation dense-only / BM25-only / hybrid | `results/tuan_bo_sung/ablation/` |
+| `script/tuan_bo_sung/run_ablation_fair_baseline.py` | Baseline công bằng: `fixed_size_fair` và `page_aware_no_bridge` | `results/tuan_bo_sung/ablation_fair_baseline/` |
+| `script/tuan_bo_sung/run_longcontext_used_sources.py` | Long-context có trích nguồn đã dùng (`longcontext_used_sources`) | `results/tuan_bo_sung/longcontext_used_sources/` |
+| `script/tuan_bo_sung/compute_hit15_mrr.py` | Tính Hit@15 và MRR | in ra/ghi theo tham số của script |
+| `script/get_test_retrieval_scores.py` | Điểm truy hồi top-15 (retrieval-only, không gọi Gemini) cho đối chiếu tau | `results/tuan9_tau_sweep/test_retrieval_scores.csv` |
+| `script/pilot_tuan8/do_hieu_nang_thuc_te.py`, `do_hieu_nang_longcontext.py` | Đo thời gian xử lý (không gọi Gemini) | `results/trai_nghiem_thuc_te/` |
+| `script/tuan_bo_sung/do_end_to_end_timing.py` | Đo thời gian liền mạch từ đọc PDF đến câu trả lời đầu tiên (3 cấu hình × 3 lần, mỗi lần một tiến trình mới, có gọi Gemini; từ chối ghi đè nếu CSV đã tồn tại) | `results/tuan_bo_sung/end_to_end_timing/` |
+
 ---
 
 ## 6. Kết quả đánh giá chính thức (Test Set 50 câu: 34 answerable gồm 4 bridge case, 16 unanswerable)
@@ -295,7 +348,7 @@ python script/pilot_tuan8/aggregate_results_tuan8.py
 
 Ghi chú: bảng chính là lần chạy lại 20/9; Hit@3 và false acceptance không đổi. Citation giảm khoảng 3 điểm ở cả ba cấu hình sau khi rà soát lại logic hiển thị và từ chối. 
 
-Page-aware cải thiện hơn fixed-size 5,9 điểm Hit@3 và 9,8 điểm citation; hơn long-context 20,4 điểm citation; khoảng 11% lượng token của long-context. Chi tiết đầy đủ và error analysis: `report/tuan_7/BaoCao_ChatWithYourPDF_Tuan07_VoThanhPhuoc.md`.
+Page-aware cao hơn fixed-size 5,9 điểm Hit@3 và 9,8 điểm citation, cao hơn long-context 20,4 điểm citation, và dùng khoảng 11% lượng token của long-context. Với cỡ mẫu 34 câu, chỉ chênh lệch citation giữa page-aware và long-context đạt p < 0,05 (McNemar chính xác, chưa hiệu chỉnh đa so sánh); các chênh lệch còn lại là xu hướng chưa có ý nghĩa thống kê (xem mục 5c). Chi tiết đầy đủ và error analysis: `report/tuan_7/BaoCao_ChatWithYourPDF_Tuan07_VoThanhPhuoc.md`.
 
 ---
 
@@ -309,6 +362,7 @@ Page-aware cải thiện hơn fixed-size 5,9 điểm Hit@3 và 9,8 điểm citat
 - [x] Tuần 6 — Giao diện Streamlit, khóa cứng hệ thống, kiểm thử 9 file corpus
 - [x] Tuần 7 — Đánh giá chính thức Test Set 50 câu, error analysis, xác minh lịch sử khóa
 - [x] Tuần 8 — Chạy lại Test Set sau khi sửa hiển thị citation, báo cáo tổng kết, README, cảnh báo mất dấu trên giao diện
+- [x] Sau Tuần 8 — Thực nghiệm bổ sung: Wilson/McNemar, chạy lặp 3 lần, ablation hybrid, baseline công bằng, Hit@15/MRR, đối chiếu tau, edge case, kiểm tra chấm điểm độc lập (mục 5c, 5d)
 
 ---
 

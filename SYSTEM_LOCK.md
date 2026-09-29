@@ -35,9 +35,12 @@ liệu này **hết hiệu lực** và cần soạn lại.
 Abstention)** — ngưỡng dùng CHUNG cho mọi cấu hình (page_aware, fixed_size,
 long-context), KHÔNG phải Kịch bản 2 "Strict Sweep Filter" (từng thử
 page_aware=0.5 / fixed_size=0.45 riêng theo từng cấu hình). Lý do chốt
-Kịch bản 1: giữ đúng 1 biến số duy nhất ("cách chunking") khi so sánh các
-cấu hình, không lẫn thêm biến "ngưỡng khác nhau" — đúng yêu cầu đề cương và
-GVHD.
+Kịch bản 1: dùng chung một ngưỡng để không lẫn thêm biến "ngưỡng khác
+nhau" khi so sánh các cấu hình. Lưu ý: page-aware và fixed-size vẫn khác
+nhau ở cách gán trang, kích thước chunk (320 token + bridge so với 170
+từ) và số token dùng, nên việc dùng chung `tau` KHÔNG có nghĩa 2 cấu hình
+chỉ khác nhau đúng một biến số duy nhất — đây là 2 baseline khác biệt về
+thiết kế, không phải một thí nghiệm kiểm soát biến đơn lẻ.
 
 ---
 

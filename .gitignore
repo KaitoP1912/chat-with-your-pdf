@@ -12,3 +12,5 @@ results/raw_outputs/
 vncorenlp_models/
 data/corpus/normal_vinamilkbaocao2024_96tr.pdf
 results/debug_retrieval/
+
+data/corpus/normal_lichsudang_C1&2_60tr.pdf
