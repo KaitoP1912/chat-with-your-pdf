@@ -2,6 +2,7 @@
 import sys
 from dataclasses import dataclass
 from types import ModuleType
+from types import SimpleNamespace
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -16,6 +17,8 @@ from source.ingestion.scan_detector import (
     detect_scan,
     should_reject,
 )
+from source.retrieval import vectorstore
+from source.retrieval.vectorstore import ChunkIndex
 
 
 @dataclass
@@ -144,3 +147,75 @@ def test_filter_hits_preserves_input_order_without_mutating_hits():
 
     assert [hit.chunk_id for hit in kept] == ["a", "b", "c"]
     assert [hit.chunk_id for hit in hits] == original_ids
+
+
+@pytest.mark.parametrize(
+    ("bm25_scores", "expected_chunk_ids"),
+    [
+        ([0.0, 2.0, 0.0], ["chunk-1"]),
+        ([0.0, 0.0, 0.0], []),
+    ],
+)
+def test_search_hybrid_excludes_zero_score_bm25_chunks(
+    monkeypatch, bm25_scores, expected_chunk_ids
+):
+    index = ChunkIndex.__new__(ChunkIndex)
+    index._index = SimpleNamespace(ntotal=3)
+    index._metadatas = [
+        {
+            "chunk_id": f"chunk-{i}",
+            "source_file": "fake.pdf",
+            "page_number": i + 1,
+            "page_range": None,
+            "is_bridge": False,
+            "text": f"text {i}",
+        }
+        for i in range(3)
+    ]
+    index._bm25 = SimpleNamespace(get_scores=lambda _: bm25_scores)
+    index._vncorenlp_dir = "unused-by-mock"
+    monkeypatch.setattr(vectorstore, "segment_text", lambda text, _: text)
+
+    hits = index.search_hybrid("query", k=3, use_dense=False)
+
+    assert [hit.chunk_id for hit in hits] == expected_chunk_ids
+    assert all(hit.bm25_score > 0 for hit in hits)
+
+
+def test_resolve_used_sources_maps_deduplicates_and_ignores_invalid_indexes():
+    from source.qa.qa_generator import _resolve_used_sources
+
+    hits = [
+        FakeSearchHit("chunk-a", "fake.pdf", 1, None, False, "a", 0.9),
+        FakeSearchHit("chunk-b", "fake.pdf", 2, None, False, "b", 0.8),
+    ]
+
+    used_hits, chunk_ids = _resolve_used_sources(
+        hits, [2, "2", 99, "not-an-index", 1]
+    )
+
+    assert used_hits == [hits[1], hits[0]]
+    assert chunk_ids == ["chunk-b", "chunk-a"]
+
+
+def test_model_abstention_recognizes_test_32_refusal_with_explanation():
+    from source.qa.qa_generator import _is_model_abstain_text
+
+    answer = (
+        "Không tìm thấy thông tin trong tài liệu về đơn vị phối hợp triển khai "
+        "và phương thức thực hiện của khảo sát."
+    )
+
+    assert _is_model_abstain_text(answer)
+
+
+def test_model_abstention_does_not_flag_test_25_honest_partial_answer():
+    from source.qa.qa_generator import _is_model_abstain_text
+
+    answer = (
+        "Dựa vào tài liệu, trong 12 ngày đêm cuối năm 1972 quân dân miền Bắc "
+        "đã bắt sống 43 giặc lái. Tài liệu không cung cấp con số cụ thể về "
+        "tổng số trong toàn bộ các lần chống chiến tranh phá hoại."
+    )
+
+    assert not _is_model_abstain_text(answer)
