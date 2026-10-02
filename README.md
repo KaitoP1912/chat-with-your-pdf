@@ -148,6 +148,21 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+`requirements.txt` cài SDK Gemini hiện dùng bởi ứng dụng (`google-genai`).
+Sáu script thí nghiệm độc lập bên dưới vẫn dùng SDK cũ `google-generativeai`;
+chỉ cài dependency này nếu cần chạy một trong các script đó:
+
+```powershell
+pip install -r requirements-legacy.txt
+```
+
+- `script/tuan_bo_sung/run_longcontext_used_sources.py`
+- `script/pilot_tuan5/grade_answers_with_gemini.py`
+- `script/pilot_tuan1/test_longcontext_baseline.py`
+- `script/pilot_tuan5/run_longcontext_baseline.py`
+- `script/pilot_tuan1/test_longcontext_baseline_114tr.py`
+- `script/pilot_tuan4/run_fixes_verification.py`
+
 ### 3.3. Model VnCoreNLP (bắt buộc, tải riêng — không có trong repo)
 
 > **Quan trọng:** `save_dir` bắt buộc phải là đường dẫn **tuyệt đối**. Đường dẫn tương đối gây lỗi JVM khó hiểu (`java.lang.NoClassDefFoundError: vn/pipeline/VnCoreNLP`) — đã xác nhận thực tế nhiều lần trong quá trình phát triển.

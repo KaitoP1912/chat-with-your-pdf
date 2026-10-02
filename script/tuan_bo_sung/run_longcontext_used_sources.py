@@ -1,3 +1,4 @@
+# Legacy: cần pip install -r requirements-legacy.txt
 """
 script/tuan_bo_sung/run_longcontext_used_sources.py — Bien the long-context
 dung co che chon nguon (used_sources) giong RAG, thay vi tu viet [Trang X]

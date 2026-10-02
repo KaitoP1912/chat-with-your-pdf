@@ -1,3 +1,4 @@
+# Legacy: cần pip install -r requirements-legacy.txt
 """
 run_fixes_verification.py — GỘP TẤT CẢ VÀO 1 FILE DUY NHẤT.
 

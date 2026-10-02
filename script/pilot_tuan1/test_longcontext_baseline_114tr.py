@@ -1,3 +1,4 @@
+# Legacy: cần pip install -r requirements-legacy.txt
 """
 Test baseline long-context trên file 114 trang (gần sát mốc 125 trang) — để xác nhận
 số token/latency thực tế ở quy mô lớn hơn 33 trang, thay vì chỉ ngoại suy tuyến tính.

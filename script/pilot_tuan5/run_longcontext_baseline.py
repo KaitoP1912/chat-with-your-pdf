@@ -1,3 +1,4 @@
+# Legacy: cần pip install -r requirements-legacy.txt
 """
 script/pilot_tuan5/test_longcontext_baseline.py — Bước A2 của kế hoạch "80% đồ án"
 

@@ -1,0 +1,9 @@
+# Optional dependency for legacy standalone experiment scripts.
+# Required by:
+# - script/tuan_bo_sung/run_longcontext_used_sources.py
+# - script/pilot_tuan5/grade_answers_with_gemini.py
+# - script/pilot_tuan1/test_longcontext_baseline.py
+# - script/pilot_tuan5/run_longcontext_baseline.py
+# - script/pilot_tuan1/test_longcontext_baseline_114tr.py
+# - script/pilot_tuan4/run_fixes_verification.py
+google-generativeai==0.8.6

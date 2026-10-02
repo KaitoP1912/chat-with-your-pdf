@@ -1,3 +1,4 @@
+# Legacy: cần pip install -r requirements-legacy.txt
 """
 script/pilot_tuan5/grade_answers_with_gemini.py
 

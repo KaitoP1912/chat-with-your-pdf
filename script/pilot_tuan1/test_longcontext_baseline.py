@@ -1,3 +1,4 @@
+# Legacy: cần pip install -r requirements-legacy.txt
 """
 Test baseline long-context (Tuần 1 pilot)
 Bản cập nhật theo nhận xét của thầy hướng dẫn:
