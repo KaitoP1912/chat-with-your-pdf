@@ -274,13 +274,34 @@ Nếu trang 2-3 đọc được và có "Phạm vi điều chỉnh" → hành vi
 đã ghi trong `corpus_test_log.md` **cần điều tra lại**, không được coi là
 "đúng thiết kế" như suy luận ban đầu.
 
-### 7.5. Test Set chạy sớm — ĐÃ XÁC NHẬN AN TOÀN
+### 7.5. Test Set chạy sớm — lịch sử và phạm vi kiểm tra
 
 Đã chạy `git log --since="2026-08-01" -- config.py source/qa/qa_generator.py
 source/retrieval/chunker.py`: chỉ có 3 commit, đều thuộc Tuần 3-5
-(16/8–30/8/2026), trước thời điểm Test Set chạy sớm ở Tuần 6. Không có
-commit nào sửa tham số lõi sau khi Test Set đã chạy — **checklist Mục 4 đã
-được tick, Test Set hợp lệ cho Tuần 7.**
+(16/8–30/8/2026), trước thời điểm Test Set chạy sớm ở Tuần 6. Phần rà soát
+ghi trong mục này phản ánh lịch sử tại thời điểm thực hiện. Các mốc commit
+được bổ sung dưới đây là dữ kiện về diễn tiến thay đổi; mức ảnh hưởng của
+chúng đến tính độc lập của đánh giá được để người đọc tự đánh giá.
+
+Đối chiếu lịch sử commit sau thời điểm rà soát ban đầu: commit
+`f4db368c9f37f4d68db926a02b407ae357525a3b` ngày 13/09/2026 đổi `DEFAULT_TAU`
+trong `source/qa/qa_generator.py` từ `0.45` thành `0.38`, tức có thay đổi ở
+file lõi sau ngày khóa 06/09/2026. Trong
+`script/pilot_tuan6/run_test_qa.py`, tham số `tau` được truyền tường minh vào
+`generate_answer()` dưới dạng `tau=args.tau`; mặc định của `args.tau` lấy từ
+`config.TAU` là `0.38`. Các CSV đánh giá ghi `tau_used=0.38`. Những dữ kiện
+này ghi nhận giá trị truyền khi đánh giá và thay đổi trong lịch sử, không
+suy đoán lý do thay đổi.
+
+Commit `31a2e622340e688eb91913ec9be54fea20c3e38c` ngày 20/09/2026 thay đổi
+prompt của hai cấu hình RAG qua `source/qa/qa_generator.py` sang đầu ra JSON
+có `answer` và `used_sources`, đồng thời nhận diện từ chối theo tiền tố.
+Cấu hình long-context trong lần chạy B tiếp tục dùng prompt riêng trong
+`script/pilot_tuan5/run_longcontext_baseline.py`, yêu cầu trích `[Trang X]`
+và không yêu cầu JSON/`used_sources`. Vì vậy, prompt/định dạng đầu ra giữa
+hai cấu hình RAG và long-context ở lần chạy B không giống nhau. Commit
+`23ecafd9bba6027b64b14c3be328b7648a666018` ngày 20/09 cập nhật tài liệu để
+ghi nhận các thay đổi.
 
 ### 7.6. Việc còn treo (chưa xử lý)
 
