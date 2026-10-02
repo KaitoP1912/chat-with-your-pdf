@@ -10,6 +10,7 @@ from source.ingestion.pdf_loader import load_pdf_pages
 
 GROUND_TRUTH_PATH = Path('script/ground_truth_manual_verified.csv')
 MAX_CER_THRESHOLD = 0.05
+LICHSUDANG_PDF = Path('data/corpus/normal_lichsudang_C1&2_60tr.pdf')
 
 
 def load_ground_truth():
@@ -45,6 +46,10 @@ def test_character_level_accuracy(row):
         assert cer <= MAX_CER_THRESHOLD, f"{row['id']}: CER={cer:.3f} vượt ngưỡng {MAX_CER_THRESHOLD}"
 
 
+@pytest.mark.skipif(
+    not LICHSUDANG_PDF.exists(),
+    reason='Lich Su Dang corpus PDF is not distributed with the repository',
+)
 def test_no_false_conversion_on_clean_corpus():
     clean_files = [
         'normal_hienphap_33tr.pdf',
