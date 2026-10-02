@@ -85,7 +85,7 @@ chat-with-your-pdf/
 │       └── do_hieu_nang_longcontext.py # Đo thời gian xử lý PDF của long-context, không gọi Gemini
 │
 ├── results/
-│   ├── tuan1_pilot/ … tuan8/      # CSV kết quả, bảng tổng hợp từng tuần, bảng chính thức Tuần 8
+│   ├── tuan1_pilot/ … tuan8/      # CSV kết quả, bảng tổng hợp từng tuần, bảng tổng hợp Tuần 8 (Lần chạy B)
 │   ├── tuan_bo_sung/              # Thực nghiệm bổ sung (ablation, chạy lặp, Wilson/McNemar)
 │   ├── archive_25cau/             # Backup lần chạy 25 câu
 │   ├── trai_nghiem_thuc_te/       # Edge case, đo thời gian xử lý, đối chiếu tau trên Dev set
@@ -236,7 +236,7 @@ python -m pytest tests/
 
 ## 5. Tái tạo đánh giá (Test Set 50 câu)
 
-> Dưới đây là lần chạy chính thức đầu (12/09/2026) trên Test Set 50 câu.
+> Dưới đây là Lần chạy A (12/09/2026) trên Test Set 50 câu.
 >
 > Tất cả lệnh dưới đây **bắt buộc** truyền `--vncorenlp_dir` đường dẫn tuyệt đối — thiếu tham số này sẽ gặp lại lỗi JVM ở mục 3.3.
 
@@ -338,7 +338,9 @@ Các script dưới đây đã có trong repo. Xem tham số bằng `--help` c�
 
 ---
 
-## 6. Kết quả đánh giá chính thức (Test Set 50 câu: 34 answerable gồm 4 bridge case, 16 unanswerable)
+## 6. Kết quả đánh giá (Test Set 50 câu: 34 answerable gồm 4 bridge case, 16 unanswerable)
+
+Đây là kết quả Lần chạy B (20/09/2026); kết quả Lần chạy A xem báo cáo, Bảng 4.5.
 
 | Chỉ số | page_aware (đề xuất) | fixed_size (baseline) | longcontext (baseline) |
 |---|---|---|---|

@@ -307,17 +307,25 @@ sách xếp hạng và sửa nhãn trang bridge trong prompt tại
 
 ### 7.6. Việc còn treo (chưa xử lý)
 
-- Đọc trực tiếp `vni_recheck.txt` để kết luận file VNI (xem Mục 7.3).
+- File VNI đã được đọc trực tiếp; kết luận lỗi chuyển đổi dấu hỏi được ghi
+  tại Mục 7.3. Không còn là việc chờ xác nhận.
 - Xem trang 2-3 file mixedscan để kết luận dứt điểm (xem Mục 7.4).
 - Văn bản mất dấu tiếng Việt — giới hạn đã biết, chưa khắc phục, chỉ ghi
   nhận, cần nêu rõ trong hồ sơ cuối kỳ.
+- Đã đếm riêng câu trả lời bắt đầu bằng lời từ chối nhưng vẫn có nội dung:
+  trong kết quả `results/tuan8/`, fixed-size có 1 câu (test_32), page-aware
+  và long-context không có. Câu test_34 là từ chối hoàn toàn, không phải
+  từ chối một phần; vẫn được tính trong false refusal như trước.
 
 ## Thay đổi sau khóa (Tuần 8)
 
 ### a) Bối cảnh
 
 - Hệ thống đã được khóa cứng từ ngày 06/09/2026 theo nội dung Mục 1–Mục 7 của tài liệu này.
-- Test Set 50 câu chạy chính thức lần đầu trên cơ sở dữ liệu đã khóa vào ngày 12/09/2026 (kết quả lưu ở `results/tuan6_pilot/`).
+- Test Set 50 câu có Lần chạy A (12/09/2026, kết quả lưu ở
+  `results/tuan6_pilot/`) và Lần chạy B (20/09/2026, kết quả lưu ở
+  `results/tuan8/`). Hai lần chạy được báo cáo song song; không gọi lần nào
+  là chính thức hơn lần còn lại.
 - Có 2 vấn đề cần sửa nhưng không đổi tham số lõi: 1) giao diện hiển thị dư chip nguồn trùng trang (phát hiện sau Tuần 7, trước lần chạy lại); 2) nhận diện từ chối sai ở `test_32` (phát hiện khi kiểm tra kết quả lần chạy lại).
 
 ### b) Bảng thay đổi
@@ -353,10 +361,11 @@ Những giá trị sau được xác nhận KHÔNG thay đổi sau khóa và kh�
 ### e) Cách xử lý kết quả
 
 - Chạy lại 3 cấu hình trên cùng Test Set 50 câu: `page_aware`, `fixed_size`, `longcontext`.
-- Kết quả lần đầu vẫn giữ nguyên ở `results/tuan6_pilot/` làm dữ liệu lịch sử.
-- Kết quả lần chạy lại ở `results/tuan8/` là số liệu chính thức cho báo cáo Tuần 8.
-- Báo cáo cần có bảng đối chiếu hai lần chạy: lần đầu (`results/tuan6_pilot/`) và lần chạy lại (`results/tuan8/`).
-- Cột `is_abstained` trong CSV thô có thể theo logic cũ; các chỉ số từ chối được tính lại từ `answer_text` bằng `aggregate_results_tuan8.py`; CSV thô không bị sửa.
+- Giữ nguyên cả hai kết quả: Lần chạy A ở `results/tuan6_pilot/` và
+  Lần chạy B ở `results/tuan8/`; báo cáo đối chiếu chúng trong cùng một bảng.
+- Không xem Lần chạy B là số liệu chính thức hơn Lần chạy A; các thay đổi
+  giữa hai lần được trình bày để người đọc hiểu khác biệt.
+- Báo cáo lấy FAR/FRR từ cột `is_abstained` gốc trong CSV (mục 4.8.4). Script `aggregate_results_tuan8.py` chỉ khớp tiền tố khi tính lại từ `answer_text`, nên chạy lại sẽ cho FAR 6/16 và 7/16; không dùng kết quả đó (xem README, Lưu ý 2). CSV thô không bị sửa.
 
 ### f) Lý do sửa
 
