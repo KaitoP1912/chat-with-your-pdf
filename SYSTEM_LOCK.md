@@ -138,8 +138,9 @@ thêm lớp giao diện bên ngoài"): `script/app_cli.py`, `script/app_ui.py`,
 - Sau ngày khóa 06/09/2026, các commit `f4db368` (13/09/2026), `31a2e62`
   (20/09/2026) và `5cc6ef2` (30/09/2026) đã sửa các tệp trong `source/`.
   Xem Mục 7.5.
-- [ ] `config.py` không đổi giá trị nào so với bảng ở Mục 1 tài liệu này
-      (so sánh trực tiếp, không tin vào trí nhớ).
+- `config.py`: Git ghi nhận commit gần nhất sửa tệp này là `d40fc4d` ngày
+  30/08/2026; không có commit sửa `config.py` sau ngày khóa 06/09/2026.
+  Các giá trị hiện tại khớp với Bảng tại Mục 1.
 - [x] `data/eval_sets/test_questions.json`: 25 câu đầu đã được chạy thử
       trong đợt khóa hệ thống ngày 06/09/2026; `DEFAULT_TAU` đổi từ `0.45`
       sang `0.38` ngày 13/09/2026; ngày 20/09/2026 prompt của hai cấu hình
