@@ -139,14 +139,11 @@ thêm lớp giao diện bên ngoài"): `script/app_cli.py`, `script/app_ui.py`,
       `git log --since="03/09/2026" -- source/` để kiểm tra).
 - [ ] `config.py` không đổi giá trị nào so với bảng ở Mục 1 tài liệu này
       (so sánh trực tiếp, không tin vào trí nhớ).
-- [x] `data/eval_sets/test_questions.json` **chưa từng được dùng để chạy
-      thử/điều chỉnh tham số** — **XÁC NHẬN ĐÚNG (xem Mục 7.4).** Đã chạy
-      `git log --since="2026-08-01" -- config.py source/qa/qa_generator.py
-      source/retrieval/chunker.py`: 3 commit tìm được đều thuộc Tuần 3-5
-      (16/8 – 30/8/2026), **trước** thời điểm Test Set được chạy sớm ở
-      Tuần 6 (soạn `SYSTEM_LOCK.md` 03/09/2026). Không có commit nào sửa
-      tham số lõi sau khi Test Set đã chạy — Test Set hợp lệ để dùng làm số
-      liệu chính thức Tuần 7.
+- [x] `data/eval_sets/test_questions.json`: 25 câu đầu đã được chạy thử
+      trong đợt khóa hệ thống ngày 06/09/2026; `DEFAULT_TAU` đổi từ `0.45`
+      sang `0.38` ngày 13/09/2026; ngày 20/09/2026 prompt của hai cấu hình
+      RAG đổi sang JSON (`answer`, `used_sources`) và nhận diện từ chối theo
+      tiền tố. Xem Mục 7.5.
 - [ ] Model Gemini vẫn đúng phiên bản đã khóa (`gemini-3.5-flash-lite`) —
       đã tra cứu ngày 03/09/2026: model đạt **GA (General Availability)**
       từ 21/7/2026, hiện **chưa có ngày shutdown nào được công bố** theo
