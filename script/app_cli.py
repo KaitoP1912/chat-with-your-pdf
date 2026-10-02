@@ -106,7 +106,7 @@ def main() -> None:
             )
             sys.exit(1)
 
-        pages = build_clean_pages(pdf_path)
+        pages = build_clean_pages(pdf_path, scan_result=scan_result)
     except Exception as exc:
         print(f"[LỖI] Không đọc được file PDF '{pdf_path}': {exc}")
         sys.exit(1)

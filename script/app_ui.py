@@ -143,7 +143,7 @@ def _build_index_for_upload(uploaded_file) -> None:
             )
             return
 
-        pages = build_clean_pages(pdf_path)
+        pages = build_clean_pages(pdf_path, scan_result=scan_result)
         n_pages_missing_diacritics = sum(
             detect_missing_diacritics(page["text"]).likely_missing_diacritics
             for page in pages

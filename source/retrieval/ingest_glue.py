@@ -15,9 +15,10 @@ Vì sao cần file này:
 
 from __future__ import annotations
 
-from typing import List, TypedDict
+from typing import List, Optional, TypedDict
 
 from source.ingestion.pdf_loader import load_pdf_pages, PDFLoadError
+from source.ingestion.scan_detector import DocScanResult, usable_pages
 from source.ingestion.text_normalizer import normalize_page_text
 
 
@@ -30,12 +31,23 @@ class CleanPage(TypedDict):
     encoding_decision: str
 
 
-def build_clean_pages(file_path: str, normalize_encoding: bool = True) -> List[CleanPage]:
+def build_clean_pages(
+    file_path: str,
+    normalize_encoding: bool = True,
+    scan_result: Optional[DocScanResult] = None,
+) -> List[CleanPage]:
     """Trả về list các trang đã có đủ (page_number, source_file, text sạch).
 
+    Khi nhận scan_result, giữ nguyên vị trí trang nhưng để trống nội dung trang
+    scan/trắng để chunker không lập chỉ mục chúng hoặc nối qua khoảng trang đó.
     Raise PDFLoadError nếu file vượt giới hạn/hỏng (đúng hành vi của Trạm 1).
     """
     raw_pages = load_pdf_pages(file_path)  # list[PageData]
+    usable_page_numbers = None
+    if scan_result is not None:
+        usable_page_numbers = {
+            page.page_number for page in usable_pages(raw_pages, scan_result)
+        }
 
     clean_pages: List[CleanPage] = []
     for page in raw_pages:
@@ -43,12 +55,18 @@ def build_clean_pages(file_path: str, normalize_encoding: bool = True) -> List[C
             page.raw_text,
             convert_legacy_encoding=normalize_encoding,
         )
+        is_usable = (
+            usable_page_numbers is None
+            or page.page_number in usable_page_numbers
+        )
         clean_pages.append(
             CleanPage(
                 page_number=page.page_number,
                 source_file=page.source_file,
-                text=result.normalized_text,
-                likely_missing_diacritics=result.likely_missing_diacritics,
+                text=result.normalized_text if is_usable else "",
+                likely_missing_diacritics=(
+                    result.likely_missing_diacritics if is_usable else False
+                ),
                 encoding_decision=result.encoding_decision,
             )
         )

@@ -391,3 +391,12 @@ Những giá trị sau được xác nhận KHÔNG thay đổi sau khóa và kh�
   - `results/tuan8/test_qa_results_*_50cau.csv`: `2026-09-20 04:52:51` đến `2026-09-20 05:53:46`
 
 **Kết luận:** phần thêm này phản ánh đúng lịch sử sửa sau khóa cứng của Tuần 8, không sửa đổi nội dung đã khóa trước đó.
+
+## 7.7. Xác minh bổ sung mixed-scan và lọc trang trước khi lập chỉ mục (02/10/2026)
+
+- Đối chiếu trực tiếp `data/corpus/mixedscan_qcvn06_38tr.pdf`: hệ thống phát hiện tài liệu `MIXED_SCAN`, trang scan 1 và 38, trang trắng 3, 7 và 9; không từ chối toàn bộ tài liệu.
+- Trước khi chunk/index trong cả Streamlit và CLI, `build_clean_pages()` nhận kết quả scan và để trống nội dung các trang scan/trắng, đồng thời giữ nguyên số trang. Nhờ đó citation không bị đánh lại số trang và chunk không bắc cầu qua trang bị loại.
+- Chạy qua pipeline trên file mẫu: tạo 184 chunk, không có chunk từ trang scan. Số chunk trùng với kết quả trước thay đổi trên mẫu này; con số 184 là kết quả kiểm tra pipeline, không phải chỉ số đánh giá retrieval/QA.
+- PDF scan hoàn toàn `scan_nd238_14tr.pdf` được nhận diện `FULL_SCAN` (14/14 trang scan) và bị từ chối trước khi lập chỉ mục.
+- Chạy lại bộ kiểm thử sau thay đổi: `python -m pytest tests/ -q` — 159 passed, 0 failed. Không chạy lại Gemini Test Set và không thay đổi tham số, dữ liệu hoặc số liệu đánh giá.
+- Ghi nhận này cập nhật kết luận kiểm tra mixed-scan tại Mục 7.4 và đóng việc chờ xác minh trang 2–3 nêu ở Mục 7.6. Hệ thống chưa có OCR; nội dung chỉ nằm trong ảnh scan vẫn không được đọc.

@@ -23,6 +23,8 @@ Phạm vi chính thức: PDF tiếng Việt có text layer. Hỗ trợ Word/.doc
 | 4 — UI | `script/app_ui.py`, `script/app_ui_style.py` | Streamlit, 1 tài liệu/phiên, chat nhiều lượt, trích dẫn dạng chip, giao diện chỉ hiển thị nguồn thực sự được dùng và gộp theo trang, cảnh báo trang scan, cảnh báo trang mất dấu tiếng Việt |
 | 5 — Evaluation | `script/pilot_tuan6/run_test_qa.py`, `aggregate_results.py` | Logic đo Hit@k, citation accuracy, false acceptance/refusal, answer correctness, latency, token, bridge-case riêng; `source/evaluation/` hiện chỉ là package placeholder |
 
+Hybrid Search là một cấu hình đang được thử nghiệm, không phải kết luận rằng nó tốt hơn BM25-only. Kết quả so sánh retrieval-only hiện có được ghi ở mục 5d; không áp dụng tau và không gọi Gemini trong phép ablation đó.
+
 ### Tham số đã khóa (`config.py`, ổn định từ 28/8/2026)
 
 ```
@@ -200,7 +202,7 @@ Mở `.env` và sửa thành:
 GEMINI_API_KEY=dán_API_key_của_bạn
 ```
 
-Lấy key miễn phí tại [Google AI Studio](https://aistudio.google.com/app/apikey). Không commit `.env` lên Git.
+Lấy key tại [Google AI Studio](https://aistudio.google.com/app/apikey). Chỉ lưu key trong `.env` ở thư mục gốc; không dán key vào mã nguồn, README, ảnh chụp màn hình hoặc log và không commit/chia sẻ file `.env`. Ứng dụng đọc biến `GEMINI_API_KEY` khi cần gọi Gemini. Có thể chạy các bài test offline mà không cần gọi API; để hỏi đáp thật cần key hợp lệ và kết nối Internet.
 
 ---
 
@@ -218,7 +220,9 @@ Double-click file **`chay_ung_dung.bat`** ở thư mục gốc. Cửa sổ termi
 python -m streamlit run script/app_ui.py --server.fileWatcherType none
 ```
 
-Giới hạn khi sử dụng: PDF có text layer, ≤ 20 MB, ≤ 60 trang, 1 tài liệu/phiên làm việc. Giới hạn 60 trang được enforce cứng trong `source/ingestion/pdf_loader.py` (`MAX_PAGES = 60` và kiểm tra tổng số trang trước khi đọc). Mốc 90 giây là ngưỡng quan sát từ stress-test thực nghiệm Tuần 1, dùng để tính ra giới hạn 60 trang an toàn; đây không phải timeout chủ động ngắt tiến trình. Giao diện tự động cảnh báo nếu phát hiện trang scan hoặc trang mất dấu tiếng Việt trong file vừa upload.
+Giới hạn khi sử dụng: PDF tối đa 20 MB, tối đa 60 trang, một tài liệu/phiên. Giới hạn được kiểm tra trong `source/ingestion/pdf_loader.py`. PDF mixed-scan được hệ thống nhận diện; các trang scan/trắng không được đưa vào chunk để truy hồi, còn các trang có text vẫn tiếp tục xử lý. **Chưa có OCR**: nội dung chỉ nằm trong ảnh scan không được đọc hoặc dùng để trả lời. PDF scan hoàn toàn bị từ chối. Trên file mẫu `mixedscan_qcvn06_38tr.pdf`, đã xác nhận phát hiện trang scan 1 và 38, trang trắng 3, 7 và 9, và không tạo chunk từ hai trang scan; đây là kiểm tra trên file mẫu, không phải bảo đảm cho mọi dạng PDF. Mốc 90 giây là ngưỡng quan sát từ stress-test thực nghiệm Tuần 1, không phải timeout chủ động.
+
+Ứng dụng có thể cảnh báo trang nghi mất dấu tiếng Việt, nhưng cảnh báo **không khôi phục dấu**. Trang mất dấu vẫn có thể làm truy hồi thất bại.
 
 ### Demo CLI nhanh (không cần mở giao diện)
 
@@ -231,6 +235,8 @@ python script/app_cli.py --pdf data/corpus/normal_hienphap_33tr.pdf --question "
 ```powershell
 python -m pytest tests/
 ```
+
+Lệnh trên chạy toàn bộ test hiện có; hiện bộ test tập trung vào chuẩn hóa bảng mã, phân loại scan, chunking, lọc tau và một số hành vi QA/aggregation. Đây chủ yếu là test tự động/offline, **không thay thế** kiểm thử Gemini trực tuyến hay kiểm tra trực quan trên mọi PDF.
 
 ---
 
@@ -336,6 +342,25 @@ Các script dưới đây đã có trong repo. Xem tham số bằng `--help` c�
 | `script/pilot_tuan8/do_hieu_nang_thuc_te.py`, `do_hieu_nang_longcontext.py` | Đo thời gian xử lý (không gọi Gemini) | `results/trai_nghiem_thuc_te/` |
 | `script/tuan_bo_sung/do_end_to_end_timing.py` | Đo thời gian liền mạch từ đọc PDF đến câu trả lời đầu tiên (3 cấu hình × 3 lần, mỗi lần một tiến trình mới, có gọi Gemini; từ chối ghi đè nếu CSV đã tồn tại) | `results/tuan_bo_sung/end_to_end_timing/` |
 
+Kết quả ablation retrieval-only trên cùng 34 câu answerable (k=3 và k=15; **không áp dụng tau, không gọi Gemini**):
+
+| Cấu hình | Hit@3 | Hit@15 | MRR |
+|---|---:|---:|---:|
+| Dense-only | 30/34 (88,2%) | 33/34 (97,1%) | 0,8268 |
+| BM25-only | 33/34 (97,1%) | 34/34 (100%) | 0,9160 |
+| Hybrid (dense + BM25 qua RRF) | 32/34 (94,1%) | 34/34 (100%) | 0,9042 |
+
+Trong lần đo này, BM25-only cao hơn Hybrid ở Hit@3 và MRR; hai cấu hình bằng nhau ở Hit@15. Đây là kết quả của corpus và bộ câu hỏi hiện tại, không chứng minh cấu hình nào cho câu trả lời Gemini tốt hơn.
+
+Hit@15/MRR khi đối chiếu ngưỡng `tau=0,38` được tính riêng trên thứ hạng top-15 trước và sau lọc:
+
+| Cấu hình chunking | Trước tau: Hit@15 / MRR | Sau tau: Hit@15 / MRR |
+|---|---:|---:|
+| Page-aware | 34/34 (100%) / 0,9042 | 33/34 (97,1%) / 0,8748 |
+| Fixed-size | 33/34 (97,1%) / 0,8610 | 30/34 (88,2%) / 0,8272 |
+
+`tau` cố định ở 0,38 và loại các chunk có dense score thấp hơn ngưỡng trước khi gửi ngữ cảnh cho Gemini; điểm dưới ngưỡng có thể làm mất một chunk đúng dù chunk đó đã xuất hiện trong top-15. Trong Hybrid, ngưỡng này dựa trên trường dense `score` (không phải điểm RRF/BM25); chunk chỉ được BM25 tìm thấy có dense score bằng 0 nên bị loại. Vì vậy các số ablation chưa lọc tau không phản ánh kết quả sau lọc hay chất lượng trả lời đầu cuối, và cần đánh giá riêng nếu thay đổi cách kết hợp/ngưỡng.
+
 ---
 
 ## 6. Kết quả đánh giá (Test Set 50 câu: 34 answerable gồm 4 bridge case, 16 unanswerable)
@@ -364,7 +389,7 @@ Các script dưới đây đã có trong repo. Xem tham số bằng `--help` c�
 
 Ghi chú: bảng chính là lần chạy lại 20/9; Hit@3 và false acceptance không đổi. Citation giảm khoảng 3 điểm ở cả ba cấu hình sau khi rà soát lại logic hiển thị và từ chối. 
 
-Page-aware cao hơn fixed-size 5,9 điểm Hit@3 và 9,8 điểm citation, cao hơn long-context 20,4 điểm citation, và dùng khoảng 11% lượng token của long-context. Với cỡ mẫu 34 câu, chỉ chênh lệch citation giữa page-aware và long-context đạt p < 0,05 (McNemar chính xác, chưa hiệu chỉnh đa so sánh); các chênh lệch còn lại là xu hướng chưa có ý nghĩa thống kê (xem mục 5c). Chi tiết đầy đủ và error analysis: `report/tuan_7/BaoCao_ChatWithYourPDF_Tuan07_VoThanhPhuoc.md`.
+Page-aware cao hơn fixed-size 5,9 điểm Hit@3 và 9,8 điểm citation, cao hơn long-context 20,4 điểm citation, và dùng khoảng 11% lượng token của long-context. Với cỡ mẫu 34 câu, chỉ chênh lệch citation giữa page-aware và long-context đạt p < 0,05 (McNemar chính xác, chưa hiệu chỉnh đa so sánh); các chênh lệch còn lại là xu hướng chưa có ý nghĩa thống kê (xem mục 5c). Đây là so sánh các cấu hình RAG/long-context, không phải bằng chứng Hybrid vượt BM25-only. Chi tiết đầy đủ và error analysis: `report/tuan_7/BaoCao_ChatWithYourPDF_Tuan07_VoThanhPhuoc.md`.
 
 ---
 
@@ -386,10 +411,11 @@ Page-aware cao hơn fixed-size 5,9 điểm Hit@3 và 9,8 điểm citation, cao h
 
 | Giới hạn | Trạng thái |
 |---|---|
-| File VNI — một số chuyển đổi còn lỗi có quy luật | Đã xác nhận, ghi nhận, không sửa trong bản khóa hiện tại |
-| File mixed-scan | Đã đóng — xác nhận hoạt động đúng thiết kế |
+| TCVN3/VNI | Có bước chuẩn hóa bảng mã và test trên các mẫu đã có; không bảo đảm với mọi biến thể, file trộn bảng mã hoặc văn bản lỗi. Riêng file VNI đã xác nhận còn lỗi chuyển đổi dấu hỏi có quy luật ở một số từ (ví dụ “Bỏ”, “Thẻ”); không sửa trong lần đánh giá này. |
+| PDF mixed-scan | Đã kiểm tra phát hiện và bỏ qua trang scan trên một file mẫu; chưa có OCR, nên không đọc được nội dung chỉ nằm trong ảnh scan. Không coi đây là xác nhận OCR hoặc hỏi-đáp trên trang scan. |
 | Lỗi rớt dấu thanh trong text layer PDF (file Lịch sử Đảng) | Đã xác nhận nguyên nhân (đối chứng độc lập 2 công cụ đọc PDF); đã thử OCR nhưng chưa triệt để |
-| File mất dấu tiếng Việt hoàn toàn | Gây fail retrieval; giao diện đã cảnh báo, chưa có fallback tự động sửa |
+| Văn bản mất dấu tiếng Việt | Giao diện có cảnh báo, nhưng chưa có fallback tự động thêm dấu; truy hồi có thể thất bại |
+| Ngưỡng lọc `tau` | Cố định ở 0,38; có thể loại chunk đúng dưới ngưỡng. Trong Hybrid, `tau` dùng dense score, không dùng điểm BM25/RRF; xem số liệu trước/sau lọc ở mục 5d. |
 | PDF lớn | Giới hạn cứng 60 trang/file, được enforce trong `source/ingestion/pdf_loader.py`; mốc 90 giây chỉ là ngưỡng quan sát từ stress-test thực nghiệm Tuần 1 để tính giới hạn an toàn, không phải timeout chủ động |
 | Bảng/biểu đồ phức tạp trong PDF | Có thể gây lỗi đọc nhầm số liệu liền kề; đã có cơ chế gửi ảnh trang hỗ trợ một phần |
 | Word/.docx | Ngoài phạm vi cam kết chính thức, chưa triển khai |

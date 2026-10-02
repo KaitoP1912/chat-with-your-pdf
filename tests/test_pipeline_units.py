@@ -90,6 +90,29 @@ def test_document_scan_status_controls_rejection(pages, expected_status, expecte
     assert should_reject(result) is expected_reject
 
 
+def test_build_clean_pages_omits_detected_scan_text_and_preserves_page_positions(
+    monkeypatch,
+):
+    from source.retrieval import ingest_glue
+    from source.retrieval.chunker import chunk_by_page
+
+    raw_pages = [
+        make_page(1, text="Nội dung hợp lệ trên trang một. " * 8),
+        make_page(2, text="scan noise", image_count=1),
+        make_page(3, text="Nội dung hợp lệ trên trang ba. " * 8),
+    ]
+    scan_result = detect_scan(raw_pages)
+    monkeypatch.setattr(ingest_glue, "load_pdf_pages", lambda _: raw_pages)
+
+    clean_pages = ingest_glue.build_clean_pages("fake.pdf", scan_result=scan_result)
+    chunks = chunk_by_page(clean_pages, token_counter=lambda text: len(text.split()))
+
+    assert [page["page_number"] for page in clean_pages] == [1, 2, 3]
+    assert clean_pages[1]["text"] == ""
+    assert all(chunk["page_number"] != 2 for chunk in chunks)
+    assert not any(chunk["page_range"] in ("1-2", "2-3") for chunk in chunks)
+
+
 def test_page_aware_chunker_only_bridges_two_nonempty_pages():
     from source.retrieval.chunker import chunk_by_page
 
@@ -196,6 +219,39 @@ def test_resolve_used_sources_maps_deduplicates_and_ignores_invalid_indexes():
 
     assert used_hits == [hits[1], hits[0]]
     assert chunk_ids == ["chunk-b", "chunk-a"]
+
+
+def test_generate_answer_abstains_before_gemini_when_no_hit_meets_tau(monkeypatch):
+    from source.qa import qa_generator
+
+    monkeypatch.setattr(
+        qa_generator,
+        "_get_client",
+        lambda: pytest.fail("Gemini must not be called when tau removes every hit"),
+    )
+    hit = FakeSearchHit("weak", "fake.pdf", 17, None, False, "weak evidence", 0.37)
+
+    answer = qa_generator.generate_answer("question without evidence", [hit], tau=0.38)
+
+    assert answer.is_abstained
+    assert answer.abstain_reason == "retrieval_threshold"
+    assert answer.citations == []
+
+
+def test_citations_use_page_metadata_and_only_display_used_chunks():
+    from source.qa.qa_generator import _build_citations
+    from script.app_ui import _format_citations
+
+    hits = [
+        FakeSearchHit("used", "fake.pdf", 17, None, False, "used text", 0.8),
+        FakeSearchHit("unused", "fake.pdf", 21, None, False, "unused text", 0.7),
+    ]
+
+    citations = _build_citations([hits[0]])
+
+    assert citations[0]["page_number"] == 17
+    assert _format_citations(citations, ["used"]) == "trang 17"
+    assert _format_citations(citations, ["not-used"]) == "(không có)"
 
 
 def test_model_abstention_recognizes_test_32_refusal_with_explanation():
