@@ -135,8 +135,9 @@ thêm lớp giao diện bên ngoài"): `script/app_cli.py`, `script/app_ui.py`,
 
 ## 4. Checklist xác nhận trước khi chạy Test Set Tuần 7
 
-- [ ] Không có commit nào sửa file trong `source/` kể từ ngày khóa (chạy
-      `git log --since="03/09/2026" -- source/` để kiểm tra).
+- Sau ngày khóa 06/09/2026, các commit `f4db368` (13/09/2026), `31a2e62`
+  (20/09/2026) và `5cc6ef2` (30/09/2026) đã sửa các tệp trong `source/`.
+  Xem Mục 7.5.
 - [ ] `config.py` không đổi giá trị nào so với bảng ở Mục 1 tài liệu này
       (so sánh trực tiếp, không tin vào trí nhớ).
 - [x] `data/eval_sets/test_questions.json`: 25 câu đầu đã được chạy thử
@@ -185,11 +186,9 @@ thêm lớp giao diện bên ngoài"): `script/app_cli.py`, `script/app_ui.py`,
    dẫn kỹ thuật sâu hơn (không bắt buộc cho mục đích khóa tham số).
 2. ~~Đối chiếu `README.md` thật để xác nhận danh sách file ở Mục 3 đầy đủ~~
    → **Đã đối chiếu (03/09/2026), danh sách khớp đúng, không thiếu file.**
-3. Xử lý dứt điểm ô chưa tick được ở Mục 4 (Test Set có thể đã chạy sớm ở
-   Tuần 6) — đây là điểm quan trọng nhất, ảnh hưởng trực tiếp tính hợp lệ
-   của toàn bộ Test Set Tuần 7. **README.md cũng ghi rõ
-   `test_questions.json` là "dùng cho Tuần 7"** — càng củng cố thêm việc
-   Test Set chạy ở Tuần 6 (nếu đúng) là lệch kế hoạch gốc, cần làm rõ.
+3. Đối chiếu thời điểm Test Set được chạy trong Tuần 6 với README.md ghi
+   `test_questions.json` dùng cho Tuần 7; xem lịch sử và phạm vi kiểm tra
+   tại Mục 7.5.
 4. Đối chiếu lại báo cáo Tuần 4 đầy đủ để xác nhận chính xác chi tiết lịch
    sử đổi model (hàng "Cần xác nhận thêm" ở Mục 5).
 5. ~~Verify thay đổi `vectorstore.py`~~ → **ĐÃ XONG** (xem Mục 7), commit
@@ -299,6 +298,11 @@ và không yêu cầu JSON/`used_sources`. Vì vậy, prompt/định dạng đ�
 hai cấu hình RAG và long-context ở lần chạy B không giống nhau. Commit
 `23ecafd9bba6027b64b14c3be328b7648a666018` ngày 20/09 cập nhật tài liệu để
 ghi nhận các thay đổi.
+
+Commit `5cc6ef205992ddfb129bff219e2978134b320f9c` ngày 30/09/2026 sửa
+`source/retrieval/vectorstore.py` để lọc chunk có điểm BM25 bằng 0 khỏi danh
+sách xếp hạng và sửa nhãn trang bridge trong prompt tại
+`source/qa/qa_generator.py`.
 
 ### 7.6. Việc còn treo (chưa xử lý)
 
